@@ -1,5 +1,5 @@
 /**
- * @file App.tsx
+ * @file bemHelper.ts
  *
  * Created by Zander Otavka on 6/2/17.
  * Copyright (C) 2016  Grinnell AppDev.
@@ -19,25 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react"
+import { withDefaults } from "react-bem-helper"
 
-import bemHelper from "../util/bemHelper"
-import "./App.css"
-
-const logo = require("./logo.svg")
-
-const b = bemHelper("App")
-
-export default function App() {
-  return (
-    <div className={b()}>
-      <div className={b("header")}>
-        <img src={logo} className={b("logo")} alt="logo" />
-        <h2>Welcome to React</h2>
-      </div>
-      <p className={b("intro")}>
-        To get started, edit <code>src/App.tsx</code> and save to reload.
-      </p>
-    </div>
-  )
-}
+export default withDefaults({
+  outputIsString: true,
+})
