@@ -19,13 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import ReactDOM from "react-dom"
+import * as React from "react"
+import { render } from "react-dom"
 
 import App from "./components/App"
 import registerServiceWorker from "./registerServiceWorker"
 
 import "./index.css"
 
-ReactDOM.render(<App />, document.getElementById("root"))
+render(<App />, document.getElementById("root"))
 registerServiceWorker()
