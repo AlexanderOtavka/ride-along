@@ -16,6 +16,7 @@
         "jsdoc-format": true,
         "jsx-no-lambda": false,
         "jsx-no-multiline-js": false,
+        "jsx-wrap-multiline": false,
         "label-position": true,
         "member-ordering": [
             true,
