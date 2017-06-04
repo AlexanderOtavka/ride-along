@@ -41,12 +41,13 @@ export default function App() {
           <form className={bem("header-form")} action="/search" method="get">
             <BoxField type="submit" value="Request a ride" />
             <div className={bem("mode-switch")}>
-              <ModeButton name="mode" mode="request" defaultChecked={true}>
-                <ThumbSVG />
-              </ModeButton>
-              <ModeButton name="mode" mode="offer">
-                <CarSVG />
-              </ModeButton>
+              <ModeButton
+                name="mode"
+                mode="request"
+                defaultChecked={true}
+                image={<ThumbSVG />}
+              />
+              <ModeButton name="mode" mode="offer" image={<CarSVG />} />
             </div>
           </form>
         </header>

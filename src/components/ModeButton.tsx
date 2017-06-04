@@ -28,7 +28,7 @@ interface ModeButtonProps {
   name: string
   mode: string
   defaultChecked?: boolean
-  children: JSX.Element
+  image: JSX.Element
 }
 
 const bem = bemHelper("ModeButton")
@@ -49,7 +49,7 @@ export default function ModeButton({
       />
 
       <div className={bem("button", mode)}>
-        {React.Children.only(props.children)}
+        {props.image}
       </div>
     </label>
   )
