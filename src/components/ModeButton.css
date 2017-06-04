@@ -1,7 +1,7 @@
 /**
- * App.css
+ * ModeButton.css
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/3/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.App__header {
-  height: 80px;
-  background-color: #F2C94C;
-  padding: 16px;
+.ModeButton {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 48px;
 }
 
-.App__header-form {
+.ModeButton__input {
+  position: absolute;
+  visibility: hidden;
+}
+
+.ModeButton__button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #F2F2F2;
 }
 
-.App__mode-switch {
-  margin-left: 16px;
+.ModeButton__input:checked ~ .ModeButton__button {
+  background-color: rgba(242, 242, 242, 0.3);
+}
+
+.ModeButton__image {
+  width: 28px;
+  height: 28px;
 }

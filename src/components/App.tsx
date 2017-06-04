@@ -20,24 +20,53 @@
  */
 
 import * as React from "react"
+import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+
+import BoxField from "./BoxField"
+import ModeButton from "./ModeButton"
 
 import bemHelper from "../util/bemHelper"
 import "./App.css"
 
-const logo = require("./logo.svg")
+const thumbImage = require("../assets/thumb-right.svg") as string
+const carImage = require("../assets/car-side.svg") as string
 
-const b = bemHelper("App")
+const bem = bemHelper("App")
 
 export default function App() {
   return (
-    <div className={b()}>
-      <div className={b("header")}>
-        <img src={logo} className={b("logo")} alt="logo" />
-        <h2>Welcome to React</h2>
+    <Router>
+      <div className={bem()}>
+        <header className={bem("header")}>
+          <form className={bem("header-form")} action="/search" method="get">
+            <BoxField type="submit" value="Request a ride" />
+            <div className={bem("mode-switch")}>
+              <ModeButton
+                name="mode"
+                mode="request"
+                defaultChecked={true}
+                imageSrc={thumbImage}
+              />
+              <ModeButton name="mode" mode="offer" imageSrc={carImage} />
+            </div>
+          </form>
+        </header>
+
+        <nav>
+          <Link to="/">Rides</Link>
+          <Link to="/me">Me</Link>
+          <button>Options</button>
+        </nav>
+
+        <main>
+          <Route
+            exact={true}
+            path="/(:?search)?"
+            render={() => <span>"Rides..."</span>}
+          />
+          <Route path="/me" render={() => <span>"Me"</span>} />
+        </main>
       </div>
-      <p className={b("intro")}>
-        To get started, edit <code>src/App.tsx</code> and save to reload.
-      </p>
-    </div>
+    </Router>
   )
 }

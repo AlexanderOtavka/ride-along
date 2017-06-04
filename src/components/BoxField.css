@@ -1,7 +1,7 @@
 /**
- * App.css
+ * BoxField.css
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/4/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.App__header {
-  height: 80px;
-  background-color: #F2C94C;
-  padding: 16px;
+.BoxField {
+  flex-grow: 1;
+  height: 48px;
+  background: rgba(242, 242, 242, 0.3);
+  border: none;
+  padding: 0 16px;
+  font-size: 18px;
+  color: white;
+  font-weight: 300;
+  outline: none;
+  text-align: left;
 }
 
-.App__header-form {
-  display: flex;
-  flex-direction: row;
+.BoxField:focus {
+  background-color: #F2F2F2;
+  color: #4F4F4F;
 }
 
-.App__mode-switch {
-  margin-left: 16px;
+.BoxField::placeholder {
+  color: white;
+}
+
+.BoxField:focus::placeholder {
+  color: #4F4F4F;
 }

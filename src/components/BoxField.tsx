@@ -1,9 +1,10 @@
 /**
- * App.css
+ * @file BoxField.tsx
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/4/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
+ * @license
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,17 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.App__header {
-  height: 80px;
-  background-color: #F2C94C;
-  padding: 16px;
+import * as React from "react"
+
+import bemHelper from "../util/bemHelper"
+import "./BoxField.css"
+
+interface Props extends React.HTMLProps<HTMLInputElement> {
+  type?: "text" | "submit"
 }
 
-.App__header-form {
-  display: flex;
-  flex-direction: row;
-}
+const bem = bemHelper("BoxField")
 
-.App__mode-switch {
-  margin-left: 16px;
+export default function BoxField({
+  type = "text",
+  className,
+  ...props,
+}: Props) {
+  return <input type={type} className={bem("", "", className)} {...props} />
 }
