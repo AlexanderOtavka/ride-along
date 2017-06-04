@@ -28,10 +28,8 @@ import ModeButton from "./ModeButton"
 import bemHelper from "../util/bemHelper"
 import "./App.css"
 
-const ThumbSVG = require("!!react-svg-loader?es5=true!../assets/thumb-right.svg")
-  .default as React.SVGFactory
-const CarSVG = require("!!react-svg-loader?es5=true!../assets/car-side.svg")
-  .default as React.SVGFactory
+import ThumbSVG from "!!react-svg-loader?es5=true!../assets/thumb-right.svg"
+import CarSVG from "!!react-svg-loader?es5=true!../assets/car-side.svg"
 
 const bem = bemHelper("App")
 
