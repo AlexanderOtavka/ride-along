@@ -28,8 +28,10 @@ import ModeButton from "./ModeButton"
 import bemHelper from "../util/bemHelper"
 import "./App.css"
 
-const thumbImage = require("../assets/thumb-right.svg") as string
-const carImage = require("../assets/car-side.svg") as string
+const ThumbSVG = require("!!react-svg-loader?es5=true!../assets/thumb-right.svg")
+  .default as React.SVGFactory
+const CarSVG = require("!!react-svg-loader?es5=true!../assets/car-side.svg")
+  .default as React.SVGFactory
 
 const bem = bemHelper("App")
 
@@ -41,13 +43,12 @@ export default function App() {
           <form className={bem("header-form")} action="/search" method="get">
             <BoxField type="submit" value="Request a ride" />
             <div className={bem("mode-switch")}>
-              <ModeButton
-                name="mode"
-                mode="request"
-                defaultChecked={true}
-                imageSrc={thumbImage}
-              />
-              <ModeButton name="mode" mode="offer" imageSrc={carImage} />
+              <ModeButton name="mode" mode="request" defaultChecked={true}>
+                <ThumbSVG />
+              </ModeButton>
+              <ModeButton name="mode" mode="offer">
+                <CarSVG />
+              </ModeButton>
             </div>
           </form>
         </header>

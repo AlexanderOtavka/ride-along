@@ -46,7 +46,18 @@
   background-color: rgba(242, 242, 242, 0.3);
 }
 
-.ModeButton__image {
+.ModeButton__button > svg {
   width: 28px;
   height: 28px;
+}
+
+.ModeButton__button--request > svg {
+  fill: #F2C94C;
+}
+
+.ModeButton__button--offer > svg {
+  fill: #219653;
+}
+.ModeButton__input:checked ~ .ModeButton__button > svg {
+  fill: #F2F2F2;
 }
