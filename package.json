@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "babel-node scripts/build.js",
-    "precommit": "lint-staged",
+    "precommit": "lint-staged && CI=true yon test",
     "lint-staged": "lint-staged",
     "start": "babel-node scripts/start.js",
     "test": "babel-node scripts/test.js --env=jsdom",
@@ -107,7 +107,8 @@
   "lint-staged": {
     "*.{js,ts,tsx,css}": [
       "yon run prettier",
-      "git add"
+      "git add",
+      "tslint"
     ]
   }
 }
