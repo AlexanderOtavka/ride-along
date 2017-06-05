@@ -1,7 +1,7 @@
 /**
- * @file loader-modules.d.ts
+ * @file svgTransform.js
  *
- * Created by Zander Otavka on 6/4/17.
+ * Created by Zander Otavka on .
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,7 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-declare module "*.svg" {
-  const _default: React.SVGFactory
-  export default _default
+export function process() {
+  return `
+    const React = require("react")
+    module.exports.default = (props) => React.createElement("svg", props)
+  `
+}
+
+export function getCacheKey() {
+  // The output is always the same
+  return "svgTransform"
 }

@@ -32,6 +32,7 @@
     "app-root-path": "^2.0.1",
     "autoprefixer": "7.1.0",
     "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
@@ -86,17 +87,18 @@
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/src/**/?(*.)(spec|test).ts?(x)"
+      "<rootDir>/src/**/?(*.)test.ts?(x)"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost",
     "transform": {
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
-      "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^.+\\.svg$": "<rootDir>/config/jest/svgTransform.js",
+      "^(?!.*\\.(css|json|svg)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
