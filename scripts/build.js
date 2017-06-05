@@ -1,7 +1,34 @@
-"use strict"
+/**
+ * @file build.js
+ *
+ * Created by Zander Otavka on 6/4/17.
+ * Copyright (C) 2016  Grinnell AppDev.
+ *
+ * @license
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-// Do this as the first thing so that any code reading it knows the right env.
-process.env.NODE_ENV = "production"
+import path from "path"
+import chalk from "chalk"
+import fs from "fs-extra"
+import webpack from "webpack"
+import checkRequiredFiles from "react-dev-utils/checkRequiredFiles"
+import formatWebpackMessages from "react-dev-utils/formatWebpackMessages"
+import printHostingInstructions from "react-dev-utils/printHostingInstructions"
+import FileSizeReporter from "react-dev-utils/FileSizeReporter"
+
+import paths from "../config/paths"
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -10,19 +37,15 @@ process.on("unhandledRejection", err => {
   throw err
 })
 
+// Do this as the first thing so that any code reading it knows the right env.
+process.env.NODE_ENV = "production"
+
 // Ensure environment variables are read.
 require("../config/env")
 
-const path = require("path")
-const chalk = require("chalk")
-const fs = require("fs-extra")
-const webpack = require("webpack")
-const config = require("../config/webpack.config")
-const paths = require("../config/paths")
-const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles")
-const formatWebpackMessages = require("react-dev-utils/formatWebpackMessages")
-const printHostingInstructions = require("react-dev-utils/printHostingInstructions")
-const FileSizeReporter = require("react-dev-utils/FileSizeReporter")
+// We have to use require because imports are evaluated before this module is
+// executed and NODE_ENV is set.
+const config = require("../config/webpack.config").default
 
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild

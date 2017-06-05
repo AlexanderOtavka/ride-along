@@ -71,7 +71,7 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
     { publicPath: Array(cssFilename.split("/").length).join("../") }
   : {}
 
-module.exports = {
+export default {
   // In production, don't attempt to continue if there are any errors.
   bail: isProduction,
   // We generate sourcemaps in production. This is slow but gives good results.

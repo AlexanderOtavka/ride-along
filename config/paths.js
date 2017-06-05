@@ -1,8 +1,27 @@
-"use strict"
+/**
+ * @file paths.js
+ *
+ * Created by Zander Otavka on 6/4/17.
+ * Copyright (C) 2016  Grinnell AppDev.
+ *
+ * @license
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-const path = require("path")
-const fs = require("fs")
-const url = require("url")
+import path from "path"
+import fs from "fs"
+import url from "url"
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
@@ -40,7 +59,7 @@ function getServedPath(appPackageJson) {
 }
 
 // config after eject: we're in ./config/
-module.exports = {
+export default {
   dotenv: resolveApp(".env"),
   appBuild: resolveApp("build"),
   appPublic: resolveApp("public"),

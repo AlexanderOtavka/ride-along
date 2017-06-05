@@ -1,14 +1,34 @@
-"use strict"
+/**
+ * @file webpackDevServer.config.js
+ *
+ * Created by Zander Otavka on 6/4/17.
+ * Copyright (C) 2016  Grinnell AppDev.
+ *
+ * @license
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-const errorOverlayMiddleware = require("react-error-overlay/middleware")
-const noopServiceWorkerMiddleware = require("react-dev-utils/noopServiceWorkerMiddleware")
-const config = require("./webpack.config")
-const paths = require("./paths")
+import errorOverlayMiddleware from "react-error-overlay/middleware"
+import noopServiceWorkerMiddleware from "react-dev-utils/noopServiceWorkerMiddleware"
+
+import config from "./webpack.config"
+import paths from "./paths"
 
 const protocol = process.env.HTTPS === "true" ? "https" : "http"
 const host = process.env.HOST || "0.0.0.0"
 
-module.exports = function(proxy, allowedHost) {
+export default function getWebpackDevServerConfig(proxy, allowedHost) {
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
     // websites from potentially accessing local content through DNS rebinding:
