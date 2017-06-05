@@ -159,23 +159,21 @@ export default {
   module: {
     strictExportPresence: true,
     rules: [
-      // TODO: Disable require.ensure as it's not a standard language feature.
-      // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.
-      // { parser: { requireEnsure: false } },
+      { parser: { requireEnsure: false } },
 
       // First, run the linter.
       // It's important to do this before Typescript runs.
       {
         test: /\.(ts|tsx)$/,
+        include: paths.appSrc,
         loader: require.resolve("tslint-loader"),
         enforce: "pre",
-        include: paths.appSrc,
       },
       {
         test: /\.js$/,
+        include: paths.appSrc,
         loader: require.resolve("source-map-loader"),
         enforce: "pre",
-        include: paths.appSrc,
       },
       // ** ADDING/UPDATING LOADERS **
       // The "file" loader handles all assets unless explicitly excluded.
@@ -197,7 +195,9 @@ export default {
           /\.gif$/,
           /\.jpe?g$/,
           /\.png$/,
+          /\.svg$/,
         ],
+        include: paths.appSrc,
         loader: require.resolve("file-loader"),
         options: {
           name: "static/media/[name].[hash:8].[ext]",
@@ -207,6 +207,7 @@ export default {
       // assets smaller than specified size as data URLs to avoid requests.
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+        include: paths.appSrc,
         loader: require.resolve("url-loader"),
         options: {
           limit: 10000,
@@ -296,6 +297,18 @@ export default {
                 },
               },
             ],
+      },
+      {
+        test: /\.svg$/,
+        include: paths.appSrc,
+        loader: require.resolve("react-svg-loader"),
+        options: {
+          es5: true,
+          svgo: {
+            plugins: [{ removeTitle: false }],
+            floatPrecision: 2,
+          },
+        },
       },
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "file" loader exclusion list.
