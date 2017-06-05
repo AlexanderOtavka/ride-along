@@ -2,20 +2,20 @@
   "name": "ride-along",
   "version": "0.1.0",
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "babel-node scripts/build.js",
     "precommit": "lint-staged",
     "lint-staged": "lint-staged",
-    "start": "node scripts/start.js",
-    "test": "node scripts/test.js --env=jsdom",
+    "start": "babel-node scripts/start.js",
+    "test": "babel-node scripts/test.js --env=jsdom",
     "prettier": "prettier --no-semi --trailing-comma es5 --write"
   },
   "babel": {
     "presets": [
-      "react-app"
+      "es2015"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
     ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "dependencies": {
     "react": "^15.5.4",
@@ -31,7 +31,10 @@
     "@types/react-router-dom": "^4.0.4",
     "app-root-path": "^2.0.1",
     "autoprefixer": "7.1.0",
+    "babel-cli": "^6.24.1",
     "babel-loader": "^7.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
     "case-sensitive-paths-webpack-plugin": "2.0.0",
     "chalk": "1.1.3",
     "cli-highlight": "1.1.4",

@@ -26,7 +26,7 @@ const {
 } = require("react-dev-utils/WebpackDevServerUtils")
 const openBrowser = require("react-dev-utils/openBrowser")
 const paths = require("../config/paths")
-const config = require("../config/webpack.config.dev")
+const config = require("../config/webpack.config")
 const createDevServerConfig = require("../config/webpackDevServer.config")
 
 const useYarn = fs.existsSync(paths.yarnLockFile)
@@ -75,8 +75,9 @@ choosePort(HOST, DEFAULT_PORT)
       openBrowser(urls.localUrlForBrowser)
     })
 
-    ;["SIGINT", "SIGTERM"].forEach(function(sig) {
-      process.on(sig, function() {
+    const signals = ["SIGINT", "SIGTERM"]
+    signals.forEach(sig => {
+      process.on(sig, () => {
         devServer.close()
         process.exit()
       })
