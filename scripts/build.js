@@ -71,25 +71,25 @@ measureFileSizesBeforeBuild(paths.appBuild)
   .then(
     ({ stats, previousFileSizes, warnings }) => {
       if (warnings.length) {
-        console.log(chalk.yellow("Compiled with warnings.\n"))
-        console.log(warnings.join("\n\n"))
-        console.log(
+        console.warn(chalk.yellow("Compiled with warnings.\n"))
+        console.warn(warnings.join("\n\n"))
+        console.warn(
           "\nSearch for the " +
             chalk.underline(chalk.yellow("keywords")) +
             " to learn more about each warning."
         )
-        console.log(
+        console.warn(
           "To ignore, add " +
             chalk.cyan("// eslint-disable-next-line") +
             " to the line before.\n"
         )
       } else {
-        console.log(chalk.green("Compiled successfully.\n"))
+        console.info(chalk.green("Compiled successfully.\n"))
       }
 
-      console.log("File sizes after gzip:\n")
+      console.info("File sizes after gzip:\n")
       printFileSizesAfterBuild(stats, previousFileSizes)
-      console.log()
+      console.info()
 
       const appPackage = require(paths.appPackageJson)
       const publicUrl = paths.publicUrl
@@ -104,15 +104,15 @@ measureFileSizesBeforeBuild(paths.appBuild)
       )
     },
     err => {
-      console.log(chalk.red("Failed to compile.\n"))
-      console.log((err.message || err) + "\n")
+      console.error(chalk.red("Failed to compile.\n"))
+      console.error((err.message || err) + "\n")
       process.exit(1)
     }
   )
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
-  console.log("Creating an optimized production build...")
+  console.info("Creating an optimized production build...")
 
   let compiler = webpack(config)
   return new Promise((resolve, reject) => {
@@ -125,7 +125,7 @@ function build(previousFileSizes) {
         return reject(new Error(messages.errors.join("\n\n")))
       }
       if (process.env.CI && messages.warnings.length) {
-        console.log(
+        console.warn(
           chalk.yellow(
             "\nTreating warnings as errors because process.env.CI = true.\n" +
               "Most CI servers set it automatically.\n"

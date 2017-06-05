@@ -386,8 +386,9 @@ export default {
               if (message.indexOf("Total precache size is") === 0) {
                 // This message occurs for every build and is a bit too noisy.
                 return
+              } else {
+                console.info(message)
               }
-              console.log(message)
             },
             minify: true,
             // For unknown URLs, fallback to the index page

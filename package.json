@@ -7,7 +7,8 @@
     "lint-staged": "lint-staged",
     "start": "babel-node scripts/start.js",
     "test": "babel-node scripts/test.js --env=jsdom",
-    "prettier": "prettier --no-semi --trailing-comma es5 --write"
+    "prettier": "prettier --no-semi --trailing-comma es5 --write",
+    "tslint": "tslint"
   },
   "babel": {
     "presets": [
@@ -107,8 +108,8 @@
   "lint-staged": {
     "*.{js,ts,tsx,css}": [
       "yon run prettier",
-      "git add",
-      "tslint"
+      "yon run tslint",
+      "git add"
     ]
   }
 }

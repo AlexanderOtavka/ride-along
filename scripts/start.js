@@ -70,7 +70,7 @@ const HOST = process.env.HOST || "0.0.0.0"
 // run on a different port. `detect()` Promise resolves to the next free port.
 choosePort(HOST, DEFAULT_PORT)
   .then(port => {
-    if (port == null) {
+    if (port === null) {
       // We have not found a port.
       return
     }
@@ -91,12 +91,12 @@ choosePort(HOST, DEFAULT_PORT)
     // Launch WebpackDevServer.
     devServer.listen(port, HOST, err => {
       if (err) {
-        return console.log(err)
+        return console.error(err)
       }
       if (isInteractive) {
         clearConsole()
       }
-      console.log(chalk.cyan("Starting the development server...\n"))
+      console.info(chalk.cyan("Starting the development server...\n"))
       openBrowser(urls.localUrlForBrowser)
     })
 
@@ -110,7 +110,7 @@ choosePort(HOST, DEFAULT_PORT)
   })
   .catch(err => {
     if (err && err.message) {
-      console.log(err.message)
+      console.error(err.message)
     }
     process.exit(1)
   })
