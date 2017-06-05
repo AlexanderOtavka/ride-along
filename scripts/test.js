@@ -37,7 +37,7 @@ import jest from "jest"
 const argv = process.argv.slice(2)
 
 // Watch unless on CI or in coverage mode
-if (!process.env.CI && argv.indexOf("--coverage") !== -1) {
+if (!process.env.CI && argv.indexOf("--coverage") === -1) {
   argv.push("--watch")
 }
 
