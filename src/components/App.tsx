@@ -20,7 +20,7 @@
  */
 
 import React from "react"
-import { BrowserRouter as Router, Route, Link } from "react-router-dom"
+import { Route, Link } from "react-router-dom"
 
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
@@ -32,38 +32,36 @@ import CarSVG from "../assets/car-side.svg"
 
 export default function App() {
   return (
-    <Router>
-      <div className={styles.app}>
-        <header className={styles.header}>
-          <form className={styles.headerForm} action="/search" method="get">
-            <BoxField type="submit" value="Request a ride" />
-            <div className={styles.modeSwitch}>
-              <ModeButton
-                name="mode"
-                mode="request"
-                defaultChecked={true}
-                image={<ThumbSVG />}
-              />
-              <ModeButton name="mode" mode="offer" image={<CarSVG />} />
-            </div>
-          </form>
-        </header>
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <form className={styles.headerForm} action="/search" method="get">
+          <BoxField type="submit" value="Request a ride" />
+          <div className={styles.modeSwitch}>
+            <ModeButton
+              name="mode"
+              mode="request"
+              defaultChecked={true}
+              image={<ThumbSVG />}
+            />
+            <ModeButton name="mode" mode="offer" image={<CarSVG />} />
+          </div>
+        </form>
+      </header>
 
-        <nav>
-          <Link to="/">Rides</Link>
-          <Link to="/me">Me</Link>
-          <button>Options</button>
-        </nav>
+      <nav>
+        <Link to="/">Rides</Link>
+        <Link to="/me">Me</Link>
+        <button>Options</button>
+      </nav>
 
-        <main>
-          <Route
-            exact={true}
-            path="/(:?search)?"
-            render={() => <p>Rides...</p>}
-          />
-          <Route path="/me" render={() => <p>Me</p>} />
-        </main>
-      </div>
-    </Router>
+      <main>
+        <Route
+          exact={true}
+          path="/(:?search)?"
+          render={() => <p>Rides...</p>}
+        />
+        <Route path="/me" render={() => <p>Me</p>} />
+      </main>
+    </div>
   )
 }
