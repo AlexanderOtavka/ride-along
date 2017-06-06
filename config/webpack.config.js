@@ -30,6 +30,8 @@ import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin"
 import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin"
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin"
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin"
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer"
+import CompressionPlugin from "compression-webpack-plugin"
 
 import paths from "./paths"
 import getClientEnvironment from "./env"
@@ -161,6 +163,13 @@ export default {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       "react-native": "react-native-web",
+      ...(isProduction
+        ? {
+            react: "preact-compat",
+            "react-dom": "preact-compat",
+            "create-react-class": "preact-compat/lib/create-react-class",
+          }
+        : {}),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -352,6 +361,10 @@ export default {
     new webpack.DefinePlugin(env.stringified),
     ...(isProduction
       ? [
+          // Visualize the bundle contents
+          new BundleAnalyzerPlugin({
+            analyzerMode: "static",
+          }),
           // Minify the code.
           new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -365,6 +378,10 @@ export default {
               comments: false,
             },
             sourceMap: true,
+          }),
+          // Create gzip files
+          new CompressionPlugin({
+            test: /\.(js|css|html)$/,
           }),
           // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
           new ExtractTextPlugin({
