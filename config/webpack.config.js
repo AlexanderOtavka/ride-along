@@ -262,7 +262,7 @@ export default {
                   loader: require.resolve("css-loader"),
                   options: {
                     modules: true,
-                    // localIdentName: '[hash:base64:8]',
+                    localIdentName: "[hash:base64:12]",
                     importLoaders: 1,
                     minimize: true,
                     sourceMap: true,
@@ -280,7 +280,7 @@ export default {
                 loader: require.resolve("css-loader"),
                 options: {
                   modules: true,
-                  // localIdentName: '[name]--[local]',
+                  localIdentName: "[name]--[local]",
                   importLoaders: 1,
                 },
               },
