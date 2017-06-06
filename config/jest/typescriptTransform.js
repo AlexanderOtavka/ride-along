@@ -20,22 +20,25 @@
  */
 
 import fs from "fs"
-import tsc from "typescript"
+import { transpileModule as tsc, ModuleKind, JsxEmit } from "typescript"
+import { transform as babel } from "babel-core"
 import appRootPath from "app-root-path"
+import createCacheKeyFunction from "fbjs-scripts/jest/createCacheKeyFunction"
 
 const tsconfigPath = appRootPath.resolve("/tsconfig.json")
+const tsconfigExists = fs.existsSync(tsconfigPath)
 
-let compilerConfig = {
-  module: tsc.ModuleKind.CommonJS,
-  jsx: tsc.JsxEmit.React,
+let compilerOptions = {
+  module: ModuleKind.CommonJS,
+  jsx: JsxEmit.React,
 }
 
-if (fs.existsSync(tsconfigPath)) {
+if (tsconfigExists) {
   try {
     const tsconfig = require(tsconfigPath)
 
     if (tsconfig && tsconfig.compilerOptions) {
-      compilerConfig = tsconfig.compilerOptions
+      compilerOptions = tsconfig.compilerOptions
     }
   } catch (e) {
     // The default is set, just warn.
@@ -45,8 +48,23 @@ if (fs.existsSync(tsconfigPath)) {
 
 export function process(src, path) {
   if (path.endsWith(".ts") || path.endsWith(".tsx")) {
-    return tsc.transpile(src, compilerConfig, path, [])
+    const { outputText: tscOutput } = tsc(src, {
+      compilerOptions,
+      fileName: path,
+      reportDiagnostics: false,
+    })
+
+    const { code: babelOutput } = babel(tscOutput, {
+      plugins: ["transform-es2015-modules-commonjs"],
+      ast: false,
+    })
+
+    return babelOutput
   } else {
     return src
   }
 }
+
+export const getCacheKey = createCacheKeyFunction(
+  [__filename, tsconfigExists && tsconfigPath].filter(Boolean)
+)

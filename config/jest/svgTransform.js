@@ -22,7 +22,7 @@
 export function process() {
   return `
     const React = require("react")
-    module.exports.default = (props) => React.createElement("svg", props)
+    module.exports = (props) => React.createElement("svg", props)
   `
 }
 
