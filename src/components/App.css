@@ -18,17 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.App__header {
+.header {
   height: 80px;
   background-color: #F2C94C;
   padding: 16px;
 }
 
-.App__header-form {
+.headerForm {
   display: flex;
   flex-direction: row;
 }
 
-.App__mode-switch {
+.modeSwitch {
   margin-left: 16px;
 }

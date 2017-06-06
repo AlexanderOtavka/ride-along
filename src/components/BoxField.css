@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.BoxField {
+.boxField {
   flex-grow: 1;
   height: 48px;
   background: rgba(242, 242, 242, 0.3);
@@ -31,15 +31,15 @@
   text-align: left;
 }
 
-.BoxField:focus {
+.boxField:focus {
   background-color: #F2F2F2;
   color: #4F4F4F;
 }
 
-.BoxField::placeholder {
+.boxField::placeholder {
   color: white;
 }
 
-.BoxField:focus::placeholder {
+.boxField:focus::placeholder {
   color: #4F4F4F;
 }

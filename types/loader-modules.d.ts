@@ -23,3 +23,10 @@ declare module "*.svg" {
   const _default: React.SVGFactory
   export default _default
 }
+
+declare module "*.css" {
+  const _default: {
+    [localClassName: string]: string | undefined
+  }
+  export = _default
+}

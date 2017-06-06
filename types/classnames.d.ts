@@ -1,7 +1,7 @@
 /**
- * @file bemHelper.ts
+ * @file classnames.d.ts
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/5/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,8 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { withDefaults } from "react-bem-helper"
+declare module "classnames" {
+  interface PredicateMap {
+    [className: string]: boolean
+  }
 
-export default withDefaults({
-  outputIsString: true,
-})
+  interface ClassNameArray extends Array<ClassName> {}
+
+  type ClassName = string | boolean | void | PredicateMap | ClassNameArray
+
+  export default function classNames(...args: ClassName[]): string
+}

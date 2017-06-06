@@ -19,21 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react"
+import React from "react"
+import classes from "classnames"
 
-import bemHelper from "../util/bemHelper"
-import "./BoxField.css"
+import styles from "./BoxField.css"
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
   type?: "text" | "submit"
 }
-
-const bem = bemHelper("BoxField")
 
 export default function BoxField({
   type = "text",
   className,
   ...props,
 }: Props) {
-  return <input type={type} className={bem("", "", className)} {...props} />
+  return (
+    <input
+      type={type}
+      className={classes(styles.boxField, className)}
+      {...props}
+    />
+  )
 }

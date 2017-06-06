@@ -71,6 +71,22 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
     { publicPath: Array(cssFilename.split("/").length).join("../") }
   : {}
 
+const postCSSOptions = {
+  ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
+  plugins: () => [
+    require("postcss-flexbugs-fixes"),
+    autoprefixer({
+      browsers: [
+        ">1%",
+        "last 4 versions",
+        "Firefox ESR",
+        "not ie < 9", // React doesn't support IE8 anyway
+      ],
+      flexbox: "no-2009",
+    }),
+  ],
+}
+
 export default {
   // In production, don't attempt to continue if there are any errors.
   bail: isProduction,
@@ -236,7 +252,8 @@ export default {
       {
         test: /\.css$/,
         use: isProduction
-          ? ExtractTextPlugin.extract({
+          ? // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+            ExtractTextPlugin.extract({
               ...extractTextPluginOptions,
 
               fallback: require.resolve("style-loader"),
@@ -244,6 +261,8 @@ export default {
                 {
                   loader: require.resolve("css-loader"),
                   options: {
+                    modules: true,
+                    // localIdentName: '[hash:base64:8]',
                     importLoaders: 1,
                     minimize: true,
                     sourceMap: true,
@@ -251,50 +270,23 @@ export default {
                 },
                 {
                   loader: require.resolve("postcss-loader"),
-                  options: {
-                    ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
-                    plugins: () => [
-                      require("postcss-flexbugs-fixes"),
-                      autoprefixer({
-                        browsers: [
-                          ">1%",
-                          "last 4 versions",
-                          "Firefox ESR",
-                          "not ie < 9", // React doesn't support IE8 anyway
-                        ],
-                        flexbox: "no-2009",
-                      }),
-                    ],
-                  },
+                  options: postCSSOptions,
                 },
               ],
-              // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
             })
           : [
               require.resolve("style-loader"),
               {
                 loader: require.resolve("css-loader"),
                 options: {
+                  modules: true,
+                  // localIdentName: '[name]--[local]',
                   importLoaders: 1,
                 },
               },
               {
                 loader: require.resolve("postcss-loader"),
-                options: {
-                  ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
-                  plugins: () => [
-                    require("postcss-flexbugs-fixes"),
-                    autoprefixer({
-                      browsers: [
-                        ">1%",
-                        "last 4 versions",
-                        "Firefox ESR",
-                        "not ie < 9", // React doesn't support IE8 anyway
-                      ],
-                      flexbox: "no-2009",
-                    }),
-                  ],
-                },
+                options: postCSSOptions,
               },
             ],
       },

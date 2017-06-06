@@ -19,19 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react"
+import React from "react"
+import classes from "classnames"
 
-import bemHelper from "../util/bemHelper"
-import "./ModeButton.css"
+import styles from "./ModeButton.css"
 
 interface ModeButtonProps {
   name: string
-  mode: string
+  mode: "request" | "offer"
   defaultChecked?: boolean
   image: JSX.Element
 }
-
-const bem = bemHelper("ModeButton")
 
 export default function ModeButton({
   mode,
@@ -39,16 +37,16 @@ export default function ModeButton({
   ...props,
 }: ModeButtonProps) {
   return (
-    <label className={bem("")}>
+    <label className={styles.modeButton}>
       <input
-        className={bem("input")}
+        className={styles.input}
         type="radio"
         name={props.name}
         value={mode}
         defaultChecked={defaultChecked}
       />
 
-      <div className={bem("button", mode)}>
+      <div className={classes(styles.button, mode)}>
         {props.image}
       </div>
     </label>

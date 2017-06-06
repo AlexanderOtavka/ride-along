@@ -18,19 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.ModeButton {
+.modeButton {
   position: relative;
   display: inline-block;
   width: 56px;
   height: 48px;
 }
 
-.ModeButton__input {
+.input {
   position: absolute;
   visibility: hidden;
 }
 
-.ModeButton__button {
+.button {
   position: absolute;
   top: 0;
   right: 0;
@@ -42,22 +42,23 @@
   background-color: #F2F2F2;
 }
 
-.ModeButton__input:checked ~ .ModeButton__button {
+.input:checked ~ .button {
   background-color: rgba(242, 242, 242, 0.3);
 }
 
-.ModeButton__button > svg {
+.button > svg {
   width: 28px;
   height: 28px;
 }
 
-.ModeButton__button--request > svg {
+.button:global(.request) > svg {
   fill: #F2C94C;
 }
 
-.ModeButton__button--offer > svg {
+.button:global(.offer) > svg {
   fill: #219653;
 }
-.ModeButton__input:checked ~ .ModeButton__button > svg {
+
+.input:checked ~ .button > svg {
   fill: #F2F2F2;
 }

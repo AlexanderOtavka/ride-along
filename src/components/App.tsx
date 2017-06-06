@@ -19,28 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from "react"
+import React from "react"
 import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
 
-import bemHelper from "../util/bemHelper"
-import "./App.css"
+import styles from "./App.css"
 
 import ThumbSVG from "../assets/thumb-right.svg"
 import CarSVG from "../assets/car-side.svg"
 
-const bem = bemHelper("App")
-
 export default function App() {
   return (
     <Router>
-      <div className={bem()}>
-        <header className={bem("header")}>
-          <form className={bem("header-form")} action="/search" method="get">
+      <div className={styles.app}>
+        <header className={styles.header}>
+          <form className={styles.headerForm} action="/search" method="get">
             <BoxField type="submit" value="Request a ride" />
-            <div className={bem("mode-switch")}>
+            <div className={styles.modeSwitch}>
               <ModeButton
                 name="mode"
                 mode="request"
@@ -62,9 +59,9 @@ export default function App() {
           <Route
             exact={true}
             path="/(:?search)?"
-            render={() => <span>"Rides..."</span>}
+            render={() => <p>Rides...</p>}
           />
-          <Route path="/me" render={() => <span>"Me"</span>} />
+          <Route path="/me" render={() => <p>Me</p>} />
         </main>
       </div>
     </Router>

@@ -110,8 +110,10 @@
   "lint-staged": {
     "*.{js,ts,tsx,css}": [
       "yon run prettier",
-      "yon run tslint",
       "git add"
+    ],
+    "*.{js,ts,tsx}": [
+      "yon run tslint"
     ]
   }
 }
