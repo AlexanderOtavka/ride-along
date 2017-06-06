@@ -26,7 +26,7 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./components/App"
 import registerServiceWorker from "./registerServiceWorker"
 
-import "./index.css"
+import "./index.sass"
 
 registerServiceWorker()
 

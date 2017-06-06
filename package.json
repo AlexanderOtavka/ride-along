@@ -55,6 +55,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "20.0.3",
     "lint-staged": "^3.6.0",
+    "node-sass": "^4.5.3",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.0.0",
     "postcss-loader": "2.0.5",
@@ -64,6 +65,7 @@
     "react-error-overlay": "^1.0.6",
     "react-svg-loader": "^1.1.1",
     "react-test-renderer": "^15.5.4",
+    "sass-loader": "^6.0.5",
     "source-map-loader": "^0.2.1",
     "style-loader": "0.17.0",
     "sw-precache-webpack-plugin": "0.9.1",
@@ -99,10 +101,10 @@
     "testEnvironment": "node",
     "testURL": "http://localhost",
     "transform": {
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^.+\\.sass$": "<rootDir>/config/jest/sassTransform.js",
       "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
       "^.+\\.svg$": "<rootDir>/config/jest/svgTransform.js",
-      "^(?!.*\\.(css|json|svg)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(sass|json|svg)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
@@ -112,11 +114,9 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx,css}": [
-      "yon run prettier",
-      "git add"
-    ],
     "*.{js,ts,tsx}": [
+      "yon run prettier",
+      "git add",
       "yon run tslint"
     ]
   }

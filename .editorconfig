@@ -6,5 +6,5 @@ indent_size = 2
 end_of_line = lf
 insert_final_newline = true
 
-[*.{html,css,js,ts,tsx,yml}]
+[*.{html,sass,js,ts,tsx,yml}]
 charset = utf-8

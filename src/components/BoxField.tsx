@@ -22,7 +22,7 @@
 import React from "react"
 import classes from "classnames"
 
-import styles from "./BoxField.css"
+import styles from "./BoxField.sass"
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
   type?: "text" | "submit"

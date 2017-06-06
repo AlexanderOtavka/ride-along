@@ -1,10 +1,9 @@
 /**
- * @file cssTransform.js
+ * App.sass
  *
- * Created by Zander Otavka on 6/4/17.
+ * Created by Zander Otavka on 6/2/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
- * @license
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,14 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This is a custom Jest transformer turning style imports into empty objects.
-// http://facebook.github.io/jest/docs/tutorial-webpack.html
-
-export function process() {
-  return "module.exports = require('identity-obj-proxy')"
-}
-
-export function getCacheKey() {
-  // The output is always the same.
-  return "cssTransform"
-}
+.nav
+  position: fixed
+  right: 0
+  bottom: 0
+  left: 0

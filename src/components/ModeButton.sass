@@ -1,7 +1,7 @@
 /**
- * BoxField.css
+ * ModeButton.sass
  *
- * Created by Zander Otavka on 6/4/17.
+ * Created by Zander Otavka on 6/3/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,28 +18,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.boxField {
-  flex-grow: 1;
-  height: 48px;
-  background: rgba(242, 242, 242, 0.3);
-  border: none;
-  padding: 0 16px;
-  font-size: 18px;
-  color: white;
-  font-weight: 300;
-  outline: none;
-  text-align: left;
-}
+@import "style/colors"
 
-.boxField:focus {
-  background-color: #F2F2F2;
-  color: #4F4F4F;
-}
+.modeButton
+  position: relative
+  display: inline-block
+  width: 56px
+  height: 48px
 
-.boxField::placeholder {
-  color: white;
-}
+.input
+  position: absolute
+  visibility: hidden
 
-.boxField:focus::placeholder {
-  color: #4F4F4F;
-}
+.button
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: $off-white
+
+  & > svg
+    width: 28px
+    height: 28px
+
+  &:global(.request) > svg
+    fill: $primary-yellow
+
+  &:global(.offer) > svg
+    fill: $primary-green
+
+.input:checked ~ .button
+  background-color: $box-field-background
+
+  & > svg
+    fill: $off-white
+

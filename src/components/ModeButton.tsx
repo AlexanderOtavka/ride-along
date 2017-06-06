@@ -22,7 +22,7 @@
 import React from "react"
 import classes from "classnames"
 
-import styles from "./ModeButton.css"
+import styles from "./ModeButton.sass"
 
 interface ModeButtonProps {
   name: string

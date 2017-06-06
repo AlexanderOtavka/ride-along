@@ -1,7 +1,7 @@
 /**
- * @file App.tsx
+ * @file sassTransform.js
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/4/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,29 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import { Route, Link } from "react-router-dom"
+// This is a custom Jest transformer turning style imports into empty objects.
+// http://facebook.github.io/jest/docs/tutorial-webpack.html
 
-import RideListHeader from "./RideListHeader"
+export function process() {
+  return "module.exports = require('identity-obj-proxy')"
+}
 
-import styles from "./App.sass"
-
-export default function App() {
-  return (
-    <div className={styles.app}>
-      <Route exact path="/(search)?" component={RideListHeader} />
-
-      <nav className={styles.nav}>
-        <Link to="/">Rides</Link>
-        <Link to="/me">Me</Link>
-        <button>Options</button>
-        <Link to="/search">Debug Search</Link>
-      </nav>
-
-      <main>
-        <Route exact path="/(search)?" render={() => <p>Rides...</p>} />
-        <Route path="/me" render={() => <p>Me</p>} />
-      </main>
-    </div>
-  )
+export function getCacheKey() {
+  // The output is always the same.
+  return "sassTransform"
 }

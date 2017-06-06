@@ -27,7 +27,7 @@ import classes from "classnames"
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
 
-import styles from "./RideListHeader.css"
+import styles from "./RideListHeader.sass"
 
 import ThumbSVG from "../drawables/thumb-right.svg"
 import CarSVG from "../drawables/car-side.svg"

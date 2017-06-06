@@ -24,7 +24,7 @@ declare module "*.svg" {
   export default _default
 }
 
-declare module "*.css" {
+declare module "*.sass" {
   const _default: {
     [localClassName: string]: string | undefined
   }

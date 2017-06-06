@@ -72,7 +72,6 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
   : {}
 
 const postCSSOptions = {
-  ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
   plugins: () => [
     require("postcss-flexbugs-fixes"),
     autoprefixer({
@@ -205,7 +204,7 @@ export default {
           /\.html$/,
           /\.(js|jsx)$/,
           /\.(ts|tsx)$/,
-          /\.css$/,
+          /\.sass$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -250,7 +249,7 @@ export default {
       // use the "style" loader inside the async code so CSS from them won't be
       // in the main CSS file.
       {
-        test: /\.css$/,
+        test: /\.sass$/,
         use: isProduction
           ? // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
             ExtractTextPlugin.extract({
@@ -263,7 +262,7 @@ export default {
                   options: {
                     modules: true,
                     localIdentName: "[hash:base64:12]",
-                    importLoaders: 1,
+                    importLoaders: 2,
                     minimize: true,
                     sourceMap: true,
                   },
@@ -271,6 +270,12 @@ export default {
                 {
                   loader: require.resolve("postcss-loader"),
                   options: postCSSOptions,
+                },
+                {
+                  loader: require.resolve("sass-loader"),
+                  options: {
+                    indentedSyntax: true,
+                  },
                 },
               ],
             })
@@ -281,12 +286,18 @@ export default {
                 options: {
                   modules: true,
                   localIdentName: "[name]--[local]",
-                  importLoaders: 1,
+                  importLoaders: 2,
                 },
               },
               {
                 loader: require.resolve("postcss-loader"),
                 options: postCSSOptions,
+              },
+              {
+                loader: require.resolve("sass-loader"),
+                options: {
+                  indentedSyntax: true,
+                },
               },
             ],
       },
