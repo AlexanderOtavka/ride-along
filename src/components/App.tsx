@@ -22,31 +22,14 @@
 import React from "react"
 import { Route, Link } from "react-router-dom"
 
-import BoxField from "./BoxField"
-import ModeButton from "./ModeButton"
+import RideListHeader from "./RideListHeader"
 
 import styles from "./App.css"
-
-import ThumbSVG from "../assets/thumb-right.svg"
-import CarSVG from "../assets/car-side.svg"
 
 export default function App() {
   return (
     <div className={styles.app}>
-      <header className={styles.header}>
-        <form className={styles.headerForm} action="/search" method="get">
-          <BoxField type="submit" value="Request a ride" />
-          <div className={styles.modeSwitch}>
-            <ModeButton
-              name="mode"
-              mode="request"
-              defaultChecked={true}
-              image={<ThumbSVG />}
-            />
-            <ModeButton name="mode" mode="offer" image={<CarSVG />} />
-          </div>
-        </form>
-      </header>
+      <Route exact path="/(search)?" component={RideListHeader} />
 
       <nav>
         <Link to="/">Rides</Link>
@@ -54,12 +37,10 @@ export default function App() {
         <button>Options</button>
       </nav>
 
+      <Link to="/search">Search</Link>
+
       <main>
-        <Route
-          exact={true}
-          path="/(:?search)?"
-          render={() => <p>Rides...</p>}
-        />
+        <Route exact path="/(search)?" render={() => <p>Rides...</p>} />
         <Route path="/me" render={() => <p>Me</p>} />
       </main>
     </div>

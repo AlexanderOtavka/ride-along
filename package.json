@@ -20,11 +20,13 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "querystring": "^0.2.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.0",
     "@types/jest": "^19.2.4",
     "@types/node": "^7.0.27",
     "@types/react": "^15.0.26",
@@ -65,7 +67,6 @@
     "ts-loader": "^2.0.3",
     "tslint": "^5.2.0",
     "tslint-loader": "^3.5.3",
-    "tslint-react": "^3.0.0",
     "typescript": "^2.3.3",
     "url-loader": "0.5.8",
     "webpack": "2.6.0",

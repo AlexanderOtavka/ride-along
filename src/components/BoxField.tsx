@@ -28,16 +28,6 @@ interface Props extends React.HTMLProps<HTMLInputElement> {
   type?: "text" | "submit"
 }
 
-export default function BoxField({
-  type = "text",
-  className,
-  ...props,
-}: Props) {
-  return (
-    <input
-      type={type}
-      className={classes(styles.boxField, className)}
-      {...props}
-    />
-  )
+export default function BoxField({ className, ...props }: Props) {
+  return <input className={classes(styles.boxField, className)} {...props} />
 }

@@ -27,15 +27,11 @@ import styles from "./ModeButton.css"
 interface ModeButtonProps {
   name: string
   mode: "request" | "offer"
-  defaultChecked?: boolean
+  selectedMode?: "request" | "offer"
   image: JSX.Element
 }
 
-export default function ModeButton({
-  mode,
-  defaultChecked = false,
-  ...props,
-}: ModeButtonProps) {
+export default function ModeButton({ mode, ...props }: ModeButtonProps) {
   return (
     <label className={styles.modeButton}>
       <input
@@ -43,7 +39,7 @@ export default function ModeButton({
         type="radio"
         name={props.name}
         value={mode}
-        defaultChecked={defaultChecked}
+        defaultChecked={props.selectedMode === mode}
       />
 
       <div className={classes(styles.button, mode)}>
