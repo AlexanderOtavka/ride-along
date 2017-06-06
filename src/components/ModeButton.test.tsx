@@ -24,7 +24,7 @@ import renderer from "react-test-renderer"
 
 import ModeButton from "./ModeButton"
 
-it("is not selected without a selectedMode", () => {
+it("without a selectedMode", () => {
   const component = renderer.create(
     <ModeButton name="foo" mode="request" image={<svg />} />
   )
@@ -32,7 +32,7 @@ it("is not selected without a selectedMode", () => {
   expect(component.toJSON()).toMatchSnapshot()
 })
 
-it("is not selected when selectedMode is different from mode", () => {
+it("when selectedMode is different from mode", () => {
   const component = renderer.create(
     <ModeButton
       name="foo"
@@ -45,7 +45,7 @@ it("is not selected when selectedMode is different from mode", () => {
   expect(component.toJSON()).toMatchSnapshot()
 })
 
-it("is selected when selectedMode matches mode", () => {
+it("when selectedMode matches mode", () => {
   const component = renderer.create(
     <ModeButton name="foo" mode="offer" selectedMode="offer" image={<svg />} />
   )

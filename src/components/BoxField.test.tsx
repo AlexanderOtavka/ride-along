@@ -24,13 +24,13 @@ import renderer from "react-test-renderer"
 
 import BoxField from "./BoxField"
 
-it("has the correct className when rendered without props", () => {
+it("when rendered without props", () => {
   const component = renderer.create(<BoxField />)
 
   expect(component.toJSON()).toMatchSnapshot()
 })
 
-it("has the correct className when rendered with props", () => {
+it("when rendered with props", () => {
   const component = renderer.create(<BoxField className="foo" />)
 
   expect(component.toJSON()).toMatchSnapshot()
