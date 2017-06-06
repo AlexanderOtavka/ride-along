@@ -1,7 +1,7 @@
 /**
- * @file cssTransform.js
+ * @file BoxField.test.tsx
  *
- * Created by Zander Otavka on 6/4/17.
+ * Created by Zander Otavka on 6/6/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,14 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This is a custom Jest transformer turning style imports into empty objects.
-// http://facebook.github.io/jest/docs/tutorial-webpack.html
+import React from "react"
+import renderer from "react-test-renderer"
 
-export function process() {
-  return "module.exports = require('identity-obj-proxy')"
-}
+import BoxField from "./BoxField"
 
-export function getCacheKey() {
-  // The output is always the same.
-  return "cssTransform"
-}
+it("has the correct className when rendered without props", () => {
+  const component = renderer.create(<BoxField />)
+
+  expect(component.toJSON()).toMatchSnapshot()
+})
+
+it("has the correct className when rendered with props", () => {
+  const component = renderer.create(<BoxField className="foo" />)
+
+  expect(component.toJSON()).toMatchSnapshot()
+})

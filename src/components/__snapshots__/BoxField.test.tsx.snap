@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`has the correct className when rendered with props 1`] = `
+<input
+  className="boxField foo"
+/>
+`;
+
+exports[`has the correct className when rendered without props 1`] = `
+<input
+  className="boxField"
+/>
+`;

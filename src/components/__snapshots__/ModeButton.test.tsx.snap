@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`is not selected when selectedMode is different from mode 1`] = `
+<label
+  className="modeButton"
+>
+  <input
+    className="input"
+    defaultChecked={false}
+    name="foo"
+    type="radio"
+    value="offer"
+  />
+  <div
+    className="button offer"
+  >
+    <svg />
+  </div>
+</label>
+`;
+
+exports[`is not selected without a selectedMode 1`] = `
+<label
+  className="modeButton"
+>
+  <input
+    className="input"
+    defaultChecked={false}
+    name="foo"
+    type="radio"
+    value="request"
+  />
+  <div
+    className="button request"
+  >
+    <svg />
+  </div>
+</label>
+`;
+
+exports[`is selected when selectedMode matches mode 1`] = `
+<label
+  className="modeButton"
+>
+  <input
+    className="input"
+    defaultChecked={true}
+    name="foo"
+    type="radio"
+    value="offer"
+  />
+  <div
+    className="button offer"
+  >
+    <svg />
+  </div>
+</label>
+`;
