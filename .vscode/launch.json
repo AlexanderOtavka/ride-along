@@ -1,18 +1,46 @@
 {
   "version": "0.2.0",
-  "configurations": [{
-    "name": "Chrome",
-    "type": "chrome",
-    "request": "launch",
-    "url": "http://localhost:3000",
-    "webRoot": "${workspaceRoot}/src",
-    "userDataDir": "${workspaceRoot}/.vscode/chrome",
-    "skipFiles": [
-      "node_modules/**",
-      "webpack/**"
-    ],
-    "sourceMapPathOverrides": {
-      "webpack:///src/*": "${webRoot}/*"
+  "configurations": [
+    {
+      "name": "Launch build.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/scripts/build.js",
+      "stopOnEntry": false,
+      "args": [],
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "sourceMaps": false
+    },
+    {
+      "name": "Attach to node process",
+      "type": "node",
+      "request": "attach",
+      "port": 5858,
+      "address": "localhost",
+      "restart": false,
+      "sourceMaps": false,
+      "localRoot": "${workspaceRoot}",
+      "remoteRoot": null
+    },
+    {
+      "name": "Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/src",
+      "userDataDir": "${workspaceRoot}/.vscode/chrome",
+      "skipFiles": [
+        "node_modules/**",
+        "webpack/**"
+      ],
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
     }
-  }]
+  ]
 }
