@@ -26,7 +26,10 @@ import webpack from "webpack"
 import checkRequiredFiles from "react-dev-utils/checkRequiredFiles"
 import formatWebpackMessages from "react-dev-utils/formatWebpackMessages"
 import printHostingInstructions from "react-dev-utils/printHostingInstructions"
-import FileSizeReporter from "react-dev-utils/FileSizeReporter"
+import {
+  measureFileSizesBeforeBuild,
+  printFileSizesAfterBuild,
+} from "react-dev-utils/FileSizeReporter"
 
 import paths from "../config/paths"
 
@@ -47,8 +50,7 @@ require("../config/env")
 // executed and NODE_ENV is set.
 const config = require("../config/webpack.config").default
 
-const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild
-const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild
+// Check for yarn.lock
 const useYarn = fs.existsSync(paths.yarnLockFile)
 
 // Warn and crash if required files are missing
@@ -68,47 +70,45 @@ measureFileSizesBeforeBuild(paths.appBuild)
     // Start the webpack build
     return build(previousFileSizes)
   })
-  .then(
-    ({ stats, previousFileSizes, warnings }) => {
-      if (warnings.length) {
-        console.warn(chalk.yellow("Compiled with warnings.\n"))
-        console.warn(warnings.join("\n\n"))
-        console.warn(
-          "\nSearch for the " +
-            chalk.underline(chalk.yellow("keywords")) +
-            " to learn more about each warning."
-        )
-        console.warn(
-          "To ignore, add " +
-            chalk.cyan("// eslint-disable-next-line") +
-            " to the line before.\n"
-        )
-      } else {
-        console.info(chalk.green("Compiled successfully.\n"))
-      }
-
-      console.info("File sizes after gzip:\n")
-      printFileSizesAfterBuild(stats, previousFileSizes)
-      console.info()
-
-      const appPackage = require(paths.appPackageJson)
-      const publicUrl = paths.publicUrl
-      const publicPath = config.output.publicPath
-      const buildFolder = path.relative(process.cwd(), paths.appBuild)
-      printHostingInstructions(
-        appPackage,
-        publicUrl,
-        publicPath,
-        buildFolder,
-        useYarn
+  .then(({ stats, previousFileSizes, warnings }) => {
+    if (warnings.length) {
+      console.warn(chalk.yellow("Compiled with warnings.\n"))
+      console.warn(warnings.join("\n\n"))
+      console.warn(
+        "\nSearch for the " +
+          chalk.underline(chalk.yellow("keywords")) +
+          " to learn more about each warning."
       )
-    },
-    err => {
-      console.error(chalk.red("Failed to compile.\n"))
-      console.error((err.message || err) + "\n")
-      process.exit(1)
+      console.warn(
+        "To ignore, add " +
+          chalk.cyan("// eslint-disable-next-line") +
+          " to the line before.\n"
+      )
+    } else {
+      console.info(chalk.green("Compiled successfully.\n"))
     }
-  )
+
+    console.info("File sizes after gzip:\n")
+    printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild)
+    console.info()
+
+    const appPackage = require(paths.appPackageJson)
+    const publicUrl = paths.publicUrl
+    const publicPath = config.output.publicPath
+    const buildFolder = path.relative(process.cwd(), paths.appBuild)
+    printHostingInstructions(
+      appPackage,
+      publicUrl,
+      publicPath,
+      buildFolder,
+      useYarn
+    )
+  })
+  .catch(err => {
+    console.error(chalk.red("Failed to compile.\n"))
+    console.error(err + "\n")
+    process.exit(1)
+  })
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
@@ -120,10 +120,12 @@ function build(previousFileSizes) {
       if (err) {
         return reject(err)
       }
+
       const messages = formatWebpackMessages(stats.toJson({}, true))
       if (messages.errors.length) {
         return reject(new Error(messages.errors.join("\n\n")))
       }
+
       if (process.env.CI && messages.warnings.length) {
         console.warn(
           chalk.yellow(
@@ -133,6 +135,7 @@ function build(previousFileSizes) {
         )
         return reject(new Error(messages.warnings.join("\n\n")))
       }
+
       return resolve({
         stats,
         previousFileSizes,
