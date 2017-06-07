@@ -20,14 +20,37 @@
  */
 
 import React from "react"
-import classes from "classnames"
+import { FormField } from "react-form"
+import classnames from "classnames"
 
 import styles from "./BoxField.sass"
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
-  type?: "text" | "submit"
+  isButton?: boolean
+  field: string
 }
 
-export default function BoxField({ className, ...props }: Props) {
-  return <input className={classes(styles.boxField, className)} {...props} />
+export default function BoxField({
+  field,
+  isButton = false,
+  className,
+  placeholder,
+  value,
+  ...props,
+}: Props) {
+  const classes = classnames(styles.boxField, className)
+
+  return isButton
+    ? <input {...props} className={classes} type="submit" value={placeholder} />
+    : <FormField field={field}>
+        {({ getValue, setValue, setTouched }: any) =>
+          <input
+            {...props}
+            className={classes}
+            placeholder={placeholder}
+            value={getValue("")}
+            onChange={ev => setValue(ev.target.value)}
+            onBlur={ev => setTouched()}
+          />}
+      </FormField>
 }

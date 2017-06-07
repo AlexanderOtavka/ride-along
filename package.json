@@ -23,10 +23,12 @@
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
     "querystring": "^0.2.0",
+    "react-form": "^1.2.8",
     "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.0",
+    "@types/enzyme": "^2.8.0",
     "@types/jest": "^19.2.4",
     "@types/node": "^7.0.27",
     "@types/react": "^15.0.26",
@@ -47,6 +49,7 @@
     "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.4",
     "dotenv": "^4.0.0",
+    "enzyme": "^2.8.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "fbjs-scripts": "^0.8.0",
     "file-loader": "^0.11.1",
@@ -55,6 +58,7 @@
     "husky": "^0.13.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^20.0.3",
+    "jest-enzyme": "^3.2.0",
     "lint-staged": "^3.6.0",
     "node-sass": "^4.5.3",
     "object-assign": "^4.1.1",
@@ -86,6 +90,7 @@
   },
   "private": true,
   "jest": {
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}"
     ],

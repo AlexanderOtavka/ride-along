@@ -1,13 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when rendered with props 1`] = `
-<input
-  className="boxField foo"
-/>
+exports[`BoxField when it is a button 1`] = `
+<div
+  className="ReactForm"
+>
+  <input
+    className="boxField foo"
+    type="submit"
+    value={undefined}
+  />
+</div>
 `;
 
-exports[`when rendered without props 1`] = `
-<input
-  className="boxField"
-/>
+exports[`BoxField with className 1`] = `
+<div
+  className="ReactForm"
+>
+  <input
+    className="boxField foo"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder={undefined}
+    value=""
+  />
+</div>
+`;
+
+exports[`BoxField with placeholder 1`] = `
+<div
+  className="ReactForm"
+>
+  <input
+    className="boxField"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder="foo"
+    value=""
+  />
+</div>
+`;
+
+exports[`BoxField without optional props 1`] = `
+<div
+  className="ReactForm"
+>
+  <input
+    className="boxField"
+    onBlur={[Function]}
+    onChange={[Function]}
+    placeholder={undefined}
+    value=""
+  />
+</div>
 `;

@@ -1,7 +1,7 @@
 /**
- * @file ModeButton.tsx
+ * @file react-form.d.ts
  *
- * Created by Zander Otavka on 6/3/17.
+ * Created by Zander Otavka on .
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,27 +19,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import { Radio } from "react-form"
-import classes from "classnames"
+declare module "react-form" {
+  export const Form: any
+  export const FormDefaultProps: any
+  export const FormField: any
+  export const FormError: any
+  export const FormInput: any
 
-import styles from "./ModeButton.sass"
-
-import ThumbSVG from "../drawables/thumb-right.svg"
-import CarSVG from "../drawables/car-side.svg"
-
-interface ModeButtonProps {
-  mode: "request" | "offer"
-}
-
-export default function ModeButton({ mode }: ModeButtonProps) {
-  return (
-    <label className={styles.modeButton}>
-      <Radio className={styles.input} value={mode} />
-
-      <div className={classes(styles.button, mode)}>
-        {mode === "request" ? <ThumbSVG /> : <CarSVG />}
-      </div>
-    </label>
-  )
+  export const Select: any
+  export const Checkbox: any
+  export const Textarea: any
+  export const NestedForm: any
+  export const Text: any
+  export const RadioGroup: any
+  export const Radio: any
 }

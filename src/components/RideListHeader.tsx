@@ -21,6 +21,7 @@
 
 import React from "react"
 import { RouteComponentProps } from "react-router-dom"
+import { Form, RadioGroup } from "react-form"
 import querystring from "querystring"
 import classes from "classnames"
 
@@ -29,8 +30,6 @@ import ModeButton from "./ModeButton"
 
 import styles from "./RideListHeader.sass"
 
-import ThumbSVG from "../drawables/thumb-right.svg"
-import CarSVG from "../drawables/car-side.svg"
 import DownChevronSVG from "../drawables/down-chevron.svg"
 
 interface QueryParams {
@@ -45,57 +44,72 @@ interface MatchParams {
 
 interface Props extends RouteComponentProps<MatchParams> {}
 
-export default function RideListHeader({ location, match }: Props) {
-  const query = querystring.parse(location.search.substring(1)) as QueryParams
+export default function RideListHeader({ history, ...props }: Props) {
+  const query = querystring.parse(
+    props.location.search.substring(1)
+  ) as QueryParams
   const selectedMode = query.mode || "request"
-  const isSearchMode = !!match.params[0]
+  const isSearchMode = !!props.match.params[0]
+  const updateURL = (values: QueryParams) => {
+    const urlValues = isSearchMode ? values : { mode: values.mode }
+    history.replace("?" + querystring.stringify(urlValues))
+  }
 
   return (
     <header className={classes(styles.header, selectedMode)}>
-      <form action="/search" method="get">
-        <div className={styles.headerTop}>
-          {isSearchMode
-            ? <BoxField
-                defaultValue={query.departLocation || ""}
-                name="departLocation"
-                placeholder="Departure location"
-                autoFocus={true}
+      <Form
+        values={{
+          ...query,
+          mode: selectedMode,
+        }}
+        onChange={({ values }: any) => updateURL(values)}
+        onSubmit={updateURL}
+        component={false}
+      >
+        {({ submitForm, values }: any) =>
+          <form
+            onSubmit={ev => {
+              ev.preventDefault()
+              history.push("/search")
+              submitForm()
+            }}
+            action="/search"
+            method="get"
+          >
+            <div className={styles.headerTop}>
+              <BoxField
+                field="departLocation"
+                isButton={!isSearchMode}
+                placeholder={
+                  isSearchMode ? "Departure location" : "Request a ride"
+                }
+                autoFocus={
+                  isSearchMode &&
+                  values.departLocation === undefined &&
+                  values.arriveLocation === undefined
+                }
               />
-            : <BoxField type="submit" value="Request a ride" />}
 
-          {isSearchMode ||
-            <div className={styles.modeSwitch}>
-              <ModeButton
-                name="mode"
-                mode="request"
-                selectedMode={selectedMode}
-                image={<ThumbSVG />}
-              />
-              <ModeButton
-                name="mode"
-                mode="offer"
-                selectedMode={selectedMode}
-                image={<CarSVG />}
-              />
-            </div>}
-        </div>
+              {isSearchMode ||
+                <RadioGroup field="mode" className={styles.modeSwitch}>
+                  <ModeButton mode="request" />
+                  <ModeButton mode="offer" />
+                </RadioGroup>}
+            </div>
 
-        <div
-          className={classes(
-            styles.headerBottom,
-            isSearchMode && styles.inSearchMode
-          )}
-        >
-          <DownChevronSVG className={styles.downChevron} />
-          <BoxField
-            defaultValue={query.arriveLocation || ""}
-            name="arriveLocation"
-            placeholder="Destination"
-          />
-        </div>
+            <div
+              className={classes(
+                styles.headerBottom,
+                isSearchMode && styles.inSearchMode
+              )}
+            >
+              <DownChevronSVG className={styles.downChevron} />
+              <BoxField field="arriveLocation" placeholder="Destination" />
+            </div>
 
-        {isSearchMode && <input type="submit" hidden />}
-      </form>
+            {isSearchMode && <input type="submit" hidden />}
+          </form>}
+      </Form>
     </header>
   )
 }

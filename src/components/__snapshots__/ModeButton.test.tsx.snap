@@ -1,58 +1,121 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when selectedMode is different from mode 1`] = `
-<label
-  className="modeButton"
+exports[`ModeButton when default value is different from mode 1`] = `
+<div
+  className="ReactForm"
 >
-  <input
-    className="input"
-    defaultChecked={false}
-    name="foo"
-    type="radio"
-    value="offer"
-  />
   <div
-    className="button offer"
+    className="FormInput"
   >
-    <svg />
+    <div
+      className="FormError"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      
+    </div>
+    <radiogroup>
+      <label
+        className="modeButton"
+      >
+        <input
+          checked={true}
+          className="input"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onClick={[Function]}
+          type="radio"
+        />
+        <div
+          className="button request"
+        >
+          <svg />
+        </div>
+      </label>
+    </radiogroup>
   </div>
-</label>
+</div>
 `;
 
-exports[`when selectedMode matches mode 1`] = `
-<label
-  className="modeButton"
+exports[`ModeButton when default value matches mode 1`] = `
+<div
+  className="ReactForm"
 >
-  <input
-    className="input"
-    defaultChecked={true}
-    name="foo"
-    type="radio"
-    value="offer"
-  />
   <div
-    className="button offer"
+    className="FormInput"
   >
-    <svg />
+    <div
+      className="FormError"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      
+    </div>
+    <radiogroup>
+      <label
+        className="modeButton"
+      >
+        <input
+          checked={false}
+          className="input"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onClick={[Function]}
+          type="radio"
+        />
+        <div
+          className="button offer"
+        >
+          <svg />
+        </div>
+      </label>
+    </radiogroup>
   </div>
-</label>
+</div>
 `;
 
-exports[`without a selectedMode 1`] = `
-<label
-  className="modeButton"
+exports[`ModeButton without a default value 1`] = `
+<div
+  className="ReactForm"
 >
-  <input
-    className="input"
-    defaultChecked={false}
-    name="foo"
-    type="radio"
-    value="request"
-  />
   <div
-    className="button request"
+    className="FormInput"
   >
-    <svg />
+    <div
+      className="FormError"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      
+    </div>
+    <radiogroup>
+      <label
+        className="modeButton"
+      >
+        <input
+          checked={false}
+          className="input"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onClick={[Function]}
+          type="radio"
+        />
+        <div
+          className="button request"
+        >
+          <svg />
+        </div>
+      </label>
+    </radiogroup>
   </div>
-</label>
+</div>
 `;

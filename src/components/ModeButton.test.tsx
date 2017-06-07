@@ -20,35 +20,45 @@
  */
 
 import React from "react"
-import renderer from "react-test-renderer"
+import { Form, RadioGroup } from "react-form"
+import { create as reactTestRender } from "react-test-renderer"
 
 import ModeButton from "./ModeButton"
 
-it("without a selectedMode", () => {
-  const component = renderer.create(
-    <ModeButton name="foo" mode="request" image={<svg />} />
-  )
+describe("ModeButton", () => {
+  it("without a default value", () => {
+    const component = reactTestRender(
+      <Form>
+        <RadioGroup field="foo">
+          <ModeButton mode="request" />
+        </RadioGroup>
+      </Form>
+    )
 
-  expect(component.toJSON()).toMatchSnapshot()
-})
+    expect(component.toJSON()).toMatchSnapshot()
+  })
 
-it("when selectedMode is different from mode", () => {
-  const component = renderer.create(
-    <ModeButton
-      name="foo"
-      mode="offer"
-      selectedMode="request"
-      image={<svg />}
-    />
-  )
+  it("when default value is different from mode", () => {
+    const component = reactTestRender(
+      <Form defaultValues={{ foo: "request" }}>
+        <RadioGroup field="foo">
+          <ModeButton mode="request" />
+        </RadioGroup>
+      </Form>
+    )
 
-  expect(component.toJSON()).toMatchSnapshot()
-})
+    expect(component.toJSON()).toMatchSnapshot()
+  })
 
-it("when selectedMode matches mode", () => {
-  const component = renderer.create(
-    <ModeButton name="foo" mode="offer" selectedMode="offer" image={<svg />} />
-  )
+  it("when default value matches mode", () => {
+    const component = reactTestRender(
+      <Form defaultValues={{ foo: "request" }}>
+        <RadioGroup field="foo">
+          <ModeButton mode="offer" />
+        </RadioGroup>
+      </Form>
+    )
 
-  expect(component.toJSON()).toMatchSnapshot()
+    expect(component.toJSON()).toMatchSnapshot()
+  })
 })

@@ -20,18 +20,49 @@
  */
 
 import React from "react"
-import renderer from "react-test-renderer"
+import { create as reactTestRender } from "react-test-renderer"
+import { Form } from "react-form"
 
 import BoxField from "./BoxField"
 
-it("when rendered without props", () => {
-  const component = renderer.create(<BoxField />)
+describe("BoxField", () => {
+  it("without optional props", () => {
+    const component = reactTestRender(
+      <Form>
+        <BoxField field="foo" />
+      </Form>
+    )
 
-  expect(component.toJSON()).toMatchSnapshot()
-})
+    expect(component.toJSON()).toMatchSnapshot()
+  })
 
-it("when rendered with props", () => {
-  const component = renderer.create(<BoxField className="foo" />)
+  it("with className", () => {
+    const component = reactTestRender(
+      <Form>
+        <BoxField field="foo" className="foo" />
+      </Form>
+    )
 
-  expect(component.toJSON()).toMatchSnapshot()
+    expect(component.toJSON()).toMatchSnapshot()
+  })
+
+  it("with placeholder", () => {
+    const component = reactTestRender(
+      <Form>
+        <BoxField field="foo" placeholder="foo" />
+      </Form>
+    )
+
+    expect(component.toJSON()).toMatchSnapshot()
+  })
+
+  it("when it is a button", () => {
+    const component = reactTestRender(
+      <Form>
+        <BoxField isButton field="foo" className="foo" />
+      </Form>
+    )
+
+    expect(component.toJSON()).toMatchSnapshot()
+  })
 })

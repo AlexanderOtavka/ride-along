@@ -1,0 +1,615 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RideListHandler when at / 1`] = `
+<header
+  className="header request"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        type="submit"
+        value="Request a ride"
+      />
+      <div
+        className="FormInput"
+      >
+        <div
+          className="FormError"
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+        >
+          
+        </div>
+        <radiogroup
+          className="modeSwitch"
+        >
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={true}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button request"
+            >
+              <svg />
+            </div>
+          </label>
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={false}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button offer"
+            >
+              <svg />
+            </div>
+          </label>
+        </radiogroup>
+      </div>
+    </div>
+    <div
+      className="headerBottom"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
+<header
+  className="header request"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        type="submit"
+        value="Request a ride"
+      />
+      <div
+        className="FormInput"
+      >
+        <div
+          className="FormError"
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+        >
+          
+        </div>
+        <radiogroup
+          className="modeSwitch"
+        >
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={true}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button request"
+            >
+              <svg />
+            </div>
+          </label>
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={false}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button offer"
+            >
+              <svg />
+            </div>
+          </label>
+        </radiogroup>
+      </div>
+    </div>
+    <div
+      className="headerBottom"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /?mode=offer 1`] = `
+<header
+  className="header offer"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        type="submit"
+        value="Request a ride"
+      />
+      <div
+        className="FormInput"
+      >
+        <div
+          className="FormError"
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+        >
+          
+        </div>
+        <radiogroup
+          className="modeSwitch"
+        >
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={false}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button request"
+            >
+              <svg />
+            </div>
+          </label>
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={true}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button offer"
+            >
+              <svg />
+            </div>
+          </label>
+        </radiogroup>
+      </div>
+    </div>
+    <div
+      className="headerBottom"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /?mode=request 1`] = `
+<header
+  className="header request"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        type="submit"
+        value="Request a ride"
+      />
+      <div
+        className="FormInput"
+      >
+        <div
+          className="FormError"
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+        >
+          
+        </div>
+        <radiogroup
+          className="modeSwitch"
+        >
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={true}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button request"
+            >
+              <svg />
+            </div>
+          </label>
+          <label
+            className="modeButton"
+          >
+            <input
+              checked={false}
+              className="input"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              type="radio"
+            />
+            <div
+              className="button offer"
+            >
+              <svg />
+            </div>
+          </label>
+        </radiogroup>
+      </div>
+    </div>
+    <div
+      className="headerBottom"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /search 1`] = `
+<header
+  className="header request"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={true}
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Departure location"
+        value=""
+      />
+    </div>
+    <div
+      className="headerBottom inSearchMode"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+    <input
+      hidden={true}
+      type="submit"
+    />
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /search?mode=offer 1`] = `
+<header
+  className="header offer"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={true}
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Departure location"
+        value=""
+      />
+    </div>
+    <div
+      className="headerBottom inSearchMode"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+    <input
+      hidden={true}
+      type="submit"
+    />
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /search?mode=offer&arriveLocation=bar 1`] = `
+<header
+  className="header offer"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Departure location"
+        value=""
+      />
+    </div>
+    <div
+      className="headerBottom inSearchMode"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value="bar"
+      />
+    </div>
+    <input
+      hidden={true}
+      type="submit"
+    />
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /search?mode=offer&departLocation=foo&arriveLocation=bar 1`] = `
+<header
+  className="header offer"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Departure location"
+        value="foo"
+      />
+    </div>
+    <div
+      className="headerBottom inSearchMode"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value="bar"
+      />
+    </div>
+    <input
+      hidden={true}
+      type="submit"
+    />
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /search?mode=request 1`] = `
+<header
+  className="header request"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={true}
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Departure location"
+        value=""
+      />
+    </div>
+    <div
+      className="headerBottom inSearchMode"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+    <input
+      hidden={true}
+      type="submit"
+    />
+  </form>
+</header>
+`;
+
+exports[`RideListHandler when at /search?mode=request&departLocation=foo 1`] = `
+<header
+  className="header request"
+>
+  <form
+    action="/search"
+    method="get"
+    onSubmit={[Function]}
+  >
+    <div
+      className="headerTop"
+    >
+      <input
+        autoFocus={false}
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Departure location"
+        value="foo"
+      />
+    </div>
+    <div
+      className="headerBottom inSearchMode"
+    >
+      <svg
+        className="downChevron"
+      />
+      <input
+        className="boxField"
+        onBlur={[Function]}
+        onChange={[Function]}
+        placeholder="Destination"
+        value=""
+      />
+    </div>
+    <input
+      hidden={true}
+      type="submit"
+    />
+  </form>
+</header>
+`;
