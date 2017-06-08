@@ -19,7 +19,7 @@ exports[`ModeButton when default value is different from mode 1`] = `
     </div>
     <radiogroup>
       <label
-        className="modeButton"
+        className="modeButton request"
         title="Request rides"
       >
         <input
@@ -32,6 +32,8 @@ exports[`ModeButton when default value is different from mode 1`] = `
         />
         <div
           className="button request"
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
         >
           <svg />
         </div>
@@ -60,7 +62,7 @@ exports[`ModeButton when default value matches mode 1`] = `
     </div>
     <radiogroup>
       <label
-        className="modeButton"
+        className="modeButton offer"
         title="Offer rides"
       >
         <input
@@ -73,6 +75,8 @@ exports[`ModeButton when default value matches mode 1`] = `
         />
         <div
           className="button offer"
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
         >
           <svg />
         </div>
@@ -101,7 +105,7 @@ exports[`ModeButton without a default value 1`] = `
     </div>
     <radiogroup>
       <label
-        className="modeButton"
+        className="modeButton request"
         title="Request rides"
       >
         <input
@@ -114,6 +118,8 @@ exports[`ModeButton without a default value 1`] = `
         />
         <div
           className="button request"
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
         >
           <svg />
         </div>

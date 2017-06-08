@@ -45,7 +45,7 @@ exports[`RideListHandler when at / 1`] = `
           className="modeSwitch"
         >
           <label
-            className="modeButton"
+            className="modeButton request"
             title="Request rides"
           >
             <input
@@ -58,12 +58,14 @@ exports[`RideListHandler when at / 1`] = `
             />
             <div
               className="button request"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
           </label>
           <label
-            className="modeButton"
+            className="modeButton offer"
             title="Offer rides"
           >
             <input
@@ -76,6 +78,8 @@ exports[`RideListHandler when at / 1`] = `
             />
             <div
               className="button offer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
@@ -156,7 +160,7 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
           className="modeSwitch"
         >
           <label
-            className="modeButton"
+            className="modeButton request"
             title="Request rides"
           >
             <input
@@ -169,12 +173,14 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
             />
             <div
               className="button request"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
           </label>
           <label
-            className="modeButton"
+            className="modeButton offer"
             title="Offer rides"
           >
             <input
@@ -187,6 +193,8 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
             />
             <div
               className="button offer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
@@ -267,7 +275,7 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
           className="modeSwitch"
         >
           <label
-            className="modeButton"
+            className="modeButton request"
             title="Request rides"
           >
             <input
@@ -280,12 +288,14 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
             />
             <div
               className="button request"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
           </label>
           <label
-            className="modeButton"
+            className="modeButton offer"
             title="Offer rides"
           >
             <input
@@ -298,6 +308,8 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
             />
             <div
               className="button offer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
@@ -378,7 +390,7 @@ exports[`RideListHandler when at /?mode=request 1`] = `
           className="modeSwitch"
         >
           <label
-            className="modeButton"
+            className="modeButton request"
             title="Request rides"
           >
             <input
@@ -391,12 +403,14 @@ exports[`RideListHandler when at /?mode=request 1`] = `
             />
             <div
               className="button request"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>
           </label>
           <label
-            className="modeButton"
+            className="modeButton offer"
             title="Offer rides"
           >
             <input
@@ -409,6 +423,8 @@ exports[`RideListHandler when at /?mode=request 1`] = `
             />
             <div
               className="button offer"
+              onMouseDown={[Function]}
+              onTouchStart={[Function]}
             >
               <svg />
             </div>

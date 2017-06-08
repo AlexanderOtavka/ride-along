@@ -19,6 +19,7 @@
  */
 
 @import "style/colors"
+@import "style/layout"
 @import "style/effects"
 
 .modeButton
@@ -26,6 +27,12 @@
   display: inline-block
   width: 56px
   height: 48px
+
+  &.request .ripple
+    background-color: $primary-yellow
+
+  &.offer .ripple
+    background-color: $primary-green
 
 .input
   position: absolute
@@ -40,22 +47,33 @@
   display: flex
   justify-content: center
   align-items: center
-  background-color: $box-field-background
   box-shadow: none
+
+  .input:checked ~ &
+    box-shadow: $shadow1
+    pointer-events: none
+
+  &::after
+    +fullbleed
+
+    content: ""
+    z-index: -1
+    background-color: $off-white
+    opacity: 0.3
+    transition: opacity 400ms
+    will-change: opacity
+
+    .input:checked ~ &
+      opacity: 1
 
   & > svg
     width: 28px
     height: 28px
-
-  & > svg
     fill: $off-white
 
-.input:checked ~ .button
-  background-color: $off-white
-  box-shadow: $shadow1
+  .input:checked ~ &
+    &.request > svg
+      fill: $primary-yellow
 
-  &.request > svg
-    fill: $primary-yellow
-
-  &.offer > svg
-    fill: $primary-green
+    &.offer > svg
+      fill: $primary-green

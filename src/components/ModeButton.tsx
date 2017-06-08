@@ -21,30 +21,51 @@
 
 import React from "react"
 import { Radio } from "react-form"
+import ripple from "react-toolbox/lib/ripple/Ripple"
 import classnames from "classnames"
 
+import rippleTheme from "react-toolbox/lib/ripple/theme.css"
 import styles from "./ModeButton.sass"
 
 import ThumbSVG from "../drawables/thumb-right.svg"
 import CarSVG from "../drawables/car-side.svg"
 
-interface ModeButtonProps {
+interface Props {
   mode: "request" | "offer"
+  children?: React.ReactNode
+  onMouseDown?: React.EventHandler<React.MouseEvent<any>>
+  onTouchStart?: React.EventHandler<React.TouchEvent<any>>
 }
 
-export default function ModeButton({ mode }: ModeButtonProps) {
+const withRipple = ripple({
+  theme: {
+    ...rippleTheme,
+    ripple: classnames(styles.ripple, rippleTheme.ripple),
+    rippleWrapper: classnames(styles.rippleWrapper, rippleTheme.rippleWrapper),
+  },
+})
+
+function ModeButton({ mode, ...props }: Props) {
   const isRequestMode = mode === "request"
 
   return (
     <label
-      className={styles.modeButton}
+      className={classnames(styles.modeButton, styles[mode])}
       title={isRequestMode ? "Request rides" : "Offer rides"}
     >
       <Radio className={styles.input} value={mode} />
 
-      <div className={classnames(styles.button, styles[mode])}>
+      <div
+        className={classnames(styles.button, styles[mode])}
+        onMouseDown={props.onMouseDown}
+        onTouchStart={props.onTouchStart}
+      >
         {isRequestMode ? <ThumbSVG /> : <CarSVG />}
       </div>
+
+      {props.children}
     </label>
   )
 }
+
+export default withRipple(ModeButton)

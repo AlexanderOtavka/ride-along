@@ -19,6 +19,7 @@
  */
 
 @import "style/colors"
+@import "style/layout"
 
 .header
   position: relative
@@ -33,6 +34,8 @@
   flex-direction: row
   align-items: center
   z-index: 1
+  overflow: hidden
+  transition: background 400ms
 
 .downChevron
   position: absolute
@@ -49,6 +52,7 @@
   flex-direction: column
   padding-top: 32px
   z-index: 0
+  transition: transform 400ms
 
   &.inSearchMode
     transform: translateY(100%)
