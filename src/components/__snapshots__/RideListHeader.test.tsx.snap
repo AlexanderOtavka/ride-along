@@ -36,6 +36,7 @@ exports[`RideListHandler when at / 1`] = `
         >
           <label
             className="modeButton"
+            title="Request rides"
           >
             <input
               checked={true}
@@ -53,6 +54,7 @@ exports[`RideListHandler when at / 1`] = `
           </label>
           <label
             className="modeButton"
+            title="Offer rides"
           >
             <input
               checked={false}
@@ -125,6 +127,7 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
         >
           <label
             className="modeButton"
+            title="Request rides"
           >
             <input
               checked={true}
@@ -142,6 +145,7 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
           </label>
           <label
             className="modeButton"
+            title="Offer rides"
           >
             <input
               checked={false}
@@ -194,7 +198,7 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
         autoFocus={false}
         className="boxField"
         type="submit"
-        value="Request a ride"
+        value="Offer a ride"
       />
       <div
         className="FormInput"
@@ -214,6 +218,7 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
         >
           <label
             className="modeButton"
+            title="Request rides"
           >
             <input
               checked={false}
@@ -231,6 +236,7 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
           </label>
           <label
             className="modeButton"
+            title="Offer rides"
           >
             <input
               checked={true}
@@ -303,6 +309,7 @@ exports[`RideListHandler when at /?mode=request 1`] = `
         >
           <label
             className="modeButton"
+            title="Request rides"
           >
             <input
               checked={true}
@@ -320,6 +327,7 @@ exports[`RideListHandler when at /?mode=request 1`] = `
           </label>
           <label
             className="modeButton"
+            title="Offer rides"
           >
             <input
               checked={false}

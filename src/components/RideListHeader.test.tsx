@@ -73,6 +73,6 @@ describe("RideListHandler", () => {
     const { history } = routeMocks
     expect(history.location.pathname).toBe("/search")
     expect(history.location.search).toBe("?mode=request")
-    expect(history.action).toBe("REPLACE")
+    expect(history.length).toBe(2)
   })
 })

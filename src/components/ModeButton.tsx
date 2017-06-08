@@ -21,7 +21,7 @@
 
 import React from "react"
 import { Radio } from "react-form"
-import classes from "classnames"
+import classnames from "classnames"
 
 import styles from "./ModeButton.sass"
 
@@ -33,12 +33,17 @@ interface ModeButtonProps {
 }
 
 export default function ModeButton({ mode }: ModeButtonProps) {
+  const isRequestMode = mode === "request"
+
   return (
-    <label className={styles.modeButton}>
+    <label
+      className={styles.modeButton}
+      title={isRequestMode ? "Request rides" : "Offer rides"}
+    >
       <Radio className={styles.input} value={mode} />
 
-      <div className={classes(styles.button, mode)}>
-        {mode === "request" ? <ThumbSVG /> : <CarSVG />}
+      <div className={classnames(styles.button, styles[mode])}>
+        {isRequestMode ? <ThumbSVG /> : <CarSVG />}
       </div>
     </label>
   )

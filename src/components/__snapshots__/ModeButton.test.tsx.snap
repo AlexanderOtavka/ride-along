@@ -20,6 +20,7 @@ exports[`ModeButton when default value is different from mode 1`] = `
     <radiogroup>
       <label
         className="modeButton"
+        title="Request rides"
       >
         <input
           checked={true}
@@ -60,6 +61,7 @@ exports[`ModeButton when default value matches mode 1`] = `
     <radiogroup>
       <label
         className="modeButton"
+        title="Offer rides"
       >
         <input
           checked={false}
@@ -100,6 +102,7 @@ exports[`ModeButton without a default value 1`] = `
     <radiogroup>
       <label
         className="modeButton"
+        title="Request rides"
       >
         <input
           checked={false}

@@ -73,20 +73,69 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
     { publicPath: Array(cssFilename.split("/").length).join("../") }
   : {}
 
-const postCSSOptions = {
-  plugins: () => [
-    require("postcss-flexbugs-fixes"),
-    autoprefixer({
-      browsers: [
-        ">1%",
-        "last 4 versions",
-        "Firefox ESR",
-        "not ie < 9", // React doesn't support IE8 anyway
+const cssLoaders = [
+  {
+    loader: require.resolve("css-loader"),
+    options: {
+      modules: true,
+      localIdentName: isProduction
+        ? "[hash:base64:12]"
+        : "[name]_[local]_[hash:base64:2]",
+      importLoaders: 1,
+      minimize: isProduction,
+      sourceMap: isProduction,
+    },
+  },
+  {
+    loader: require.resolve("postcss-loader"),
+    options: {
+      plugins: () => [
+        require("postcss-flexbugs-fixes"),
+        autoprefixer({
+          browsers: [
+            ">1%",
+            "last 4 versions",
+            "Firefox ESR",
+            "not ie < 9", // React doesn't support IE8 anyway
+          ],
+          flexbox: "no-2009",
+        }),
       ],
-      flexbox: "no-2009",
-    }),
-  ],
-}
+    },
+  },
+]
+
+const sassLoaders = [
+  ...cssLoaders,
+  {
+    loader: require.resolve("sass-loader"),
+    options: {
+      indentedSyntax: true,
+    },
+  },
+]
+
+// The notation here is somewhat confusing.
+// "style" loader normally turns CSS into JS modules injecting <style>,
+// so in development "style" loader enables hot editing of CSS.
+// In production, we do something different.
+// `ExtractTextPlugin` first applies the "postcss" and "css" loaders
+// (second argument), then grabs the result CSS and puts it into a
+// separate file in our build process. This way we actually ship
+// a single CSS file in production instead of JS code injecting <style>
+// tags. If you use code splitting, however, any async bundles will still
+// use the "style" loader inside the async code so CSS from them won't be
+// in the main CSS file.
+const getExtractStyleLoader = loaders =>
+  isProduction
+    ? // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      ExtractTextPlugin.extract({
+        ...extractTextPluginOptions,
+
+        fallback: require.resolve("style-loader"),
+        use: loaders,
+      })
+    : [require.resolve("style-loader"), ...loaders]
 
 export default {
   // In production, don't attempt to continue if there are any errors.
@@ -214,6 +263,7 @@ export default {
           /\.(js|jsx)$/,
           /\.(ts|tsx)$/,
           /\.sass$/,
+          /\.css$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -244,71 +294,13 @@ export default {
         include: paths.appSrc,
         loader: require.resolve("ts-loader"),
       },
-      // The notation here is somewhat confusing.
-      // "postcss" loader applies autoprefixer to our CSS.
-      // "css" loader resolves paths in CSS and adds assets as dependencies.
-      // "style" loader normally turns CSS into JS modules injecting <style>,
-      // so in development "style" loader enables hot editing of CSS.
-      // In production, we do something different.
-      // `ExtractTextPlugin` first applies the "postcss" and "css" loaders
-      // (second argument), then grabs the result CSS and puts it into a
-      // separate file in our build process. This way we actually ship
-      // a single CSS file in production instead of JS code injecting <style>
-      // tags. If you use code splitting, however, any async bundles will still
-      // use the "style" loader inside the async code so CSS from them won't be
-      // in the main CSS file.
       {
         test: /\.sass$/,
-        use: isProduction
-          ? // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-            ExtractTextPlugin.extract({
-              ...extractTextPluginOptions,
-
-              fallback: require.resolve("style-loader"),
-              use: [
-                {
-                  loader: require.resolve("css-loader"),
-                  options: {
-                    modules: true,
-                    localIdentName: "[hash:base64:12]",
-                    importLoaders: 2,
-                    minimize: true,
-                    sourceMap: true,
-                  },
-                },
-                {
-                  loader: require.resolve("postcss-loader"),
-                  options: postCSSOptions,
-                },
-                {
-                  loader: require.resolve("sass-loader"),
-                  options: {
-                    indentedSyntax: true,
-                  },
-                },
-              ],
-            })
-          : [
-              require.resolve("style-loader"),
-              {
-                loader: require.resolve("css-loader"),
-                options: {
-                  modules: true,
-                  localIdentName: "[name]--[local]",
-                  importLoaders: 2,
-                },
-              },
-              {
-                loader: require.resolve("postcss-loader"),
-                options: postCSSOptions,
-              },
-              {
-                loader: require.resolve("sass-loader"),
-                options: {
-                  indentedSyntax: true,
-                },
-              },
-            ],
+        use: getExtractStyleLoader(sassLoaders),
+      },
+      {
+        test: /\.css$/,
+        use: getExtractStyleLoader(cssLoaders),
       },
       {
         test: /\.svg$/,

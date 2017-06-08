@@ -23,7 +23,7 @@ import React from "react"
 import { RouteComponentProps } from "react-router-dom"
 import { Form, RadioGroup } from "react-form"
 import querystring from "querystring"
-import classes from "classnames"
+import classnames from "classnames"
 
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
@@ -46,7 +46,7 @@ interface Props extends RouteComponentProps<MatchParams> {}
 
 export default function RideListHeader({ history, ...props }: Props) {
   const query = querystring.parse(
-    props.location.search.substring(1)
+    props.location.search.substring(1) // chop off the ?
   ) as QueryParams
   const selectedMode = query.mode || "request"
   const isSearchMode = !!props.match.params[0]
@@ -56,14 +56,14 @@ export default function RideListHeader({ history, ...props }: Props) {
   }
 
   return (
-    <header className={classes(styles.header, selectedMode)}>
+    <header className={classnames(styles.header, styles[selectedMode])}>
       <Form
         values={{
           ...query,
           mode: selectedMode,
         }}
         onChange={({ values }: any) => updateURL(values)}
-        onSubmit={updateURL}
+        postSubmit={updateURL}
         component={false}
       >
         {({ submitForm, values }: any) =>
@@ -81,7 +81,11 @@ export default function RideListHeader({ history, ...props }: Props) {
                 field="departLocation"
                 isButton={!isSearchMode}
                 placeholder={
-                  isSearchMode ? "Departure location" : "Request a ride"
+                  isSearchMode
+                    ? "Departure location"
+                    : selectedMode === "request"
+                      ? "Request a ride"
+                      : "Offer a ride"
                 }
                 autoFocus={
                   isSearchMode &&
@@ -98,7 +102,7 @@ export default function RideListHeader({ history, ...props }: Props) {
             </div>
 
             <div
-              className={classes(
+              className={classnames(
                 styles.headerBottom,
                 isSearchMode && styles.inSearchMode
               )}

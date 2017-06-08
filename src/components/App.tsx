@@ -20,22 +20,73 @@
  */
 
 import React from "react"
-import { Route, Link } from "react-router-dom"
+import {
+  Route,
+  Link,
+  NavLink,
+  withRouter,
+  RouteComponentProps,
+  matchPath,
+} from "react-router-dom"
+import { IconButton } from "react-toolbox/lib/button"
+import { IconMenu, MenuItem } from "react-toolbox/lib/menu"
 
 import RideListHeader from "./RideListHeader"
 
 import styles from "./App.sass"
 
-export default function App() {
+import CarSVG from "../drawables/car-side.svg"
+import AccountSVG from "../drawables/account-circle.svg"
+import DotsSVG from "../drawables/dots-horizontal.svg"
+
+interface OwnProps {}
+
+type Props = RouteComponentProps<{}> & OwnProps
+
+function App({ location }: Props) {
+  const ridesMatch = matchPath(location.pathname, {
+    path: "/(search)?",
+    exact: true,
+  })
+
   return (
     <div className={styles.app}>
       <Route exact path="/(search)?" component={RideListHeader} />
 
       <nav className={styles.nav}>
-        <Link to="/">Rides</Link>
-        <Link to="/me">Me</Link>
-        <button>Options</button>
-        <Link to="/search">Debug Search</Link>
+        <NavLink
+          exact
+          to={ridesMatch ? location.pathname : "/"}
+          className={styles.navLink}
+          activeClassName={styles.active}
+          title="Rides"
+        >
+          <IconButton
+            className={styles.navButton}
+            icon={<CarSVG className={styles.navIcon} />}
+          />
+        </NavLink>
+
+        <NavLink
+          to="/me"
+          className={styles.navLink}
+          activeClassName={styles.active}
+          title="Rides"
+        >
+          <IconButton
+            className={styles.navButton}
+            icon={<AccountSVG className={styles.navIcon} />}
+          />
+        </NavLink>
+
+        <IconMenu
+          className={styles.navLink}
+          theme={{ icon: styles.navButton }}
+          icon={<DotsSVG className={styles.navIcon} />}
+        >
+          <Link to="?hideTips=true"><MenuItem caption="Hide Tips" /></Link>
+          <Link to="/feedback"><MenuItem caption="Feedback" /></Link>
+        </IconMenu>
       </nav>
 
       <main>
@@ -45,3 +96,5 @@ export default function App() {
     </div>
   )
 }
+
+export default withRouter<OwnProps>(App)
