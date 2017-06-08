@@ -21,7 +21,7 @@
 
 import React from "react"
 import { create as reactTestRender } from "react-test-renderer"
-import { mount as enzymeRender } from "enzyme"
+import { mount as enzymeMount } from "enzyme"
 import { Router, matchPath } from "react-router-dom"
 import { createMemoryHistory } from "history"
 
@@ -70,7 +70,7 @@ describe("RideListHandler", () => {
   it("switches to search when form is submitted", () => {
     const routeMocks = getRouteMocks("/")
     const { history } = routeMocks
-    const component = enzymeRender(
+    const component = enzymeMount(
       <Router history={history}>
         <RideListHeader {...routeMocks} />
       </Router>
@@ -80,5 +80,84 @@ describe("RideListHandler", () => {
     expect(history.location.pathname).toBe("/search")
     expect(history.location.search).toBe("?mode=request")
     expect(history.length).toBe(2)
+  })
+
+  describe("mode switch", () => {
+    const routeMocks = getRouteMocks("/")
+    const { history } = routeMocks
+    const component = enzymeMount(
+      <Router history={history}>
+        <RideListHeader {...routeMocks} />
+      </Router>
+    )
+
+    it("starts out with request selected", () => {
+      expect(history.location.pathname).toBe("/")
+      expect(history.location.search).toBe("?mode=request")
+      expect(history.length).toBe(1)
+    })
+
+    it("switches to offer mode", () => {
+      component.find("ModeButton").last().find("input").simulate("click")
+      expect(history.location.pathname).toBe("/")
+      expect(history.location.search).toBe("?mode=offer")
+      expect(history.length).toBe(1)
+    })
+
+    it("stays in offer mode when clicked again", () => {
+      component.find("ModeButton").last().find("input").simulate("click")
+      expect(history.location.pathname).toBe("/")
+      expect(history.location.search).toBe("?mode=offer")
+      expect(history.length).toBe(1)
+    })
+
+    it("switches back to request mode", () => {
+      component.find("ModeButton").first().find("input").simulate("click")
+      expect(history.location.pathname).toBe("/")
+      expect(history.location.search).toBe("?mode=request")
+      expect(history.length).toBe(1)
+    })
+  })
+
+  describe("search box", () => {
+    it("changes the url when depart search box changes", () => {
+      const routeMocks = getRouteMocks("/search")
+      const { history } = routeMocks
+      const component = enzymeMount(
+        <Router history={history}>
+          <RideListHeader {...routeMocks} />
+        </Router>
+      )
+
+      component
+        .find("BoxField")
+        .first()
+        .find("input")
+        .simulate("change", { target: { value: "foo" } })
+
+      expect(history.location.pathname).toBe("/search")
+      expect(history.location.search).toBe("?mode=request&departLocation=foo")
+      expect(history.length).toBe(1)
+    })
+
+    it("changes the url when arrive search box changes", () => {
+      const routeMocks = getRouteMocks("/search")
+      const { history } = routeMocks
+      const component = enzymeMount(
+        <Router history={history}>
+          <RideListHeader {...routeMocks} />
+        </Router>
+      )
+
+      component
+        .find("BoxField")
+        .last()
+        .find("input")
+        .simulate("change", { target: { value: "bar" } })
+
+      expect(history.location.pathname).toBe("/search")
+      expect(history.location.search).toBe("?mode=request&arriveLocation=bar")
+      expect(history.length).toBe(1)
+    })
   })
 })
