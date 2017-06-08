@@ -12,12 +12,22 @@ exports[`RideListHandler when at / 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        type="submit"
-        value="Request a ride"
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          type="submit"
+          value="Request a ride"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
       <div
         className="FormInput"
       >
@@ -79,13 +89,23 @@ exports[`RideListHandler when at / 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
   </form>
 </header>
@@ -103,12 +123,22 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        type="submit"
-        value="Request a ride"
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          type="submit"
+          value="Request a ride"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
       <div
         className="FormInput"
       >
@@ -170,13 +200,23 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
   </form>
 </header>
@@ -194,12 +234,22 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        type="submit"
-        value="Offer a ride"
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          type="submit"
+          value="Offer a ride"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
       <div
         className="FormInput"
       >
@@ -261,13 +311,23 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
   </form>
 </header>
@@ -285,12 +345,22 @@ exports[`RideListHandler when at /?mode=request 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        type="submit"
-        value="Request a ride"
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          type="submit"
+          value="Request a ride"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
       <div
         className="FormInput"
       >
@@ -352,13 +422,23 @@ exports[`RideListHandler when at /?mode=request 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
   </form>
 </header>
@@ -376,14 +456,45 @@ exports[`RideListHandler when at /search 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={true}
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Departure location"
-        value=""
-      />
+      >
+        <input
+          autoFocus={true}
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Departure location"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
+      <a
+        href="/?mode=undefined"
+        onClick={[Function]}
+        title="Close"
+      >
+        <button
+          className=" closeButton"
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg
+            className="closeIcon"
+          />
+        </button>
+      </a>
     </div>
     <div
       className="headerBottom inSearchMode"
@@ -391,13 +502,23 @@ exports[`RideListHandler when at /search 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
     <input
       hidden={true}
@@ -419,14 +540,45 @@ exports[`RideListHandler when at /search?mode=offer 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={true}
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Departure location"
-        value=""
-      />
+      >
+        <input
+          autoFocus={true}
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Departure location"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
+      <a
+        href="/?mode=offer"
+        onClick={[Function]}
+        title="Close"
+      >
+        <button
+          className=" closeButton"
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg
+            className="closeIcon"
+          />
+        </button>
+      </a>
     </div>
     <div
       className="headerBottom inSearchMode"
@@ -434,13 +586,23 @@ exports[`RideListHandler when at /search?mode=offer 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
     <input
       hidden={true}
@@ -462,14 +624,45 @@ exports[`RideListHandler when at /search?mode=offer&arriveLocation=bar 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Departure location"
-        value=""
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Departure location"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
+      <a
+        href="/?mode=offer"
+        onClick={[Function]}
+        title="Close"
+      >
+        <button
+          className=" closeButton"
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg
+            className="closeIcon"
+          />
+        </button>
+      </a>
     </div>
     <div
       className="headerBottom inSearchMode"
@@ -477,13 +670,23 @@ exports[`RideListHandler when at /search?mode=offer&arriveLocation=bar 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value="bar"
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value="bar"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
     <input
       hidden={true}
@@ -505,14 +708,45 @@ exports[`RideListHandler when at /search?mode=offer&departLocation=foo&arriveLoc
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Departure location"
-        value="foo"
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Departure location"
+          value="foo"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
+      <a
+        href="/?mode=offer"
+        onClick={[Function]}
+        title="Close"
+      >
+        <button
+          className=" closeButton"
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg
+            className="closeIcon"
+          />
+        </button>
+      </a>
     </div>
     <div
       className="headerBottom inSearchMode"
@@ -520,13 +754,23 @@ exports[`RideListHandler when at /search?mode=offer&departLocation=foo&arriveLoc
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value="bar"
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value="bar"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
     <input
       hidden={true}
@@ -548,14 +792,45 @@ exports[`RideListHandler when at /search?mode=request 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={true}
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Departure location"
-        value=""
-      />
+      >
+        <input
+          autoFocus={true}
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Departure location"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
+      <a
+        href="/?mode=request"
+        onClick={[Function]}
+        title="Close"
+      >
+        <button
+          className=" closeButton"
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg
+            className="closeIcon"
+          />
+        </button>
+      </a>
     </div>
     <div
       className="headerBottom inSearchMode"
@@ -563,13 +838,23 @@ exports[`RideListHandler when at /search?mode=request 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
     <input
       hidden={true}
@@ -591,14 +876,45 @@ exports[`RideListHandler when at /search?mode=request&departLocation=foo 1`] = `
     <div
       className="headerTop"
     >
-      <input
-        autoFocus={false}
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Departure location"
-        value="foo"
-      />
+      >
+        <input
+          autoFocus={false}
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Departure location"
+          value="foo"
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
+      <a
+        href="/?mode=request"
+        onClick={[Function]}
+        title="Close"
+      >
+        <button
+          className=" closeButton"
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg
+            className="closeIcon"
+          />
+        </button>
+      </a>
     </div>
     <div
       className="headerBottom inSearchMode"
@@ -606,13 +922,23 @@ exports[`RideListHandler when at /search?mode=request&departLocation=foo 1`] = `
       <svg
         className="downChevron"
       />
-      <input
+      <div
         className="boxField"
-        onBlur={[Function]}
-        onChange={[Function]}
-        placeholder="Destination"
-        value=""
-      />
+      >
+        <input
+          className="input"
+          disabled={false}
+          onBlur={[Function]}
+          onChange={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+          placeholder="Destination"
+          value=""
+        />
+        <div
+          className="backdrop"
+        />
+      </div>
     </div>
     <input
       hidden={true}

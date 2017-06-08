@@ -20,8 +20,9 @@
  */
 
 import React from "react"
-import { RouteComponentProps } from "react-router-dom"
+import { RouteComponentProps, Link } from "react-router-dom"
 import { Form, RadioGroup } from "react-form"
+import { IconButton } from "react-toolbox/lib/button"
 import querystring from "querystring"
 import classnames from "classnames"
 
@@ -31,6 +32,7 @@ import ModeButton from "./ModeButton"
 import styles from "./RideListHeader.sass"
 
 import DownChevronSVG from "../drawables/down-chevron.svg"
+import CloseSVG from "../drawables/close.svg"
 
 interface QueryParams {
   mode?: "request" | "offer"
@@ -94,11 +96,18 @@ export default function RideListHeader({ history, ...props }: Props) {
                 }
               />
 
-              {isSearchMode ||
-                <RadioGroup field="mode" className={styles.modeSwitch}>
-                  <ModeButton mode="request" />
-                  <ModeButton mode="offer" />
-                </RadioGroup>}
+              {isSearchMode
+                ? <Link to={`/?mode=${query.mode}`} title="Close">
+                    <IconButton
+                      className={styles.closeButton}
+                      theme={{ ripple: styles.closeRipple } as any}
+                      icon={<CloseSVG className={styles.closeIcon} />}
+                    />
+                  </Link>
+                : <RadioGroup field="mode" className={styles.modeSwitch}>
+                    <ModeButton mode="request" />
+                    <ModeButton mode="offer" />
+                  </RadioGroup>}
             </div>
 
             <div

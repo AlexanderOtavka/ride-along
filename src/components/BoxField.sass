@@ -19,11 +19,32 @@
  */
 
 @import "style/colors"
+@import "style/effects"
+@import "style/layout"
 
 .boxField
+  position: relative
   flex-grow: 1
+  z-index: 0
+
+.backdrop
+  @include fullbleed
+  background-color: $off-white
+  opacity: 0.3
+  z-index: -1
+  transition: opacity 400ms
+  will-change: opacity
+
+.rippleWrapper
+  overflow: hidden
+
+.ripple
+  background-color: $off-white
+
+.input
+  width: 100%
   height: 48px
-  background: $box-field-background
+  background: none
   border: none
   padding: 0 16px
   font-size: 18px
@@ -36,8 +57,11 @@
     color: white
 
   &:focus
-    background-color: $off-white
     color: $grey2
+    box-shadow: $shadow1
+
+    ~ .backdrop
+      opacity: 1
 
     &::placeholder
       color: $grey2

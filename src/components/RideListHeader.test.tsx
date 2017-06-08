@@ -22,7 +22,7 @@
 import React from "react"
 import { create as reactTestRender } from "react-test-renderer"
 import { mount as enzymeRender } from "enzyme"
-import { matchPath } from "react-router-dom"
+import { Router, matchPath } from "react-router-dom"
 import { createMemoryHistory } from "history"
 
 import RideListHeader from "./RideListHeader"
@@ -35,7 +35,7 @@ function getRouteMocks(url: string) {
     exact: true,
   })
 
-  if (match === null) {
+  if (!match) {
     throw TypeError(`Invalid url. Must match path. Got "${url}"`)
   }
 
@@ -44,8 +44,11 @@ function getRouteMocks(url: string) {
 
 function itWhenAtURL(url: string) {
   it(`when at ${url}`, () => {
+    const routeMocks = getRouteMocks(url)
     const component = reactTestRender(
-      <RideListHeader {...getRouteMocks(url)} />
+      <Router history={routeMocks.history}>
+        <RideListHeader {...routeMocks} />
+      </Router>
     )
 
     expect(component.toJSON()).toMatchSnapshot()
@@ -66,11 +69,14 @@ describe("RideListHandler", () => {
 
   it("switches to search when form is submitted", () => {
     const routeMocks = getRouteMocks("/")
-    const component = enzymeRender(<RideListHeader {...routeMocks} />)
+    const { history } = routeMocks
+    const component = enzymeRender(
+      <Router history={history}>
+        <RideListHeader {...routeMocks} />
+      </Router>
+    )
 
     component.find("form").simulate("submit")
-
-    const { history } = routeMocks
     expect(history.location.pathname).toBe("/search")
     expect(history.location.search).toBe("?mode=request")
     expect(history.length).toBe(2)

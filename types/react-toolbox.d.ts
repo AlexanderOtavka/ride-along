@@ -1,7 +1,7 @@
 /**
- * @file loader-modules.d.ts
+ * @file react-toolbox.d.ts
  *
- * Created by Zander Otavka on 6/4/17.
+ * Created by Zander Otavka on 6/8/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,21 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-declare module "*.svg" {
-  const _default: React.SVGFactory
-  export default _default
-}
-
-declare module "*.sass" {
-  const _default: {
-    [localClassName: string]: string | undefined
-  }
-  export = _default
-}
-
-declare module "*.css" {
-  const _default: {
-    [localClassName: string]: string | undefined
-  }
-  export = _default
+declare module "react-toolbox/lib/ripple/Ripple" {
+  export * from "react-toolbox/lib/ripple"
+  export { default } from "react-toolbox/lib/ripple"
 }

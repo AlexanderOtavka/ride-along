@@ -4,11 +4,21 @@ exports[`BoxField when it is a button 1`] = `
 <div
   className="ReactForm"
 >
-  <input
-    className="boxField foo"
-    type="submit"
-    value={undefined}
-  />
+  <div
+    className="boxField"
+  >
+    <input
+      className="input foo"
+      disabled={false}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      type="submit"
+      value={undefined}
+    />
+    <div
+      className="backdrop"
+    />
+  </div>
 </div>
 `;
 
@@ -16,13 +26,23 @@ exports[`BoxField with className 1`] = `
 <div
   className="ReactForm"
 >
-  <input
-    className="boxField foo"
-    onBlur={[Function]}
-    onChange={[Function]}
-    placeholder={undefined}
-    value=""
-  />
+  <div
+    className="boxField"
+  >
+    <input
+      className="input foo"
+      disabled={false}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      placeholder={undefined}
+      value=""
+    />
+    <div
+      className="backdrop"
+    />
+  </div>
 </div>
 `;
 
@@ -30,13 +50,23 @@ exports[`BoxField with placeholder 1`] = `
 <div
   className="ReactForm"
 >
-  <input
+  <div
     className="boxField"
-    onBlur={[Function]}
-    onChange={[Function]}
-    placeholder="foo"
-    value=""
-  />
+  >
+    <input
+      className="input"
+      disabled={false}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      placeholder="foo"
+      value=""
+    />
+    <div
+      className="backdrop"
+    />
+  </div>
 </div>
 `;
 
@@ -44,12 +74,22 @@ exports[`BoxField without optional props 1`] = `
 <div
   className="ReactForm"
 >
-  <input
+  <div
     className="boxField"
-    onBlur={[Function]}
-    onChange={[Function]}
-    placeholder={undefined}
-    value=""
-  />
+  >
+    <input
+      className="input"
+      disabled={false}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      placeholder={undefined}
+      value=""
+    />
+    <div
+      className="backdrop"
+    />
+  </div>
 </div>
 `;

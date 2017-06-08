@@ -31,7 +31,15 @@
 .headerTop
   position: relative
   flex-direction: row
+  align-items: center
   z-index: 1
+
+.downChevron
+  position: absolute
+  top: -2px // because svgs have a weird gap
+  right: 0
+  left: 0
+  width: 100%
 
 .headerBottom
   position: absolute
@@ -50,12 +58,16 @@
   flex-direction: row
   margin-left: 16px
 
-.downChevron
-  position: absolute
-  top: -2px // because svgs have a weird gap
-  right: 0
-  left: 0
-  width: 100%
+.closeButton
+  margin-right: 10px
+  margin-left: 26px
+
+.closeIcon
+  fill: $off-white !important
+  width: 28px !important
+
+.closeRipple
+  background-color: $off-white
 
 .header.request
   .headerTop

@@ -21,36 +21,79 @@
 
 import React from "react"
 import { FormField } from "react-form"
+import ripple, { RippleTheme } from "react-toolbox/lib/ripple/Ripple"
 import classnames from "classnames"
 
+import rippleTheme from "react-toolbox/lib/ripple/theme.css"
 import styles from "./BoxField.sass"
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
   isButton?: boolean
   field: string
+  theme?: RippleTheme
 }
 
-export default function BoxField({
+const withRipple = ripple({
+  theme: {
+    ...rippleTheme,
+    ripple: classnames(styles.ripple, rippleTheme.ripple),
+    rippleWrapper: classnames(styles.rippleWrapper, rippleTheme.rippleWrapper),
+  },
+})
+
+function BoxField({
   field,
   isButton = false,
   className,
   placeholder,
   value,
+  theme,
+  children,
+  onMouseDown,
+  onTouchStart,
   ...props,
 }: Props) {
-  const classes = classnames(styles.boxField, className)
+  const classes = classnames(styles.input, className)
+  const handleMouseDown = (ev: React.MouseEvent<HTMLInputElement>) => {
+    if (onMouseDown && document.activeElement !== ev.currentTarget) {
+      onMouseDown(ev)
+    }
+  }
 
-  return isButton
-    ? <input {...props} className={classes} type="submit" value={placeholder} />
-    : <FormField field={field}>
-        {({ getValue, setValue, setTouched }: any) =>
-          <input
+  const handleTouchStart = (ev: React.TouchEvent<HTMLInputElement>) => {
+    if (onTouchStart && document.activeElement !== ev.currentTarget) {
+      onTouchStart(ev)
+    }
+  }
+
+  return (
+    <div className={styles.boxField}>
+      {isButton
+        ? <input
             {...props}
             className={classes}
-            placeholder={placeholder}
-            value={getValue("")}
-            onChange={ev => setValue(ev.target.value)}
-            onBlur={ev => setTouched()}
-          />}
-      </FormField>
+            type="submit"
+            value={placeholder}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+          />
+        : <FormField field={field}>
+            {({ getValue, setValue, setTouched }: any) =>
+              <input
+                {...props}
+                className={classes}
+                placeholder={placeholder}
+                value={getValue("")}
+                onChange={ev => setValue(ev.target.value)}
+                onBlur={ev => setTouched()}
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
+              />}
+          </FormField>}
+      <div className={styles.backdrop} />
+      {children}
+    </div>
+  )
 }
+
+export default withRipple(BoxField)
