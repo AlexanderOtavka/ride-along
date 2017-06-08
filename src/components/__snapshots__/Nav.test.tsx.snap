@@ -1,0 +1,1033 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Nav when tips are hidden 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="active navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={Object {}}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Show Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav with a path match for feedback 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav with a path match for profile 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="active navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={Object {}}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav with a path match for rides 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="active navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={Object {}}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav with only a sub-path match for feedback 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav with only a sub-path match for profile 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="active navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={Object {}}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav with only a sub-path match for rides 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;
+
+exports[`Nav without a path match 1`] = `
+<nav
+  className="nav"
+>
+  <a
+    className="navLink"
+    href="/rides"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <a
+    className="navLink"
+    href="/profile"
+    onClick={[Function]}
+    style={undefined}
+    title="Rides"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+  </a>
+  <div
+    className="navLink"
+  >
+    <button
+      className=" navButton"
+      data-react-toolbox="button"
+      disabled={false}
+      href={undefined}
+      onClick={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchStart={[Function]}
+      type="button"
+    >
+      <svg
+        className="navIcon"
+      />
+    </button>
+    <div
+      className=""
+      data-react-toolbox="menu"
+      style={
+        Object {
+          "height": undefined,
+          "width": undefined,
+        }
+      }
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "height": undefined,
+            "width": undefined,
+          }
+        }
+      />
+      <ul
+        className={undefined}
+        style={undefined}
+      >
+        <li
+          className=""
+          data-react-toolbox="menu-item"
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onTouchStart={[Function]}
+        >
+          <span
+            className={undefined}
+          >
+            Hide Tips
+          </span>
+        </li>
+        <a
+          href="/feedback"
+          onClick={[Function]}
+        >
+          <li
+            className=""
+            data-react-toolbox="menu-item"
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+          >
+            <span
+              className={undefined}
+            >
+              Feedback
+            </span>
+          </li>
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+`;

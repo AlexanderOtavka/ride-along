@@ -22,22 +22,15 @@
 import React from "react"
 import {
   Route,
-  Link,
-  NavLink,
   withRouter,
   RouteComponentProps,
   matchPath,
 } from "react-router-dom"
-import { IconButton } from "react-toolbox/lib/button"
-import { IconMenu, MenuItem } from "react-toolbox/lib/menu"
 
 import RideListHeader from "./RideListHeader"
+import Nav from "./Nav"
 
 import styles from "./App.sass"
-
-import CarSVG from "../drawables/car-side.svg"
-import AccountSVG from "../drawables/account-circle.svg"
-import DotsSVG from "../drawables/dots-horizontal.svg"
 
 interface OwnProps {}
 
@@ -53,41 +46,12 @@ function App({ location }: Props) {
     <div className={styles.app}>
       <Route exact path="/(search)?" component={RideListHeader} />
 
-      <nav className={styles.nav}>
-        <NavLink
-          exact
-          to={ridesMatch ? location.pathname : "/"}
-          className={styles.navLink}
-          activeClassName={styles.active}
-          title="Rides"
-        >
-          <IconButton
-            className={styles.navButton}
-            icon={<CarSVG className={styles.navIcon} />}
-          />
-        </NavLink>
-
-        <NavLink
-          to="/me"
-          className={styles.navLink}
-          activeClassName={styles.active}
-          title="Rides"
-        >
-          <IconButton
-            className={styles.navButton}
-            icon={<AccountSVG className={styles.navIcon} />}
-          />
-        </NavLink>
-
-        <IconMenu
-          className={styles.navLink}
-          theme={{ icon: styles.navButton }}
-          icon={<DotsSVG className={styles.navIcon} />}
-        >
-          <Link to="?hideTips=true"><MenuItem caption="Hide Tips" /></Link>
-          <Link to="/feedback"><MenuItem caption="Feedback" /></Link>
-        </IconMenu>
-      </nav>
+      <Nav
+        ridesPath={ridesMatch ? location.pathname : "/"}
+        profilePath="/users/me"
+        feedbackPath="/feedback"
+        isTipsHidden={false}
+      />
 
       <main>
         <Route exact path="/(search)?" render={() => <p>Rides...</p>} />
