@@ -22,6 +22,53 @@ exports[`BoxField when it is a button 1`] = `
 </div>
 `;
 
+exports[`BoxField when it is a date 1`] = `
+<div
+  className="ReactForm"
+>
+  <div
+    className="boxField"
+  >
+    <input
+      className="input foo"
+      disabled={false}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      placeholder="bar"
+      type="date"
+      value=""
+    />
+    <div
+      className="backdrop"
+    />
+  </div>
+</div>
+`;
+
+exports[`BoxField when it is a submit 1`] = `
+<div
+  className="ReactForm"
+>
+  <div
+    className="boxField"
+  >
+    <input
+      className="input foo"
+      disabled={false}
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+      type="submit"
+      value={undefined}
+    />
+    <div
+      className="backdrop"
+    />
+  </div>
+</div>
+`;
+
 exports[`BoxField with className 1`] = `
 <div
   className="ReactForm"

@@ -81,7 +81,7 @@ export default function RideListHeader({ history, ...props }: Props) {
             <div className={styles.headerTop}>
               <BoxField
                 field="departLocation"
-                isButton={!isSearchMode}
+                type={isSearchMode ? "text" : "submit"}
                 placeholder={
                   isSearchMode
                     ? "Departure location"
@@ -95,6 +95,11 @@ export default function RideListHeader({ history, ...props }: Props) {
                   values.arriveLocation === undefined
                 }
               />
+
+              {isSearchMode &&
+                <noscript>
+                  <BoxField field="departTime" type="date" />
+                </noscript>}
 
               {isSearchMode
                 ? <Link to={`/?mode=${query.mode}`} title="Close">

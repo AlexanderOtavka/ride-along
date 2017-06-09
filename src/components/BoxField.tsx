@@ -28,8 +28,8 @@ import rippleTheme from "react-toolbox/lib/ripple/theme.css"
 import styles from "./BoxField.sass"
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
-  isButton?: boolean
   field: string
+  type?: "text" | "date" | "submit"
   theme?: RippleTheme
 }
 
@@ -43,7 +43,7 @@ const withRipple = ripple({
 
 function BoxField({
   field,
-  isButton = false,
+  type = "text",
   className,
   placeholder,
   value,
@@ -68,7 +68,7 @@ function BoxField({
 
   return (
     <div className={styles.boxField}>
-      {isButton
+      {type === "submit"
         ? <input
             {...props}
             className={classes}
@@ -81,6 +81,7 @@ function BoxField({
             {({ getValue, setValue, setTouched }: any) =>
               <input
                 {...props}
+                type={type}
                 className={classes}
                 placeholder={placeholder}
                 value={getValue("")}

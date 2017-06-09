@@ -56,10 +56,20 @@ describe("BoxField", () => {
     expect(component.toJSON()).toMatchSnapshot()
   })
 
-  it("when it is a button", () => {
+  it("when it is a submit", () => {
     const component = reactTestRender(
       <Form>
-        <BoxField isButton field="foo" className="foo" />
+        <BoxField type="submit" field="foo" className="foo" />
+      </Form>
+    )
+
+    expect(component.toJSON()).toMatchSnapshot()
+  })
+
+  it("when it is a date", () => {
+    const component = reactTestRender(
+      <Form>
+        <BoxField type="date" field="foo" className="foo" placeholder="bar" />
       </Form>
     )
 
