@@ -192,7 +192,13 @@ export default {
     publicPath,
     // Point sourcemap entries to original disk location
     devtoolModuleFilenameTemplate: info =>
-      path.relative(paths.appSrc, info.absoluteResourcePath),
+      isProduction
+        ? // In production, we want a relative path so we don't publish our
+          // full file system path to the web eg. /Users/zander/Developer...
+          path.relative(paths.appSrc, info.absoluteResourcePath)
+        : // In development, we need a full path so external debuggers can connect
+          // the real files with the source maps.
+          path.resolve(info.absoluteResourcePath),
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
