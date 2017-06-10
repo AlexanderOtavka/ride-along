@@ -57,11 +57,13 @@ exports[`RideListHandler when at / 1`] = `
               type="radio"
             />
             <div
-              className="button request"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
           <label
@@ -77,11 +79,13 @@ exports[`RideListHandler when at / 1`] = `
               type="radio"
             />
             <div
-              className="button offer"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
         </radiogroup>
@@ -173,11 +177,13 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
               type="radio"
             />
             <div
-              className="button request"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
           <label
@@ -193,11 +199,13 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
               type="radio"
             />
             <div
-              className="button offer"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
         </radiogroup>
@@ -289,11 +297,13 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
               type="radio"
             />
             <div
-              className="button request"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
           <label
@@ -309,11 +319,13 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
               type="radio"
             />
             <div
-              className="button offer"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
         </radiogroup>
@@ -405,11 +417,13 @@ exports[`RideListHandler when at /?mode=request 1`] = `
               type="radio"
             />
             <div
-              className="button request"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
           <label
@@ -425,11 +439,13 @@ exports[`RideListHandler when at /?mode=request 1`] = `
               type="radio"
             />
             <div
-              className="button offer"
+              className="button"
               onMouseDown={[Function]}
               onTouchStart={[Function]}
             >
-              <svg />
+              <svg
+                className="icon"
+              />
             </div>
           </label>
         </radiogroup>

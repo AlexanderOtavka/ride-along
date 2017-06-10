@@ -38,7 +38,7 @@ interface Props {
   feedbackPath?: string
 }
 
-export default function Nav({
+function Nav({
   ridesPath = routes.rides.root,
   profilePath = routes.profile.root,
   feedbackPath = routes.feedback,
@@ -83,3 +83,5 @@ export default function Nav({
     </nav>
   )
 }
+
+export default Nav

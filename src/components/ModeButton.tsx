@@ -56,11 +56,13 @@ function ModeButton({ mode, ...props }: Props) {
       <Radio className={styles.input} value={mode} />
 
       <div
-        className={classnames(styles.button, styles[mode])}
+        className={styles.button}
         onMouseDown={props.onMouseDown}
         onTouchStart={props.onTouchStart}
       >
-        {isRequestMode ? <ThumbSVG /> : <CarSVG />}
+        {isRequestMode
+          ? <ThumbSVG className={styles.icon} />
+          : <CarSVG className={styles.icon} />}
       </div>
 
       {props.children}

@@ -66,14 +66,14 @@
     .input:checked ~ &
       opacity: 1
 
-  & > svg
-    width: 28px
-    height: 28px
-    fill: $off-white
+.icon
+  width: 28px
+  height: 28px
+  fill: $off-white
 
-  .input:checked ~ &
-    &.request > svg
+  .input:checked ~ .button &
+    .modeButton.request &
       fill: $primary-yellow
 
-    &.offer > svg
+    .modeButton.offer &
       fill: $primary-green
