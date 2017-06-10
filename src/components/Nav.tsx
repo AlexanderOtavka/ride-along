@@ -24,6 +24,8 @@ import { Link, NavLink } from "react-router-dom"
 import { IconButton } from "react-toolbox/lib/button"
 import { IconMenu, MenuItem } from "react-toolbox/lib/menu"
 
+import routes from "../constants/routes"
+
 import styles from "./Nav.sass"
 
 import CarSVG from "../drawables/car-side.svg"
@@ -31,18 +33,23 @@ import AccountSVG from "../drawables/account-circle.svg"
 import DotsSVG from "../drawables/dots-horizontal.svg"
 
 interface Props {
-  ridesPath: string
-  profilePath: string
-  feedbackPath: string
-  isTipsHidden: boolean
+  ridesPath?: string
+  profilePath?: string
+  feedbackPath?: string
 }
 
-export default function Nav(props: Props) {
+export default function Nav({
+  ridesPath = routes.rides.root,
+  profilePath = routes.profile.root,
+  feedbackPath = routes.feedback,
+}: Props) {
+  const isTipsHidden = false
+
   return (
     <nav className={styles.nav}>
       <NavLink
         exact
-        to={props.ridesPath}
+        to={ridesPath}
         className={styles.navLink}
         activeClassName={styles.active}
         title="Rides"
@@ -54,7 +61,7 @@ export default function Nav(props: Props) {
       </NavLink>
 
       <NavLink
-        to={props.profilePath}
+        to={profilePath}
         className={styles.navLink}
         activeClassName={styles.active}
         title="Rides"
@@ -70,8 +77,8 @@ export default function Nav(props: Props) {
         theme={{ icon: styles.navButton }}
         icon={<DotsSVG className={styles.navIcon} />}
       >
-        <MenuItem caption={props.isTipsHidden ? "Show Tips" : "Hide Tips"} />
-        <Link to={props.feedbackPath}><MenuItem caption="Feedback" /></Link>
+        <MenuItem caption={isTipsHidden ? "Show Tips" : "Hide Tips"} />
+        <Link to={feedbackPath}><MenuItem caption="Feedback" /></Link>
       </IconMenu>
     </nav>
   )

@@ -1,7 +1,7 @@
 /**
- * @file App.tsx
+ * @file routes.ts
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/9/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,26 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import { Route, Switch } from "react-router-dom"
-
-import RideListPage from "./RideListPage"
-import Nav from "./Nav"
-
-import styles from "./App.sass"
-
-function App() {
-  return (
-    <div className={styles.app}>
-      <Switch>
-        <Route exact path="/(search)?" component={RideListPage} />
-        <Route
-          render={() =>
-            <Nav ridesPath="/" profilePath="/me" feedbackPath="/feedback" />}
-        />
-      </Switch>
-    </div>
-  )
+export default {
+  rides: {
+    root: "/",
+    search: "/search",
+    matchPath: "/(search)?",
+  },
+  profile: {
+    root: "/me",
+  },
+  feedback: "/feedback",
 }
-
-export default App

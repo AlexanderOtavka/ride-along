@@ -20,7 +20,7 @@
  */
 
 import React from "react"
-import { RouteComponentProps, Link } from "react-router-dom"
+import { RouteComponentProps, Link, withRouter } from "react-router-dom"
 import { Form, RadioGroup } from "react-form"
 import { IconButton } from "react-toolbox/lib/button"
 import querystring from "querystring"
@@ -28,6 +28,8 @@ import classnames from "classnames"
 
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
+
+import routes from "../constants/routes"
 
 import styles from "./RideListHeader.sass"
 
@@ -40,18 +42,15 @@ interface QueryParams {
   arriveLocation?: string
 }
 
-interface MatchParams {
-  0: "search" | undefined
+interface Props extends RouteComponentProps<{}> {
+  isSearchMode: boolean
 }
 
-interface Props extends RouteComponentProps<MatchParams> {}
-
-export default function RideListHeader({ history, ...props }: Props) {
+function RideListHeader({ history, isSearchMode, ...props }: Props) {
   const query = querystring.parse(
     props.location.search.substring(1) // chop off the ?
   ) as QueryParams
   const selectedMode = query.mode || "request"
-  const isSearchMode = !!props.match.params[0]
   const updateURL = (values: QueryParams) => {
     const urlValues = isSearchMode ? values : { mode: values.mode }
     history.replace("?" + querystring.stringify(urlValues))
@@ -72,10 +71,10 @@ export default function RideListHeader({ history, ...props }: Props) {
           <form
             onSubmit={ev => {
               ev.preventDefault()
-              history.push("/search")
+              history.push(routes.rides.search)
               submitForm()
             }}
-            action="/search"
+            action={routes.rides.search}
             method="get"
           >
             <div className={styles.headerTop}>
@@ -96,13 +95,11 @@ export default function RideListHeader({ history, ...props }: Props) {
                 }
               />
 
-              {isSearchMode &&
-                <noscript>
-                  <BoxField field="departTime" type="date" />
-                </noscript>}
-
               {isSearchMode
-                ? <Link to={`/?mode=${query.mode}`} title="Close">
+                ? <Link
+                    to={`${routes.rides.root}?mode=${query.mode}`}
+                    title="Close"
+                  >
                     <IconButton
                       className={styles.closeButton}
                       theme={{ ripple: styles.closeRipple } as any}
@@ -131,3 +128,5 @@ export default function RideListHeader({ history, ...props }: Props) {
     </header>
   )
 }
+
+export default withRouter(RideListHeader)

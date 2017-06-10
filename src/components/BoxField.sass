@@ -36,6 +36,10 @@
   transition: opacity 400ms
   will-change: opacity
 
+  .input:focus ~ &
+    opacity: 1
+    box-shadow: $shadow1
+
 .rippleWrapper
   overflow: hidden
 
@@ -59,10 +63,6 @@
 
   &:focus
     color: $grey2
-
-    ~ .backdrop
-      opacity: 1
-      box-shadow: $shadow1
 
     &::placeholder
       color: $grey2

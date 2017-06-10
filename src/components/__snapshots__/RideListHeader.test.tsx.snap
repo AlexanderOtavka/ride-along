@@ -104,6 +104,7 @@ exports[`RideListHandler when at / 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -219,6 +220,7 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -334,6 +336,7 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -449,6 +452,7 @@ exports[`RideListHandler when at /?mode=request 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -484,6 +488,7 @@ exports[`RideListHandler when at /search 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
+          type="text"
           value=""
         />
         <div
@@ -491,7 +496,7 @@ exports[`RideListHandler when at /search 1`] = `
         />
       </div>
       <a
-        href="/?mode=undefined"
+        href="/?mode=request"
         onClick={[Function]}
         title="Close"
       >
@@ -529,6 +534,7 @@ exports[`RideListHandler when at /search 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -568,6 +574,7 @@ exports[`RideListHandler when at /search?mode=offer 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
+          type="text"
           value=""
         />
         <div
@@ -613,6 +620,7 @@ exports[`RideListHandler when at /search?mode=offer 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -652,6 +660,7 @@ exports[`RideListHandler when at /search?mode=offer&arriveLocation=bar 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
+          type="text"
           value=""
         />
         <div
@@ -697,6 +706,7 @@ exports[`RideListHandler when at /search?mode=offer&arriveLocation=bar 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value="bar"
         />
         <div
@@ -736,6 +746,7 @@ exports[`RideListHandler when at /search?mode=offer&departLocation=foo&arriveLoc
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
+          type="text"
           value="foo"
         />
         <div
@@ -781,6 +792,7 @@ exports[`RideListHandler when at /search?mode=offer&departLocation=foo&arriveLoc
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value="bar"
         />
         <div
@@ -820,6 +832,7 @@ exports[`RideListHandler when at /search?mode=request 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
+          type="text"
           value=""
         />
         <div
@@ -865,6 +878,7 @@ exports[`RideListHandler when at /search?mode=request 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div
@@ -904,6 +918,7 @@ exports[`RideListHandler when at /search?mode=request&departLocation=foo 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
+          type="text"
           value="foo"
         />
         <div
@@ -949,6 +964,7 @@ exports[`RideListHandler when at /search?mode=request&departLocation=foo 1`] = `
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Destination"
+          type="text"
           value=""
         />
         <div

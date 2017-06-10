@@ -33,7 +33,6 @@ function itWhenAtURL(description: string, url: string) {
           ridesPath="/rides"
           profilePath="/profile"
           feedbackPath="/feedback"
-          isTipsHidden={false}
         />
       </MemoryRouter>
     )
@@ -55,20 +54,5 @@ describe("Nav", () => {
     itWhenAtURL("for rides", "/rides/foo")
     itWhenAtURL("for profile", "/profile/foo")
     itWhenAtURL("for feedback", "/feedback/foo")
-  })
-
-  it("when tips are hidden", () => {
-    const component = reactTestRender(
-      <MemoryRouter initialEntries={["/rides"]}>
-        <Nav
-          ridesPath="/rides"
-          profilePath="/profile"
-          feedbackPath="/feedback"
-          isTipsHidden={true}
-        />
-      </MemoryRouter>
-    )
-
-    expect(component.toJSON()).toMatchSnapshot()
   })
 })

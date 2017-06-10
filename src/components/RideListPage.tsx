@@ -1,7 +1,7 @@
 /**
- * @file App.tsx
+ * @file RideListPage.tsx
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/9/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -20,25 +20,34 @@
  */
 
 import React from "react"
-import { Route, Switch } from "react-router-dom"
+import { Route, RouteComponentProps } from "react-router-dom"
 
-import RideListPage from "./RideListPage"
+import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
 
-import styles from "./App.sass"
+import styles from "./RideListPage.sass"
 
-function App() {
+interface MatchParams {
+  0: "search" | undefined
+}
+
+interface Props extends RouteComponentProps<MatchParams> {}
+
+function RideListPage(props: Props) {
+  const isSearchMode = !!props.match.params[0]
+
   return (
-    <div className={styles.app}>
-      <Switch>
-        <Route exact path="/(search)?" component={RideListPage} />
-        <Route
-          render={() =>
-            <Nav ridesPath="/" profilePath="/me" feedbackPath="/feedback" />}
-        />
-      </Switch>
+    <div className={styles.page}>
+      <RideListHeader {...props} isSearchMode={isSearchMode} />
+
+      <Nav ridesPath={location.pathname} />
+
+      <main>
+        <Route exact path="/(search)?" render={() => <p>Rides...</p>} />
+        <Route path="/me" render={() => <p>Me</p>} />
+      </main>
     </div>
   )
 }
 
-export default App
+export default RideListPage

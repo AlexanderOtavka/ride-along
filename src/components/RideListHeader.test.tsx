@@ -42,12 +42,12 @@ function getRouteMocks(url: string) {
   return { history, location, match }
 }
 
-function itWhenAtURL(url: string) {
+function itWhenAtURL(url: string, isSearchMode: boolean) {
   it(`when at ${url}`, () => {
     const routeMocks = getRouteMocks(url)
     const component = reactTestRender(
       <Router history={routeMocks.history}>
-        <RideListHeader {...routeMocks} />
+        <RideListHeader {...routeMocks} isSearchMode={isSearchMode} />
       </Router>
     )
 
@@ -56,23 +56,23 @@ function itWhenAtURL(url: string) {
 }
 
 describe("RideListHandler", () => {
-  itWhenAtURL("/")
-  itWhenAtURL("/?departlocation=foo&arrivelocation=bar")
-  itWhenAtURL("/?mode=request")
-  itWhenAtURL("/?mode=offer")
-  itWhenAtURL("/search")
-  itWhenAtURL("/search?mode=request")
-  itWhenAtURL("/search?mode=offer")
-  itWhenAtURL("/search?mode=offer&departLocation=foo&arriveLocation=bar")
-  itWhenAtURL("/search?mode=request&departLocation=foo")
-  itWhenAtURL("/search?mode=offer&arriveLocation=bar")
+  itWhenAtURL("/", false)
+  itWhenAtURL("/?departlocation=foo&arrivelocation=bar", false)
+  itWhenAtURL("/?mode=request", false)
+  itWhenAtURL("/?mode=offer", false)
+  itWhenAtURL("/search", true)
+  itWhenAtURL("/search?mode=request", true)
+  itWhenAtURL("/search?mode=offer", true)
+  itWhenAtURL("/search?mode=offer&departLocation=foo&arriveLocation=bar", true)
+  itWhenAtURL("/search?mode=request&departLocation=foo", true)
+  itWhenAtURL("/search?mode=offer&arriveLocation=bar", true)
 
   it("switches to search when form is submitted", () => {
     const routeMocks = getRouteMocks("/")
     const { history } = routeMocks
     const component = enzymeMount(
       <Router history={history}>
-        <RideListHeader {...routeMocks} />
+        <RideListHeader {...routeMocks} isSearchMode={false} />
       </Router>
     )
 
@@ -87,7 +87,7 @@ describe("RideListHandler", () => {
     const { history } = routeMocks
     const component = enzymeMount(
       <Router history={history}>
-        <RideListHeader {...routeMocks} />
+        <RideListHeader {...routeMocks} isSearchMode={false} />
       </Router>
     )
 
@@ -120,12 +120,12 @@ describe("RideListHandler", () => {
   })
 
   describe("search box", () => {
-    it("changes the url when depart search box changes", () => {
+    it("changes the url when departLocation changes", () => {
       const routeMocks = getRouteMocks("/search")
       const { history } = routeMocks
       const component = enzymeMount(
         <Router history={history}>
-          <RideListHeader {...routeMocks} />
+          <RideListHeader {...routeMocks} isSearchMode={true} />
         </Router>
       )
 
@@ -145,7 +145,7 @@ describe("RideListHandler", () => {
       const { history } = routeMocks
       const component = enzymeMount(
         <Router history={history}>
-          <RideListHeader {...routeMocks} />
+          <RideListHeader {...routeMocks} isSearchMode={true} />
         </Router>
       )
 
