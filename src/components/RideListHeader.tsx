@@ -29,7 +29,7 @@ import classnames from "classnames"
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
 
-import routes from "../constants/routes"
+import * as routes from "../constants/routes"
 
 import styles from "./RideListHeader.sass"
 

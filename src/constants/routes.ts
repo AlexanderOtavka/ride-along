@@ -19,14 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default {
-  rides: {
-    root: "/",
-    search: "/search",
-    matchPath: "/(search)?",
-  },
-  profile: {
-    root: "/me",
-  },
-  feedback: "/feedback",
+export const rides = {
+  root: "/",
+  search: "/search",
+  matchPath: "/(search)?",
 }
+
+export const profile = {
+  root: "/me",
+}
+
+export const feedback = "/feedback"

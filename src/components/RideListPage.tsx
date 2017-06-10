@@ -20,7 +20,8 @@
  */
 
 import React from "react"
-import { Route, RouteComponentProps } from "react-router-dom"
+import { RouteComponentProps } from "react-router-dom"
+import MediaQuery from "react-responsive"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
@@ -40,12 +41,13 @@ function RideListPage(props: Props) {
     <div className={styles.page}>
       <RideListHeader {...props} isSearchMode={isSearchMode} />
 
-      <Nav ridesPath={location.pathname} />
+      <main />
 
-      <main>
-        <Route exact path="/(search)?" render={() => <p>Rides...</p>} />
-        <Route path="/me" render={() => <p>Me</p>} />
-      </main>
+      <MediaQuery maxWidth={768}>
+        <footer className={styles.navFooter}>
+          <Nav ridesPath={location.pathname} />
+        </footer>
+      </MediaQuery>
     </div>
   )
 }

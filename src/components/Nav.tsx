@@ -24,7 +24,7 @@ import { Link, NavLink } from "react-router-dom"
 import { IconButton } from "react-toolbox/lib/button"
 import { IconMenu, MenuItem } from "react-toolbox/lib/menu"
 
-import routes from "../constants/routes"
+import * as routes from "../constants/routes"
 
 import styles from "./Nav.sass"
 

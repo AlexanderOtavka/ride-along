@@ -1,9 +1,10 @@
 /**
- * RideListPage.sass
+ * @file mediaQueries.ts
  *
- * Created by Zander Otavka on 6/9/17.
+ * Created by Zander Otavka on 6/10/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
+ * @license
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,11 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "style/colors"
+import { MediaQueryProps } from "react-responsive"
 
-.navFooter
-  background-color: $off-white
-  position: fixed
-  right: 0
-  bottom: 0
-  left: 0
+export const mobile: MediaQueryProps = {
+  maxWidth: 768,
+}
+
+export const desktop: MediaQueryProps = {
+  minWidth: 769,
+}
