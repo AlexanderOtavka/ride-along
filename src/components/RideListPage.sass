@@ -19,6 +19,7 @@
  */
 
 @import "style/colors"
+@import "style/effects"
 @import "style/layout"
 @import "style/animations"
 @import "style/media-queries"
@@ -31,16 +32,36 @@
   z-index: 0
 
 .list
+  $margin-bottom: 16px
+
   position: relative
   z-index: 0
   transition: transform $header-slide-timing
-  margin-bottom: 0px
+  padding-bottom: $margin-bottom
   flex: 1
   overflow-y: auto
+  text-align: center
 
   &.isSearchMode
     transform: translateY($header-slide-distance)
-    margin-bottom: $header-slide-distance
+    padding-bottom: $header-slide-distance + $margin-bottom
+
+.listFooterText
+  font-size: 14px
+  color: $grey2
+  margin: 16px
+
+.addRideButton
+  background-color: $off-white !important
+
+  &:focus
+    box-shadow: $shadow1
+
+  .page.request &
+    color: $primary-yellow
+
+  .page.offer &
+    color: $primary-green
 
 .navFooter
   position: relative

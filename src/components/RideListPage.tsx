@@ -21,7 +21,9 @@
 
 import React from "react"
 import { RouteComponentProps } from "react-router-dom"
+import { Button } from "react-toolbox/lib/button"
 import classnames from "classnames"
+import querystring from "querystring"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
@@ -37,9 +39,12 @@ export interface Props extends RouteComponentProps<MatchParams> {}
 
 function RideListPage(props: Props) {
   const isSearchMode = !!props.match.params[0]
+  const mode =
+    (querystring.parse(props.location.search.substring(1)).mode as string) ||
+    "request"
 
   return (
-    <div className={styles.page}>
+    <div className={classnames(styles.page, styles[mode])}>
       <RideListHeader {...props} isSearchMode={isSearchMode} />
 
       <main
@@ -88,6 +93,12 @@ function RideListPage(props: Props) {
           arrivalDateTime={new Date()}
           isLast={true}
         />
+        <footer>
+          <p className={styles.listFooterText}>
+            Don't see what you're looking for?
+          </p>
+          <Button className={styles.addRideButton}>Add Ride</Button>
+        </footer>
       </main>
 
       <footer className={styles.navFooter}>
