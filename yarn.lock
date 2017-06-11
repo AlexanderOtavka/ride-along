@@ -46,12 +46,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-responsive@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@types/react-responsive/-/react-responsive-1.1.6.tgz#2dad0b04459ca48409161fb4098b5fb0d67b4953"
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-router-dom@^4.0.4":
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.0.4.tgz#49f4a7037958f743e764b807fcbc8062fe46e493"
@@ -1727,10 +1721,6 @@ css-loader@^0.28.4:
     postcss-value-parser "^3.3.0"
     source-list-map "^0.1.7"
 
-css-mediaquery@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
-
 css-select@^1.1.0, css-select@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/css-select/-/css-select-1.2.0.tgz#2b3a110539c5355f1cd8d314623e870b121ec858"
@@ -2979,10 +2969,6 @@ husky@^0.13.4:
     is-ci "^1.0.9"
     normalize-path "^1.0.0"
 
-hyphenate-style-name@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
-
 iconv-lite@0.4.13:
   version "0.4.13"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
@@ -4161,12 +4147,6 @@ makeerror@1.0.x:
 map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
-
-matchmedia@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/matchmedia/-/matchmedia-0.1.2.tgz#cfd47f2bf68fbc7f5ea1bd3a3cf1715ecba3c1bd"
-  dependencies:
-    css-mediaquery "^0.1.2"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
@@ -5416,14 +5396,6 @@ react-form@^1.2.8:
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.5.8"
-
-react-responsive@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/react-responsive/-/react-responsive-1.3.0.tgz#adc9e8052d234be697f05386b7959e5587a54641"
-  dependencies:
-    hyphenate-style-name "^1.0.0"
-    matchmedia "^0.1.2"
-    prop-types "^15.5.7"
 
 react-router-dom@^4.1.1:
   version "4.1.1"

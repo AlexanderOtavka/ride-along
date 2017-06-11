@@ -21,7 +21,6 @@
 
 import React from "react"
 import { RouteComponentProps } from "react-router-dom"
-import MediaQuery from "react-responsive"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
@@ -52,11 +51,9 @@ function RideListPage(props: Props) {
         />
       </main>
 
-      <MediaQuery maxWidth={768}>
-        <footer className={styles.navFooter}>
-          <Nav ridesPath={location.pathname} />
-        </footer>
-      </MediaQuery>
+      <footer className={styles.navFooter}>
+        <Nav ridesPath={location.pathname} />
+      </footer>
     </div>
   )
 }

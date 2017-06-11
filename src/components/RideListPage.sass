@@ -19,6 +19,7 @@
  */
 
 @import "style/colors"
+@import "style/media-queries"
 
 .navFooter
   background-color: $off-white
@@ -26,3 +27,6 @@
   right: 0
   bottom: 0
   left: 0
+
+  @media #{$desktop}
+    display: none
