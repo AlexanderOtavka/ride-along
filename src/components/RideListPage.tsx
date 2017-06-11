@@ -21,6 +21,7 @@
 
 import React from "react"
 import { RouteComponentProps } from "react-router-dom"
+import classnames from "classnames"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
@@ -41,7 +42,37 @@ function RideListPage(props: Props) {
     <div className={styles.page}>
       <RideListHeader {...props} isSearchMode={isSearchMode} />
 
-      <main>
+      <main
+        className={classnames(styles.list, isSearchMode && styles.isSearchMode)}
+      >
+        <RideListItem
+          uri="/rides/foo"
+          departureLocation="Grinnell College"
+          departureDateTime={new Date()}
+          arrivalLocation="Walmart"
+          arrivalDateTime={new Date()}
+        />
+        <RideListItem
+          uri="/rides/foo"
+          departureLocation="Grinnell College"
+          departureDateTime={new Date()}
+          arrivalLocation="Walmart"
+          arrivalDateTime={new Date()}
+        />
+        <RideListItem
+          uri="/rides/foo"
+          departureLocation="Grinnell College"
+          departureDateTime={new Date()}
+          arrivalLocation="Walmart"
+          arrivalDateTime={new Date()}
+        />
+        <RideListItem
+          uri="/rides/foo"
+          departureLocation="Grinnell College"
+          departureDateTime={new Date()}
+          arrivalLocation="Walmart"
+          arrivalDateTime={new Date()}
+        />
         <RideListItem
           uri="/rides/foo"
           departureLocation="Grinnell College"

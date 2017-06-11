@@ -20,6 +20,7 @@
 
 @import "style/colors"
 @import "style/layout"
+@import "style/animations"
 
 .header
   position: relative
@@ -35,7 +36,7 @@
   align-items: center
   z-index: 1
   overflow: hidden
-  transition: background 400ms
+  transition: background $touch-effect-timing
 
 .downChevron
   position: absolute
@@ -52,10 +53,10 @@
   flex-direction: column
   padding-top: 32px
   z-index: 0
-  transition: transform 400ms
+  transition: transform $header-slide-timing
 
   &.inSearchMode
-    transform: translateY(100%)
+    transform: translateY($header-slide-distance)
 
 .modeSwitch
   display: flex

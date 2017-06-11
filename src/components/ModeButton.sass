@@ -21,6 +21,7 @@
 @import "style/colors"
 @import "style/layout"
 @import "style/effects"
+@import "style/animations"
 
 .modeButton
   position: relative
@@ -60,7 +61,7 @@
     z-index: -1
     background-color: $off-white
     opacity: 0.3
-    transition: opacity 400ms
+    transition: opacity $touch-effect-timing
     will-change: opacity
 
     .input:checked ~ &

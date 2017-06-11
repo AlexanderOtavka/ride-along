@@ -20,6 +20,7 @@
 
 @import "style/colors"
 @import "style/layout"
+@import "style/animations"
 
 $nav-link-size: 48px
 $nav-link-active-opacity: 0.25
@@ -52,7 +53,7 @@ $nav-link-active-opacity: 0.25
     border-radius: 50%
     opacity: 0
     z-index: -1
-    transition: opacity 400ms
+    transition: opacity $touch-effect-timing
 
   .navLink:focus &::before
     opacity: 0.1
