@@ -21,25 +21,54 @@
 
 import React from "react"
 import { Link } from "react-router-dom"
+import ripple, { RippleTheme } from "react-toolbox/lib/ripple/Ripple"
 import classnames from "classnames"
 
 import Ride, { Props as RideProps } from "./Ride"
 
+import rippleTheme from "react-toolbox/lib/ripple/theme.css"
 import styles from "./RideListItem.sass"
 
 export interface Props extends RideProps {
   uri: string
   isLast?: boolean
+  theme?: RippleTheme
+  children?: React.ReactNode
+  onMouseDown?: React.EventHandler<React.MouseEvent<any>>
+  onTouchStart?: React.EventHandler<React.TouchEvent<any>>
 }
 
-function RideListItem({ uri, isLast = false, ...props }: Props) {
+const withRipple = ripple({
+  spread: 0.5,
+  theme: {
+    ...rippleTheme,
+    rippleWrapper: classnames(styles.rippleWrapper, rippleTheme.rippleWrapper),
+  },
+})
+
+function RideListItem({
+  uri,
+  isLast = false,
+  theme,
+  children,
+  onMouseDown,
+  onTouchStart,
+  ...props,
+}: Props) {
   return (
     <li className={classnames(styles.listItem, isLast && styles.last)}>
-      <Link to={uri} className={styles.link}>
+      <Link
+        to={uri}
+        className={styles.link}
+        onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
+      >
         <Ride {...props} />
+
+        {children}
       </Link>
     </li>
   )
 }
 
-export default RideListItem
+export default withRipple(RideListItem)
