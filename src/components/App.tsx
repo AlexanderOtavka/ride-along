@@ -27,7 +27,9 @@ import Nav from "./Nav"
 
 import styles from "./App.sass"
 
-function App() {
+export interface Props {}
+
+function App(props: Props) {
   return (
     <div className={styles.app}>
       <Switch>

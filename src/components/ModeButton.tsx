@@ -30,7 +30,7 @@ import styles from "./ModeButton.sass"
 import ThumbSVG from "../drawables/thumb-right.svg"
 import CarSVG from "../drawables/car-side.svg"
 
-interface Props {
+export interface Props {
   mode: "request" | "offer"
   children?: React.ReactNode
   onMouseDown?: React.EventHandler<React.MouseEvent<any>>

@@ -1,0 +1,86 @@
+/**
+ * Ride.sass
+ *
+ * Created by Zander Otavka on 6/11/17.
+ * Copyright (C) 2016  Grinnell AppDev.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "style/colors"
+
+.ride
+  display: block
+  background-color: $off-white
+  position: relative
+
+.departure,
+.arrival
+  display: inline-flex
+  align-items: center
+  width: 50%
+
+.departure
+  flex-direction: row
+  text-align: left
+  background-color: $light-grey1
+  padding-right: 8px
+
+.arrival
+  flex-direction: row-reverse
+  text-align: right
+  padding-left: 8px
+
+.rightChevron
+  position: absolute
+  top: 0
+  height: 100%
+  left: calc(50% - 8px)
+  fill: $light-grey1
+
+.iconCircle
+  $size: 32px
+  $margin: 16px
+
+  display: flex
+  align-items: center
+  justify-content: center
+  width: $size
+  height: $size
+  margin: $margin
+  border-radius: 50%
+  background-color: $grey3
+
+.icon
+  $size: 24px
+
+  width: $size
+  height: $size
+  fill: $off-white
+
+.text
+  margin: 16px 0
+  flex: 1 0 0.001px
+
+.location
+  margin: 0
+  font-weight: 400
+  font-size: 14px
+  color: $grey1
+
+.dateTime
+  margin: 0
+  font-weight: 300
+  font-size: 14px
+  color: $grey3

@@ -42,7 +42,7 @@ interface QueryParams {
   arriveLocation?: string
 }
 
-interface Props extends RouteComponentProps<{}> {
+export interface Props extends RouteComponentProps<{}> {
   isSearchMode: boolean
 }
 

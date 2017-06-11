@@ -25,6 +25,7 @@ import MediaQuery from "react-responsive"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
+import RideListItem from "./RideListItem"
 
 import styles from "./RideListPage.sass"
 
@@ -32,7 +33,7 @@ interface MatchParams {
   0: "search" | undefined
 }
 
-interface Props extends RouteComponentProps<MatchParams> {}
+export interface Props extends RouteComponentProps<MatchParams> {}
 
 function RideListPage(props: Props) {
   const isSearchMode = !!props.match.params[0]
@@ -41,7 +42,15 @@ function RideListPage(props: Props) {
     <div className={styles.page}>
       <RideListHeader {...props} isSearchMode={isSearchMode} />
 
-      <main />
+      <main>
+        <RideListItem
+          uri="/rides/foo"
+          departureLocation="Grinnell College, Grinnell IA"
+          departureDateTime={new Date()}
+          arrivalLocation="Walmart"
+          arrivalDateTime={new Date()}
+        />
+      </main>
 
       <MediaQuery maxWidth={768}>
         <footer className={styles.navFooter}>

@@ -1,7 +1,7 @@
 /**
- * colors.sass
+ * RideListItem.sass
  *
- * Created by Zander Otavka on 6/6/17.
+ * Created by Zander Otavka on 6/11/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,14 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$primary-yellow: #F2C94C
-$primary-green: #219653
+@import "style/layout"
 
-$off-white: #F2F2F2
-$grey1: #333333
-$grey2: #4F4F4F
-$grey3: #828282
-$light-grey2: #E0E0E0
-$light-grey1: #E9E9E9
+.listItem
+  display: block
 
-$box-field-background: fade-out($off-white, 0.7)
+.link
+  position: relative
+  display: block
+  outline: none
+
+  &::after
+    +fullbleed
+
+    content: ""
+    pointer-events: none
+    opacity: 0
+    background-color: black
+
+  &:focus::after
+    opacity: 0.05

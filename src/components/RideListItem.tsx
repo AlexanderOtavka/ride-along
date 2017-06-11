@@ -1,9 +1,10 @@
 /**
- * colors.sass
+ * @file RideListItem.tsx
  *
- * Created by Zander Otavka on 6/6/17.
+ * Created by Zander Otavka on 6/11/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
+ * @license
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,14 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$primary-yellow: #F2C94C
-$primary-green: #219653
+import React from "react"
+import { Link } from "react-router-dom"
 
-$off-white: #F2F2F2
-$grey1: #333333
-$grey2: #4F4F4F
-$grey3: #828282
-$light-grey2: #E0E0E0
-$light-grey1: #E9E9E9
+import Ride, { Props as RideProps } from "./Ride"
 
-$box-field-background: fade-out($off-white, 0.7)
+import styles from "./RideListItem.sass"
+
+export interface Props extends RideProps {
+  uri: string
+}
+
+function RideListItem({ uri, ...props }: Props) {
+  return (
+    <li className={styles.listItem}>
+      <Link to={uri} className={styles.link}>
+        <Ride {...props} />
+      </Link>
+    </li>
+  )
+}
+
+export default RideListItem

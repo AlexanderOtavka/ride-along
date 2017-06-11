@@ -32,7 +32,7 @@ import CarSVG from "../drawables/car-side.svg"
 import AccountSVG from "../drawables/account-circle.svg"
 import DotsSVG from "../drawables/dots-horizontal.svg"
 
-interface Props {
+export interface Props {
   ridesPath?: string
   profilePath?: string
   feedbackPath?: string

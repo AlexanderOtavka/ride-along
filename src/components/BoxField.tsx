@@ -27,7 +27,7 @@ import classnames from "classnames"
 import rippleTheme from "react-toolbox/lib/ripple/theme.css"
 import styles from "./BoxField.sass"
 
-interface Props extends React.HTMLProps<HTMLInputElement> {
+export interface Props extends React.HTMLProps<HTMLInputElement> {
   field: string
   type?: "text" | "date" | "submit"
   theme?: RippleTheme
