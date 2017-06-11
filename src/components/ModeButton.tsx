@@ -38,6 +38,7 @@ export interface Props {
 }
 
 const withRipple = ripple({
+  spread: 8,
   theme: {
     ...rippleTheme,
     ripple: classnames(styles.ripple, rippleTheme.ripple),
