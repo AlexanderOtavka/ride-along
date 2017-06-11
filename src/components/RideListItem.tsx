@@ -21,6 +21,7 @@
 
 import React from "react"
 import { Link } from "react-router-dom"
+import classnames from "classnames"
 
 import Ride, { Props as RideProps } from "./Ride"
 
@@ -28,11 +29,12 @@ import styles from "./RideListItem.sass"
 
 export interface Props extends RideProps {
   uri: string
+  isLast?: boolean
 }
 
-function RideListItem({ uri, ...props }: Props) {
+function RideListItem({ uri, isLast = false, ...props }: Props) {
   return (
-    <li className={styles.listItem}>
+    <li className={classnames(styles.listItem, isLast && styles.last)}>
       <Link to={uri} className={styles.link}>
         <Ride {...props} />
       </Link>

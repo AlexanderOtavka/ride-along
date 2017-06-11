@@ -18,10 +18,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import "style/colors"
 @import "style/layout"
 
 .listItem
   display: block
+  border-bottom: 1px solid $off-white
+
+  &.last
+    border: none
 
 .link
   position: relative

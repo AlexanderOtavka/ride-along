@@ -44,10 +44,18 @@ function RideListPage(props: Props) {
       <main>
         <RideListItem
           uri="/rides/foo"
-          departureLocation="Grinnell College, Grinnell IA"
+          departureLocation="Grinnell College"
           departureDateTime={new Date()}
           arrivalLocation="Walmart"
           arrivalDateTime={new Date()}
+        />
+        <RideListItem
+          uri="/rides/foo"
+          departureLocation="O'Hare International Airport"
+          departureDateTime={new Date()}
+          arrivalLocation="Grinnell College"
+          arrivalDateTime={new Date()}
+          isLast={true}
         />
       </main>
 
