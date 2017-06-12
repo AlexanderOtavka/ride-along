@@ -20,6 +20,9 @@
 
 @import "style/colors"
 
+$chevron-width: 16px
+$midpoint-offset: $chevron-width / 2
+
 .ride
   display: block
   background-color: $off-white
@@ -29,24 +32,25 @@
 .arrival
   display: inline-flex
   align-items: center
-  width: 50%
 
 .departure
   flex-direction: row
   text-align: left
   background-color: $light-grey1
-  padding-right: 8px
+  width: calc(50% - #{$midpoint-offset})
 
 .arrival
   flex-direction: row-reverse
   text-align: right
-  padding-left: 8px
+  padding-left: $chevron-width
+  width: calc(50% + #{$midpoint-offset})
 
 .rightChevron
   position: absolute
   top: 0
   height: 100%
-  left: calc(50% - 8px)
+  left: calc(50% - #{$midpoint-offset})
+  width: $chevron-width
   fill: $light-grey1
 
 .iconCircle
