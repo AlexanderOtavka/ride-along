@@ -53,7 +53,6 @@ function BoxField({
   onTouchStart,
   ...props,
 }: Props) {
-  const classes = classnames(styles.input, className)
   const handleMouseDown = (ev: React.MouseEvent<HTMLInputElement>) => {
     if (onMouseDown && document.activeElement !== ev.currentTarget) {
       onMouseDown(ev)
@@ -67,11 +66,11 @@ function BoxField({
   }
 
   return (
-    <div className={styles.boxField}>
+    <div className={classnames(styles.boxField, className)}>
       {type === "submit"
         ? <input
             {...props}
-            className={classes}
+            className={styles.input}
             type="submit"
             value={placeholder}
             onMouseDown={handleMouseDown}
@@ -82,7 +81,7 @@ function BoxField({
               <input
                 {...props}
                 type={type}
-                className={classes}
+                className={styles.input}
                 placeholder={placeholder}
                 value={getValue("")}
                 onChange={ev => setValue(ev.target.value)}

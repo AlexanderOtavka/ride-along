@@ -27,6 +27,21 @@
   position: relative
   flex-grow: 1
   z-index: 0
+  display: flex
+  flex-direction: row
+  align-items: center
+
+.boxField > button
+  color: $off-white !important
+
+  &:last-of-type
+    margin-right: 8px
+
+  > svg
+    width: 24px !important
+
+.input:focus ~ button
+  color: $grey2 !important
 
 .backdrop
   +fullbleed
@@ -48,11 +63,11 @@
   background-color: $off-white
 
 .input
-  width: 100%
+  flex: 1 0 0.001px
   height: 48px
   background: none
   border: none
-  padding: 0 16px
+  padding-left: 16px
   font-size: 18px
   color: white
   font-weight: 300

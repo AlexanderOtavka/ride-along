@@ -1,36 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BoxField when it is a button 1`] = `
-<div
-  className="ReactForm"
->
-  <div
-    className="boxField"
-  >
-    <input
-      className="input foo"
-      disabled={false}
-      onMouseDown={[Function]}
-      onTouchStart={[Function]}
-      type="submit"
-      value={undefined}
-    />
-    <div
-      className="backdrop"
-    />
-  </div>
-</div>
-`;
-
 exports[`BoxField when it is a date 1`] = `
 <div
   className="ReactForm"
 >
   <div
-    className="boxField"
+    className="boxField foo"
   >
     <input
-      className="input foo"
+      className="input"
       disabled={false}
       onBlur={[Function]}
       onChange={[Function]}
@@ -52,10 +30,10 @@ exports[`BoxField when it is a submit 1`] = `
   className="ReactForm"
 >
   <div
-    className="boxField"
+    className="boxField foo"
   >
     <input
-      className="input foo"
+      className="input"
       disabled={false}
       onMouseDown={[Function]}
       onTouchStart={[Function]}
@@ -74,16 +52,17 @@ exports[`BoxField with className 1`] = `
   className="ReactForm"
 >
   <div
-    className="boxField"
+    className="boxField foo"
   >
     <input
-      className="input foo"
+      className="input"
       disabled={false}
       onBlur={[Function]}
       onChange={[Function]}
       onMouseDown={[Function]}
       onTouchStart={[Function]}
       placeholder={undefined}
+      type="text"
       value=""
     />
     <div
@@ -108,6 +87,7 @@ exports[`BoxField with placeholder 1`] = `
       onMouseDown={[Function]}
       onTouchStart={[Function]}
       placeholder="foo"
+      type="text"
       value=""
     />
     <div
@@ -132,6 +112,7 @@ exports[`BoxField without optional props 1`] = `
       onMouseDown={[Function]}
       onTouchStart={[Function]}
       placeholder={undefined}
+      type="text"
       value=""
     />
     <div

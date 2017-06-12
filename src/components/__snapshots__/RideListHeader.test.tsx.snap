@@ -27,6 +27,20 @@ exports[`RideListHandler when at / 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <div
         className="FormInput"
@@ -147,6 +161,20 @@ exports[`RideListHandler when at /?departlocation=foo&arrivelocation=bar 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <div
         className="FormInput"
@@ -267,6 +295,20 @@ exports[`RideListHandler when at /?mode=offer 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <div
         className="FormInput"
@@ -387,6 +429,20 @@ exports[`RideListHandler when at /?mode=request 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <div
         className="FormInput"
@@ -510,6 +566,20 @@ exports[`RideListHandler when at /search 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <a
         href="/?mode=request"
@@ -596,6 +666,20 @@ exports[`RideListHandler when at /search?mode=offer 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <a
         href="/?mode=offer"
@@ -682,6 +766,20 @@ exports[`RideListHandler when at /search?mode=offer&arriveLocation=bar 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <a
         href="/?mode=offer"
@@ -854,6 +952,20 @@ exports[`RideListHandler when at /search?mode=request 1`] = `
         <div
           className="backdrop"
         />
+        <button
+          className=""
+          data-react-toolbox="button"
+          disabled={false}
+          href={undefined}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchStart={[Function]}
+          type="button"
+        >
+          <svg />
+        </button>
       </div>
       <a
         href="/?mode=request"

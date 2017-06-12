@@ -35,6 +35,7 @@ import styles from "./RideListHeader.sass"
 
 import DownChevronSVG from "../drawables/down-chevron.svg"
 import CloseSVG from "../drawables/close.svg"
+import CurrentLocationSVG from "../drawables/crosshairs-gps.svg"
 
 interface QueryParams {
   mode?: "request" | "offer"
@@ -93,7 +94,17 @@ function RideListHeader({ history, isSearchMode, ...props }: Props) {
                   values.departLocation === undefined &&
                   values.arriveLocation === undefined
                 }
-              />
+              >
+                {!values.departLocation &&
+                  <IconButton
+                    icon={<CurrentLocationSVG />}
+                    onClick={() =>
+                      updateURL({
+                        ...values,
+                        departLocation: "Current Location",
+                      })}
+                  />}
+              </BoxField>
 
               {isSearchMode
                 ? <Link
