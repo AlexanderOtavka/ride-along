@@ -1,0 +1,66 @@
+// dummy ride data
+export default [
+  {
+    uri: "/rides/foo1",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo2",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo3",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo4",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo5",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo6",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo7",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo8",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+  {
+    uri: "/rides/foo9",
+    departureLocation: "Grinnell College",
+    departureDateTime: new Date(),
+    arrivalLocation: "Walmart",
+    arrivalDateTime: new Date(),
+  },
+]

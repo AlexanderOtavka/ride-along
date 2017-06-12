@@ -31,6 +31,8 @@ import RideListItem from "./RideListItem"
 
 import styles from "./RideListPage.sass"
 
+import exampleRides from "../constants/exampleRides"
+
 interface MatchParams {
   0: "search" | undefined
 }
@@ -50,49 +52,8 @@ function RideListPage(props: Props) {
       <main
         className={classnames(styles.list, isSearchMode && styles.isSearchMode)}
       >
-        <RideListItem
-          uri="/rides/foo"
-          departureLocation="Grinnell College"
-          departureDateTime={new Date()}
-          arrivalLocation="Walmart"
-          arrivalDateTime={new Date()}
-        />
-        <RideListItem
-          uri="/rides/foo"
-          departureLocation="Grinnell College"
-          departureDateTime={new Date()}
-          arrivalLocation="Walmart"
-          arrivalDateTime={new Date()}
-        />
-        <RideListItem
-          uri="/rides/foo"
-          departureLocation="Grinnell College"
-          departureDateTime={new Date()}
-          arrivalLocation="Walmart"
-          arrivalDateTime={new Date()}
-        />
-        <RideListItem
-          uri="/rides/foo"
-          departureLocation="Grinnell College"
-          departureDateTime={new Date()}
-          arrivalLocation="Walmart"
-          arrivalDateTime={new Date()}
-        />
-        <RideListItem
-          uri="/rides/foo"
-          departureLocation="Grinnell College"
-          departureDateTime={new Date()}
-          arrivalLocation="Walmart"
-          arrivalDateTime={new Date()}
-        />
-        <RideListItem
-          uri="/rides/foo"
-          departureLocation="O'Hare International Airport"
-          departureDateTime={new Date()}
-          arrivalLocation="Grinnell College"
-          arrivalDateTime={new Date()}
-          isLast={true}
-        />
+        {exampleRides.map(ride => <RideListItem key={ride.uri} {...ride} />)}
+
         <footer>
           <p className={styles.listFooterText}>
             Don't see what you're looking for?
