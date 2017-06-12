@@ -99,10 +99,13 @@ function RideListHeader({ history, isSearchMode, ...props }: Props) {
                   <IconButton
                     icon={<CurrentLocationSVG />}
                     onClick={() =>
-                      updateURL({
-                        ...values,
-                        departLocation: "Current Location",
-                      })}
+                      history.replace(
+                        "/search?" +
+                          querystring.stringify({
+                            ...values,
+                            departLocation: "Current Location",
+                          })
+                      )}
                   />}
               </BoxField>
 
