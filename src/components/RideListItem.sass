@@ -20,6 +20,7 @@
 
 @import "style/colors"
 @import "style/layout"
+@import "style/animations"
 
 .listItem
   display: block
@@ -40,9 +41,10 @@
     pointer-events: none
     opacity: 0
     background-color: black
+    transition: opacity $touch-effect-timing
 
   &:focus::after
     opacity: 0.05
 
-.rippleWrapper
-  overflow: hidden
+  &:active::after
+    opacity: 0.1
