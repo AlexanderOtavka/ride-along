@@ -21,34 +21,23 @@
 
 import React from "react"
 import { create as reactTestRender } from "react-test-renderer"
-import { mount as enzymeMount } from "enzyme"
-import { Router, matchPath } from "react-router-dom"
-import { createMemoryHistory } from "history"
+import { MemoryRouter } from "react-router-dom"
 
 import RideListHeader from "./RideListHeader"
 
-function getRouteMocks(url: string) {
-  const history = createMemoryHistory({ initialEntries: [url] })
-  const { location } = history
-  const match = matchPath<{ 0: "search" | undefined }>(location.pathname, {
-    path: "/(search)?",
-    exact: true,
-  })
+import { RideSearchModel } from "../store/rides"
 
-  if (!match) {
-    throw TypeError(`Invalid url. Must match path. Got "${url}"`)
-  }
-
-  return { history, location, match }
-}
-
-function itWhenAtURL(url: string, isSearchMode: boolean) {
-  it(`when at ${url}`, () => {
-    const routeMocks = getRouteMocks(url)
+function itWithProps(isSearchMode: boolean, values: RideSearchModel) {
+  it(`with values=${JSON.stringify(values)}`, () => {
     const component = reactTestRender(
-      <Router history={routeMocks.history}>
-        <RideListHeader {...routeMocks} isSearchMode={isSearchMode} />
-      </Router>
+      <MemoryRouter>
+        <RideListHeader
+          isSearchMode={isSearchMode}
+          values={values}
+          onSearchModeChange={() => undefined}
+          onValuesChange={() => undefined}
+        />
+      </MemoryRouter>
     )
 
     expect(component.toJSON()).toMatchSnapshot()
@@ -56,108 +45,25 @@ function itWhenAtURL(url: string, isSearchMode: boolean) {
 }
 
 describe("RideListHandler", () => {
-  itWhenAtURL("/", false)
-  itWhenAtURL("/?departlocation=foo&arrivelocation=bar", false)
-  itWhenAtURL("/?mode=request", false)
-  itWhenAtURL("/?mode=offer", false)
-  itWhenAtURL("/search", true)
-  itWhenAtURL("/search?mode=request", true)
-  itWhenAtURL("/search?mode=offer", true)
-  itWhenAtURL("/search?mode=offer&departLocation=foo&arriveLocation=bar", true)
-  itWhenAtURL("/search?mode=request&departLocation=foo", true)
-  itWhenAtURL("/search?mode=offer&arriveLocation=bar", true)
-
-  it("switches to search when form is submitted", () => {
-    const routeMocks = getRouteMocks("/")
-    const { history } = routeMocks
-    const component = enzymeMount(
-      <Router history={history}>
-        <RideListHeader {...routeMocks} isSearchMode={false} />
-      </Router>
-    )
-
-    component.find("form").simulate("submit")
-    expect(history.location.pathname).toBe("/search")
-    expect(history.location.search).toBe("?mode=request")
-    expect(history.length).toBe(2)
-  })
-
-  describe("mode switch", () => {
-    const routeMocks = getRouteMocks("/")
-    const { history } = routeMocks
-    const component = enzymeMount(
-      <Router history={history}>
-        <RideListHeader {...routeMocks} isSearchMode={false} />
-      </Router>
-    )
-
-    it("starts out with request selected", () => {
-      expect(history.location.pathname).toBe("/")
-      expect(history.location.search).toBe("?mode=request")
-      expect(history.length).toBe(1)
-    })
-
-    it("switches to offer mode", () => {
-      component.find("ModeButton").last().find("input").simulate("click")
-      expect(history.location.pathname).toBe("/")
-      expect(history.location.search).toBe("?mode=offer")
-      expect(history.length).toBe(1)
-    })
-
-    it("stays in offer mode when clicked again", () => {
-      component.find("ModeButton").last().find("input").simulate("click")
-      expect(history.location.pathname).toBe("/")
-      expect(history.location.search).toBe("?mode=offer")
-      expect(history.length).toBe(1)
-    })
-
-    it("switches back to request mode", () => {
-      component.find("ModeButton").first().find("input").simulate("click")
-      expect(history.location.pathname).toBe("/")
-      expect(history.location.search).toBe("?mode=request")
-      expect(history.length).toBe(1)
+  describe("when not in search mode", () => {
+    itWithProps(false, { mode: "request" })
+    itWithProps(false, { mode: "offer" })
+    itWithProps(false, {
+      mode: "request",
+      departLocation: "foo",
+      arriveLocation: "bar",
     })
   })
 
-  describe("search box", () => {
-    it("changes the url when departLocation changes", () => {
-      const routeMocks = getRouteMocks("/search")
-      const { history } = routeMocks
-      const component = enzymeMount(
-        <Router history={history}>
-          <RideListHeader {...routeMocks} isSearchMode={true} />
-        </Router>
-      )
-
-      component
-        .find("BoxField")
-        .first()
-        .find("input")
-        .simulate("change", { target: { value: "foo" } })
-
-      expect(history.location.pathname).toBe("/search")
-      expect(history.location.search).toBe("?mode=request&departLocation=foo")
-      expect(history.length).toBe(1)
+  describe("when in search mode", () => {
+    itWithProps(true, { mode: "request" })
+    itWithProps(true, { mode: "offer" })
+    itWithProps(true, {
+      mode: "offer",
+      departLocation: "foo",
+      arriveLocation: "bar",
     })
-
-    it("changes the url when arrive search box changes", () => {
-      const routeMocks = getRouteMocks("/search")
-      const { history } = routeMocks
-      const component = enzymeMount(
-        <Router history={history}>
-          <RideListHeader {...routeMocks} isSearchMode={true} />
-        </Router>
-      )
-
-      component
-        .find("BoxField")
-        .last()
-        .find("input")
-        .simulate("change", { target: { value: "bar" } })
-
-      expect(history.location.pathname).toBe("/search")
-      expect(history.location.search).toBe("?mode=request&arriveLocation=bar")
-      expect(history.length).toBe(1)
-    })
+    itWithProps(true, { mode: "request", departLocation: "foo" })
+    itWithProps(true, { mode: "offer", arriveLocation: "bar" })
   })
 })

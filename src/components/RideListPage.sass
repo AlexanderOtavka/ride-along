@@ -31,7 +31,7 @@
   overflow: hidden
   z-index: 0
 
-.list
+.main
   $margin-bottom: 16px
 
   position: relative
@@ -45,6 +45,11 @@
   &.isSearchMode
     transform: translateY($header-slide-distance)
     padding-bottom: $header-slide-distance + $margin-bottom
+
+.list
+  list-style-type: none
+  margin: 0
+  padding: 0
 
 .listFooterText
   font-size: 14px

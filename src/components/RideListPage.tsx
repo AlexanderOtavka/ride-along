@@ -20,6 +20,7 @@
  */
 
 import React from "react"
+import { connect, DispatchProp } from "react-redux"
 import { RouteComponentProps } from "react-router-dom"
 import { Button } from "react-toolbox/lib/button"
 import classnames from "classnames"
@@ -29,30 +30,82 @@ import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
 import RideListItem from "./RideListItem"
 
-import styles from "./RideListPage.sass"
+import { StateModel } from "../store"
+import { RideModel, RideSearchModel, ridesActions } from "../store/rides"
 
-import exampleRides from "../constants/exampleRides"
+import * as routes from "../constants/routes"
+
+import styles from "./RideListPage.sass"
 
 interface MatchParams {
   0: "search" | undefined
 }
 
+interface StateProps {
+  list: ReadonlyArray<RideModel>
+}
+
+interface DispatchProps extends DispatchProp<StateModel> {}
+
 export interface Props extends RouteComponentProps<MatchParams> {}
 
-function RideListPage(props: Props) {
+type AllProps = Readonly<StateProps & DispatchProps & Props>
+
+const withConnect = connect<
+  StateProps,
+  DispatchProps,
+  Props
+>((state: StateModel) => ({
+  list: state.rides.list,
+}))
+
+function RideListPage({ dispatch, history, ...props }: AllProps) {
   const isSearchMode = !!props.match.params[0]
-  const mode =
-    (querystring.parse(props.location.search.substring(1)).mode as string) ||
-    "request"
+
+  const query: RideSearchModel = {
+    mode: "request",
+    ...querystring.parse(
+      props.location.search.substring(1) // chop off the ?
+    ),
+  }
+
+  const updateQuery = (values: RideSearchModel) => {
+    const urlValues = isSearchMode ? values : { mode: values.mode }
+    history.replace("?" + querystring.stringify(urlValues))
+  }
 
   return (
-    <div className={classnames(styles.page, styles[mode])}>
-      <RideListHeader {...props} isSearchMode={isSearchMode} />
+    <div className={classnames(styles.page, styles[query.mode])}>
+      <RideListHeader
+        isSearchMode={isSearchMode}
+        values={query}
+        onSearchModeChange={newIsSearchMode => {
+          if (newIsSearchMode) {
+            history.push(routes.rides.search)
+            updateQuery({ mode: query.mode })
+          } else {
+            history.goBack()
+          }
+        }}
+        onValuesChange={values => {
+          dispatch(ridesActions.search(values))
+          updateQuery(values)
+        }}
+      />
 
       <main
-        className={classnames(styles.list, isSearchMode && styles.isSearchMode)}
+        className={classnames(styles.main, isSearchMode && styles.isSearchMode)}
       >
-        {exampleRides.map(ride => <RideListItem key={ride.uri} {...ride} />)}
+        <ul className={styles.list}>
+          {props.list.map(({ uid, ...ride }, i) =>
+            <RideListItem
+              {...ride}
+              key={uid}
+              uri={routes.rides.ride(uid)}
+              isLast={i === props.list.length - 1}
+            />
+          )}
+        </ul>
 
         <footer>
           <p className={styles.listFooterText}>
@@ -69,4 +122,4 @@ function RideListPage(props: Props) {
   )
 }
 
-export default RideListPage
+export default withConnect(RideListPage)

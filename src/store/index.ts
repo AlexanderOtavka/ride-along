@@ -1,7 +1,7 @@
 /**
- * @file index.tsx
+ * @file index.ts
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 6/12/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,28 +19,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import { render } from "react-dom"
-import { BrowserRouter } from "react-router-dom"
-import { Provider } from "react-redux"
+import { createStore, combineReducers } from "redux"
 
-import App from "./components/App"
+import { RidesModel, ridesReducer } from "./rides"
 
-import getStore from "./store"
+export interface StateModel {
+  readonly rides: RidesModel
+}
 
-import registerServiceWorker from "./registerServiceWorker"
+export const ridesSelector = (state: StateModel) => state.rides
 
-import "./index.sass"
+const reducer = combineReducers<StateModel>({
+  rides: ridesReducer,
+})
 
-const store = getStore()
-
-registerServiceWorker()
-
-render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
-)
+export default (initialState?: StateModel) => createStore(reducer, initialState)

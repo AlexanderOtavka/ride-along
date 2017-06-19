@@ -20,14 +20,15 @@
  */
 
 import React from "react"
-import { RouteComponentProps, Link, withRouter } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Form, RadioGroup } from "react-form"
 import { IconButton } from "react-toolbox/lib/button"
-import querystring from "querystring"
 import classnames from "classnames"
 
 import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
+
+import { RideSearchModel } from "../store/rides"
 
 import * as routes from "../constants/routes"
 
@@ -37,42 +38,30 @@ import DownChevronSVG from "../drawables/down-chevron.svg"
 import CloseSVG from "../drawables/close.svg"
 import CurrentLocationSVG from "../drawables/crosshairs-gps.svg"
 
-interface QueryParams {
-  mode?: "request" | "offer"
-  departLocation?: string
-  arriveLocation?: string
-}
-
-export interface Props extends RouteComponentProps<{}> {
+export interface Props {
   isSearchMode: boolean
+  values: RideSearchModel
+  onSearchModeChange: (isSearchMode: boolean) => void
+  onValuesChange: (values: RideSearchModel) => void
 }
 
-function RideListHeader({ history, isSearchMode, ...props }: Props) {
-  const query = querystring.parse(
-    props.location.search.substring(1) // chop off the ?
-  ) as QueryParams
-  const selectedMode = query.mode || "request"
-  const updateURL = (values: QueryParams) => {
-    const urlValues = isSearchMode ? values : { mode: values.mode }
-    history.replace("?" + querystring.stringify(urlValues))
-  }
-
+function RideListHeader({ isSearchMode, ...props }: Props) {
   return (
-    <header className={classnames(styles.header, styles[selectedMode])}>
+    <header className={classnames(styles.header, styles[props.values.mode])}>
       <Form
-        values={{
-          ...query,
-          mode: selectedMode,
-        }}
-        onChange={({ values }: any) => updateURL(values)}
-        postSubmit={updateURL}
+        values={isSearchMode ? props.values : { mode: props.values.mode }}
+        onChange={({ values }: any) => props.onValuesChange(values)}
         component={false}
       >
         {({ submitForm, values }: any) =>
           <form
             onSubmit={ev => {
               ev.preventDefault()
-              history.push(routes.rides.search)
+
+              if (!isSearchMode) {
+                props.onSearchModeChange(true)
+              }
+
               submitForm()
             }}
             action={routes.rides.search}
@@ -85,9 +74,9 @@ function RideListHeader({ history, isSearchMode, ...props }: Props) {
                 placeholder={
                   isSearchMode
                     ? "Departure location"
-                    : selectedMode === "request"
-                      ? "Request a ride"
-                      : "Offer a ride"
+                    : values.mode === "offer"
+                      ? "Offer a ride"
+                      : "Request a ride"
                 }
                 autoFocus={
                   isSearchMode &&
@@ -99,19 +88,17 @@ function RideListHeader({ history, isSearchMode, ...props }: Props) {
                   <IconButton
                     icon={<CurrentLocationSVG />}
                     onClick={() =>
-                      history.replace(
-                        "/search?" +
-                          querystring.stringify({
-                            ...values,
-                            departLocation: "Current Location",
-                          })
-                      )}
+                      props.onValuesChange({
+                        ...values,
+                        departLocation: "Current Location",
+                      })}
                   />}
               </BoxField>
 
               {isSearchMode
                 ? <Link
-                    to={`${routes.rides.root}?mode=${query.mode}`}
+                    to={routes.rides.root(values.mode)}
+                    onClick={() => props.onSearchModeChange(false)}
                     title="Close"
                   >
                     <IconButton
@@ -143,4 +130,4 @@ function RideListHeader({ history, isSearchMode, ...props }: Props) {
   )
 }
 
-export default withRouter(RideListHeader)
+export default RideListHeader

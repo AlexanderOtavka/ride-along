@@ -20,9 +20,10 @@
  */
 
 export const rides = {
-  root: "/",
+  root: (mode?: "request" | "offer") => (mode ? `/?mode=${mode}` : ""),
   search: "/search",
   matchPath: "/(search)?",
+  ride: (uid: string) => `/rides/${uid}`,
 }
 
 export const profile = {
