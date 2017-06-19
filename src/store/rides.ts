@@ -19,7 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import actionCreatorFactory, { isType, Action } from "redux-typescript-actions"
+import actionCreatorFactory from "typescript-fsa"
+import { reducerWithInitialState } from "typescript-fsa-reducers"
 
 // Models
 
@@ -39,7 +40,7 @@ export interface RideModel {
 
 export interface RidesModel {
   readonly list: ReadonlyArray<RideModel>
-  readonly isFullList: boolean
+  readonly isDoneLoading: boolean
 }
 
 // Actions
@@ -50,7 +51,10 @@ export namespace ridesActions {
   export type LoadMore = {}
   export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
 
-  export type Receive = { list: ReadonlyArray<RideModel>; isFullList: boolean }
+  export type Receive = {
+    list: ReadonlyArray<RideModel>;
+    isDoneLoading: boolean;
+  }
   export const receive = actionCreator<Receive>("RECEIVE")
 
   export type Search = Partial<RideSearchModel>
@@ -59,18 +63,7 @@ export namespace ridesActions {
 
 // Reducers
 
-const emptyRidesModel: RidesModel = {
+export const ridesReducer = reducerWithInitialState<RidesModel>({
   list: require("../constants/exampleRides").default,
-  isFullList: true,
-}
-
-export function ridesReducer(
-  state: RidesModel = emptyRidesModel,
-  action: Action<any>
-): RidesModel {
-  if (isType(action, ridesActions.receive)) {
-    return action.payload
-  }
-
-  return state
-}
+  isDoneLoading: true,
+}).case(ridesActions.receive, (state, payload) => payload)
