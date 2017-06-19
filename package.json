@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@types/enzyme": "^2.8.0",
-    "@types/jest": "^19.2.4",
+    "@types/jest": "^20.0.0",
     "@types/node": "^7.0.27",
     "@types/react-test-renderer": "^15.5.0",
     "app-root-path": "^2.0.1",
@@ -67,7 +67,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^20.0.3",
     "jest-enzyme": "^3.2.0",
-    "lint-staged": "^3.6.0",
+    "lint-staged": "^4.0.0",
     "node-sass": "^4.5.3",
     "object-assign": "^4.1.1",
     "postcss-flexbugs-fixes": "^3.0.0",
