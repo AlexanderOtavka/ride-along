@@ -20,6 +20,7 @@
  */
 
 import { createStore, combineReducers } from "redux"
+import { devToolsEnhancer } from "redux-devtools-extension"
 
 import { RidesModel, ridesReducer } from "./rides"
 
@@ -33,4 +34,10 @@ const reducer = combineReducers<StateModel>({
   rides: ridesReducer,
 })
 
-export default (initialState?: StateModel) => createStore(reducer, initialState)
+export default function getStore(initialState: StateModel | null = null) {
+  const enhancer = devToolsEnhancer({})
+
+  return initialState !== null
+    ? createStore<StateModel>(reducer, initialState, enhancer)
+    : createStore<StateModel>(reducer, enhancer)
+}
