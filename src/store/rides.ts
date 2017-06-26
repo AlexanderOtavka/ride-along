@@ -52,8 +52,8 @@ export namespace ridesActions {
   export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
 
   export type Receive = {
-    list: ReadonlyArray<RideModel>;
-    isDoneLoading: boolean;
+    list: ReadonlyArray<RideModel>
+    isDoneLoading: boolean
   }
   export const receive = actionCreator<Receive>("RECEIVE")
 
