@@ -23,7 +23,6 @@ machine:
     version: 6.9.5
   environment:
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
-    CI: "true"
 
 dependencies:
   override:
