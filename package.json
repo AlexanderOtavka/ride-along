@@ -8,7 +8,8 @@
     "start": "babel-node scripts/start.js",
     "test": "babel-node scripts/test.js --env=jsdom",
     "prettier": "prettier --no-semi --trailing-comma es5 --write",
-    "tslint": "tslint"
+    "tslint": "tslint",
+    "check-lighthouse": "babel-node scripts/check-lighthouse.js"
   },
   "babel": {
     "presets": [
