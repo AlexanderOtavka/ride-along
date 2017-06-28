@@ -360,7 +360,7 @@ export default {
           // Visualize the bundle contents
           new BundleAnalyzerPlugin({
             analyzerMode: "static",
-            reportFilename: "../report/bundle-analyzer.html",
+            reportFilename: path.join(paths.report, "bundle-analyzer.html"),
           }),
           // Minify the code.
           new webpack.optimize.UglifyJsPlugin({
