@@ -41,4 +41,6 @@ if (!process.env.CI && argv.indexOf("--coverage") === -1) {
   argv.push("--watch")
 }
 
+argv.push("--coverageDirectory", "./report/coverage")
+
 jest.run(argv)

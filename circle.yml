@@ -28,8 +28,13 @@ machine:
 dependencies:
   override:
     - yarn
+    - yarn global add serve
   cache_directories:
     - ~/.cache/yarn
+
+compile:
+  override:
+    - yarn build
 
 test:
   override:

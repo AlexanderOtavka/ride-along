@@ -44,3 +44,4 @@ Gruntfile.js
 # custom exclusions
 !tslint/lib/test
 !.svgo.yml
+!istanbul-reports/lib/html/assets
