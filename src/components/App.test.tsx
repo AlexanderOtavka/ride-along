@@ -26,12 +26,12 @@ import { Provider } from "react-redux"
 
 import App from "./App"
 
-import getStore from "../store"
+import configureStore from "../store"
 
 it("renders without crashing", () => {
   const div = document.createElement("div")
   render(
-    <Provider store={getStore()}>
+    <Provider store={configureStore()}>
       <MemoryRouter>
         <App />
       </MemoryRouter>

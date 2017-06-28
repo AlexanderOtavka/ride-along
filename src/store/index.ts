@@ -19,25 +19,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { createStore, combineReducers } from "redux"
-import { devToolsEnhancer } from "redux-devtools-extension"
+import { createStore, combineReducers, applyMiddleware } from "redux"
+import { composeWithDevTools } from "redux-devtools-extension"
+import createSagaMiddleware, { SagaIterator } from "redux-saga"
+import { all, call } from "redux-saga/effects"
 
 import { RidesModel, ridesReducer } from "./rides"
+import {
+  AutocompleteModel,
+  autocompleteReducer,
+  autocompletePersistentSaga,
+} from "./autocomplete"
 
 export interface StateModel {
   readonly rides: RidesModel
+  readonly autocomplete: AutocompleteModel
 }
 
 export const ridesSelector = (state: StateModel) => state.rides
+export const autocompleteSelector = (state: StateModel) => state.autocomplete
 
 const reducer = combineReducers<StateModel>({
   rides: ridesReducer,
+  autocomplete: autocompleteReducer,
 })
 
-export default function getStore(initialState: StateModel | null = null) {
-  const enhancer = devToolsEnhancer({})
+function* persistentSaga(): SagaIterator {
+  yield all([call(autocompletePersistentSaga)])
+}
 
-  return initialState !== null
+export default function configureStore(initialState: StateModel | null = null) {
+  const sagaMiddleware = createSagaMiddleware()
+  const enhancer = composeWithDevTools(applyMiddleware(sagaMiddleware))
+
+  const store = initialState !== null
     ? createStore<StateModel>(reducer, initialState, enhancer)
     : createStore<StateModel>(reducer, enhancer)
+
+  const runPersistentSaga = () => {
+    sagaMiddleware.run(persistentSaga)
+  }
+
+  return { ...store, runPersistentSaga }
 }

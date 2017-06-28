@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@types/classnames": "^2.2.0",
+    "@types/googlemaps": "^3.26.14",
     "@types/left-pad": "^1.1.1",
     "@types/react": "^15.0.26",
     "@types/react-dom": "^15.5.0",

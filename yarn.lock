@@ -24,6 +24,10 @@
     "@types/cheerio" "*"
     "@types/react" "*"
 
+"@types/googlemaps@^3.26.14":
+  version "3.26.14"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.26.14.tgz#611cb24214bfc0bada86105696b66325f9ad372d"
+
 "@types/history@*":
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.5.2.tgz#7739c850b7a5de94221accb352f9cabd1bcabe7c"

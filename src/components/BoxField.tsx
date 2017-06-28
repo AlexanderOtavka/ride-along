@@ -84,8 +84,18 @@ function BoxField({
                 className={styles.input}
                 placeholder={placeholder}
                 value={getValue("")}
-                onChange={ev => setValue(ev.target.value)}
-                onBlur={ev => setTouched()}
+                onChange={ev => {
+                  setValue(ev.currentTarget.value)
+                  if (props.onChange) {
+                    props.onChange(ev)
+                  }
+                }}
+                onBlur={ev => {
+                  setTouched()
+                  if (props.onBlur) {
+                    props.onBlur(ev)
+                  }
+                }}
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleTouchStart}
               />}

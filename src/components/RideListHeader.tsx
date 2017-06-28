@@ -43,6 +43,10 @@ export interface Props {
   values: RideSearchModel
   onSearchModeChange: (isSearchMode: boolean) => void
   onValuesChange: (values: RideSearchModel) => void
+  onDepartBoxChange: (value: string) => void
+  onDepartBoxBlur: () => void
+  onArriveBoxChange: (value: string) => void
+  onArriveBoxBlur: () => void
 }
 
 function RideListHeader({ isSearchMode, ...props }: Props) {
@@ -50,7 +54,9 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
     <header className={classnames(styles.header, styles[props.values.mode])}>
       <Form
         values={isSearchMode ? props.values : { mode: props.values.mode }}
-        onChange={({ values }: any) => props.onValuesChange(values)}
+        onChange={(state: any, ...args: any[]) => {
+          props.onValuesChange(state.values)
+        }}
         component={false}
       >
         {({ submitForm, values }: any) =>
@@ -83,6 +89,8 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
                   values.departLocation === undefined &&
                   values.arriveLocation === undefined
                 }
+                onChange={ev => props.onDepartBoxChange(ev.currentTarget.value)}
+                onBlur={props.onDepartBoxBlur}
               >
                 {!values.departLocation &&
                   <IconButton
@@ -120,7 +128,12 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
               )}
             >
               <DownChevronSVG className={styles.downChevron} />
-              <BoxField field="arriveLocation" placeholder="Destination" />
+              <BoxField
+                field="arriveLocation"
+                placeholder="Destination"
+                onChange={ev => props.onArriveBoxChange(ev.currentTarget.value)}
+                onBlur={props.onArriveBoxBlur}
+              />
             </div>
 
             {isSearchMode && <input type="submit" hidden />}

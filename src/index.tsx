@@ -26,14 +26,15 @@ import { Provider } from "react-redux"
 
 import App from "./components/App"
 
-import getStore from "./store"
+import configureStore from "./store"
 
 import registerServiceWorker from "./registerServiceWorker"
 
 import "./index.sass"
 
-const store = getStore()
+const store = configureStore()
 
+store.runPersistentSaga()
 registerServiceWorker()
 
 render(

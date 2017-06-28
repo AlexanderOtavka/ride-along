@@ -32,6 +32,10 @@ import RideListItem from "./RideListItem"
 
 import { StateModel } from "../store"
 import { RideModel, RideSearchModel, ridesActions } from "../store/rides"
+import {
+  AutocompletePredictionModel,
+  autocompleteActions,
+} from "../store/autocomplete"
 
 import * as routes from "../constants/routes"
 
@@ -42,7 +46,9 @@ interface MatchParams {
 }
 
 interface StateProps {
-  list: ReadonlyArray<RideModel>
+  rideList: ReadonlyArray<RideModel>
+  autocompleteList: ReadonlyArray<AutocompletePredictionModel>
+  autocompleteField: string
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
@@ -56,7 +62,9 @@ const withConnect = connect<
   DispatchProps,
   Props
 >((state: StateModel) => ({
-  list: state.rides.list,
+  rideList: state.rides.list,
+  autocompleteList: state.autocomplete.list,
+  autocompleteField: state.autocomplete.field,
 }))
 
 function RideListPage({ dispatch, history, ...props }: AllProps) {
@@ -84,6 +92,8 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
             history.push(routes.rides.search)
             updateQuery({ mode: query.mode })
           } else {
+            dispatch(ridesActions.cancelSearch({}))
+            dispatch(autocompleteActions.cancel({}))
             history.goBack()
           }
         }}
@@ -91,28 +101,66 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
           dispatch(ridesActions.search(values))
           updateQuery(values)
         }}
+        onDepartBoxChange={value =>
+          dispatch(
+            autocompleteActions.getList.started({
+              field: "departLocation",
+              search: value,
+            })
+          )}
+        onDepartBoxBlur={() =>
+          requestAnimationFrame(() => dispatch(autocompleteActions.cancel({})))}
+        onArriveBoxChange={value =>
+          dispatch(
+            autocompleteActions.getList.started({
+              field: "arriveLocation",
+              search: value,
+            })
+          )}
+        onArriveBoxBlur={() =>
+          requestAnimationFrame(() => dispatch(autocompleteActions.cancel({})))}
       />
 
       <main
         className={classnames(styles.main, isSearchMode && styles.isSearchMode)}
       >
-        <ul className={styles.list}>
-          {props.list.map(({ uid, ...ride }, i) =>
+        <ul
+          className={styles.autocompleteList}
+          hidden={props.autocompleteList.length === 0}
+        >
+          {props.autocompleteList.map(({ description, ...prediction }) =>
+            <li
+              key={prediction.place_id || description}
+              className={styles.autocompleteItem}
+              onClick={() => {
+                updateQuery({
+                  ...query,
+                  [props.autocompleteField]: description,
+                })
+              }}
+            >
+              {description}
+            </li>
+          )}
+        </ul>
+
+        <ul className={styles.rideList}>
+          {props.rideList.map(({ uid, ...ride }, i) =>
             <RideListItem
               {...ride}
               key={uid}
               uri={routes.rides.ride(uid)}
-              isLast={i === props.list.length - 1}
+              isLast={i === props.rideList.length - 1}
             />
           )}
-        </ul>
 
-        <footer>
-          <p className={styles.listFooterText}>
-            Don't see what you're looking for?
-          </p>
-          <Button className={styles.addRideButton}>Add Ride</Button>
-        </footer>
+          <footer>
+            <p className={styles.listFooterText}>
+              Don't see what you're looking for?
+            </p>
+            <Button className={styles.addRideButton}>Add Ride</Button>
+          </footer>
+        </ul>
       </main>
 
       <footer className={styles.navFooter}>

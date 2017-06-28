@@ -32,24 +32,44 @@
   z-index: 0
 
 .main
-  $margin-bottom: 16px
-
   position: relative
   z-index: 0
   transition: transform $header-slide-timing
-  padding-bottom: $margin-bottom
   flex: 1
-  overflow-y: auto
   text-align: center
 
   &.isSearchMode
     transform: translateY($header-slide-distance)
-    padding-bottom: $header-slide-distance + $margin-bottom
 
-.list
+.autocompleteList, .rideList
+  +fullbleed
+
   list-style-type: none
   margin: 0
+  overflow-y: auto
+
+  .isSearchMode &
+    bottom: $header-slide-distance
+
+.autocompleteList
+  background: $off-white
+  z-index: 1
+  padding: 16px 0
+  text-align: left
+
+.autocompleteItem
+  +touch-highlight
+
+  line-height: 48px
+  padding: 0 32px
+  white-space: nowrap
+  text-overflow: ellipsis
+  overflow: hidden
+  font-size: 18px
+
+.rideList
   padding: 0
+  padding-bottom: 32px
 
 .listFooterText
   font-size: 14px
