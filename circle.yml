@@ -28,7 +28,7 @@ machine:
 dependencies:
   override:
     - yarn
-    - yarn global add serve
+    - yarn global add serve lighthouse
   cache_directories:
     - ~/.cache/yarn
 
@@ -37,5 +37,9 @@ compile:
     - yarn build
 
 test:
+  pre:
+    - serve -s build -p 5000 &
   override:
     - yarn test
+    - lighthouse localhost:5000 --output=json --output-path=./report/lighthouse.json
+    - yarn check-lighthouse -- ./report/lighthouse.json
