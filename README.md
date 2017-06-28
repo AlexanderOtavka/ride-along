@@ -1,3 +1,9 @@
+[![CircleCI](https://circleci.com/gh/AlexanderOtavka/ride-along.svg?style=svg&circle-token=b6c5f09ac69cd17e5c3c4296bd54fa7bc617c459)](https://circleci.com/gh/AlexanderOtavka/ride-along)
+
+# RideAlong
+
+> An app for ride sharing at Grinnell College.
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
