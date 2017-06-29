@@ -37,7 +37,8 @@ compile:
 
 test:
   pre:
-    - serve -s build -p 5000 &
+    - serve -s build -p 5000:
+        background: true
   override:
     - yarn test
     - lighthouse localhost:5000 --output=json --output-path=./report/lighthouse.json
