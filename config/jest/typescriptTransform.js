@@ -55,7 +55,7 @@ export function process(src, path) {
     })
 
     const { code: babelOutput } = babel(tscOutput, {
-      plugins: ["transform-es2015-modules-commonjs"],
+      plugins: ["transform-es2015-modules-commonjs", "dynamic-import-node"],
       ast: false,
     })
 
