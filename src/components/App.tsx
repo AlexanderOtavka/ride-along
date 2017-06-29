@@ -23,8 +23,6 @@ import React from "react"
 import { Route, Switch } from "react-router-dom"
 import { asyncComponent } from "react-async-component"
 
-import Nav from "./Nav"
-
 import styles from "./App.sass"
 
 export interface Props {}
@@ -34,15 +32,16 @@ const RideListPage = asyncComponent({
     import(/* webpackChunkName: "RideListPage" */ "./RideListPage"),
 })
 
+const Nav = asyncComponent({
+  resolve: () => import(/* webpackChunkName: "Nav" */ "./Nav"),
+})
+
 function App(props: Props) {
   return (
     <div className={styles.app}>
       <Switch>
         <Route exact path="/(search)?" component={RideListPage} />
-        <Route
-          render={() =>
-            <Nav ridesPath="/" profilePath="/me" feedbackPath="/feedback" />}
-        />
+        <Route render={() => <Nav />} />
       </Switch>
     </div>
   )
