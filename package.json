@@ -46,6 +46,7 @@
     "@types/jest": "^20.0.0",
     "@types/node": "^8.0.5",
     "@types/react-test-renderer": "^15.5.0",
+    "@types/webpack": "^3.0.1",
     "app-root-path": "^2.0.1",
     "autoprefixer": "^7.1.0",
     "babel-cli": "^6.24.1",

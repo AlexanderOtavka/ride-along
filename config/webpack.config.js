@@ -362,6 +362,12 @@ export default {
             analyzerMode: "static",
             reportFilename: path.join(paths.report, "bundle-analyzer.html"),
           }),
+          // Move modules shared by all async children of main into a seperate chunk
+          new webpack.optimize.CommonsChunkPlugin({
+            name: "main",
+            children: true,
+            async: "commons",
+          }),
           // Minify the code.
           new webpack.optimize.UglifyJsPlugin({
             compress: {
@@ -383,6 +389,7 @@ export default {
           // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
           new ExtractTextPlugin({
             filename: cssFilename,
+            allChunks: true,
           }),
           // Generate a manifest file which contains a mapping of all asset filenames
           // to their corresponding output file so that tools can pick it up without
