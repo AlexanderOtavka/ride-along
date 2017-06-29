@@ -21,13 +21,18 @@
 
 import React from "react"
 import { Route, Switch } from "react-router-dom"
+import { asyncComponent } from "react-async-component"
 
-import RideListPage from "./RideListPage"
 import Nav from "./Nav"
 
 import styles from "./App.sass"
 
 export interface Props {}
+
+const RideListPage = asyncComponent({
+  resolve: () =>
+    import(/* webpackChunkName: "RideListPage" */ "./RideListPage"),
+})
 
 function App(props: Props) {
   return (
