@@ -29,7 +29,7 @@ import Dependencies from "./Dependencies"
 /// <reference types="googlemaps" />
 type AutocompleteService = google.maps.places.AutocompleteService
 type AutocompletionRequest = google.maps.places.AutocompletionRequest
-type PlacesServiceStatus = typeof google.maps.places.PlacesServiceStatus
+type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
 
 // Models
 
@@ -80,7 +80,7 @@ export const autocompleteReducer = reducerWithInitialState<AutocompleteModel>({
 
 export function getPlacePredictions(
   service: AutocompleteService,
-  PlacesServiceStatus: PlacesServiceStatus,
+  PlacesServiceStatus: PlacesServiceStatusType,
   request: AutocompletionRequest
 ): Promise<AutocompletePredictionModel[]> {
   return new Promise<AutocompletePredictionModel[]>((resolve, reject) => {
@@ -98,7 +98,7 @@ export function getPlacePredictions(
 
 export function* autocompleteWorkerSaga(
   service: AutocompleteService,
-  PlacesServiceStatus: PlacesServiceStatus,
+  PlacesServiceStatus: PlacesServiceStatusType,
   action: Action<autocompleteActions.GetListParams>
 ): SagaIterator {
   try {
