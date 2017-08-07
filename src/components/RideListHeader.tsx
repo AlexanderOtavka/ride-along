@@ -93,10 +93,10 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
                         departLocation: "Current Location",
                       }
 
-                      if (!isSearchMode) {
-                        props.onSearchModeChange(true, newValues)
-                      } else {
+                      if (isSearchMode) {
                         props.onValuesChange(newValues)
+                      } else {
+                        props.onSearchModeChange(true, newValues)
                       }
                     }}
                   />}
