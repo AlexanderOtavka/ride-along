@@ -22,5 +22,5 @@
 /// <reference types="googlemaps" />
 
 export default interface Dependencies {
-  placesPromise: Promise<typeof google.maps.places>
+  getPlacesAPI: () => Promise<typeof google.maps.places>
 }

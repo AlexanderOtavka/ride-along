@@ -38,13 +38,14 @@ declare namespace window {
 
 const store = configureStore()
 const deps: StoreDependencies = {
-  placesPromise: new Promise(resolve => {
-    if (google.maps.places) {
-      resolve(google.maps.places)
-    } else {
-      window.onPlacesAPILoad = () => resolve(google.maps.places)
-    }
-  }),
+  getPlacesAPI: () =>
+    new Promise(resolve => {
+      if (google.maps.places) {
+        resolve(google.maps.places)
+      } else {
+        window.onPlacesAPILoad = () => resolve(google.maps.places)
+      }
+    }),
 }
 
 store.runPersistentSaga(deps)

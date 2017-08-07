@@ -29,6 +29,7 @@ import Dependencies from "./Dependencies"
 /// <reference types="googlemaps" />
 type AutocompleteService = google.maps.places.AutocompleteService
 type AutocompletionRequest = google.maps.places.AutocompletionRequest
+type PlacesServiceStatus = typeof google.maps.places.PlacesServiceStatus
 
 // Models
 
@@ -77,16 +78,13 @@ export const autocompleteReducer = reducerWithInitialState<AutocompleteModel>({
 
 // Sagas
 
-export async function getPlacePredictions(
-  deps: Dependencies,
+export function getPlacePredictions(
   service: AutocompleteService,
+  PlacesServiceStatus: PlacesServiceStatus,
   request: AutocompletionRequest
 ): Promise<AutocompletePredictionModel[]> {
-  const places = await deps.placesPromise
-
-  return await new Promise<AutocompletePredictionModel[]>((resolve, reject) => {
+  return new Promise<AutocompletePredictionModel[]>((resolve, reject) => {
     service.getQueryPredictions(request, (result, status) => {
-      const { PlacesServiceStatus } = places
       if (status === PlacesServiceStatus.OK) {
         resolve(result)
       } else if (status === PlacesServiceStatus.ZERO_RESULTS) {
@@ -99,15 +97,15 @@ export async function getPlacePredictions(
 }
 
 export function* autocompleteWorkerSaga(
-  deps: Dependencies,
   service: AutocompleteService,
+  PlacesServiceStatus: PlacesServiceStatus,
   action: Action<autocompleteActions.GetListParams>
 ): SagaIterator {
   try {
     const predictions: AutocompletePredictionModel[] = yield call(
       getPlacePredictions,
-      deps,
       service,
+      PlacesServiceStatus,
       { input: action.payload.search }
     )
 
@@ -130,14 +128,14 @@ export function* autocompleteWorkerSaga(
 }
 
 export function* autocompletePersistentSaga(deps: Dependencies): SagaIterator {
-  const places: typeof google.maps.places = yield deps.placesPromise as any
+  const places: typeof google.maps.places = yield call(deps.getPlacesAPI)
   const service = new places.AutocompleteService()
 
   yield throttle(
     500,
     autocompleteActions.getList.started.type,
     autocompleteWorkerSaga,
-    deps,
-    service
+    service,
+    places.PlacesServiceStatus
   )
 }
