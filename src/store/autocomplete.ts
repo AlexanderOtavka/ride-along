@@ -24,6 +24,8 @@ import { reducerWithInitialState } from "typescript-fsa-reducers"
 import { SagaIterator } from "redux-saga"
 import { call, put, throttle } from "redux-saga/effects"
 
+import Dependencies from "./Dependencies"
+
 /// <reference types="googlemaps" />
 type AutocompleteService = google.maps.places.AutocompleteService
 type AutocompletionRequest = google.maps.places.AutocompletionRequest
@@ -75,13 +77,16 @@ export const autocompleteReducer = reducerWithInitialState<AutocompleteModel>({
 
 // Sagas
 
-export function getPlacePredictions(
+export async function getPlacePredictions(
+  deps: Dependencies,
   service: AutocompleteService,
   request: AutocompletionRequest
 ): Promise<AutocompletePredictionModel[]> {
-  return new Promise((resolve, reject) => {
+  const places = await deps.placesPromise
+
+  return await new Promise<AutocompletePredictionModel[]>((resolve, reject) => {
     service.getQueryPredictions(request, (result, status) => {
-      const { PlacesServiceStatus } = google.maps.places
+      const { PlacesServiceStatus } = places
       if (status === PlacesServiceStatus.OK) {
         resolve(result)
       } else if (status === PlacesServiceStatus.ZERO_RESULTS) {
@@ -94,12 +99,14 @@ export function getPlacePredictions(
 }
 
 export function* autocompleteWorkerSaga(
+  deps: Dependencies,
   service: AutocompleteService,
   action: Action<autocompleteActions.GetListParams>
 ): SagaIterator {
   try {
     const predictions: AutocompletePredictionModel[] = yield call(
       getPlacePredictions,
+      deps,
       service,
       { input: action.payload.search }
     )
@@ -122,13 +129,15 @@ export function* autocompleteWorkerSaga(
   }
 }
 
-export function* autocompletePersistentSaga(): SagaIterator {
-  const service = new google.maps.places.AutocompleteService()
+export function* autocompletePersistentSaga(deps: Dependencies): SagaIterator {
+  const places: typeof google.maps.places = yield deps.placesPromise as any
+  const service = new places.AutocompleteService()
 
   yield throttle(
     500,
     autocompleteActions.getList.started.type,
     autocompleteWorkerSaga,
+    deps,
     service
   )
 }

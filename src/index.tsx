@@ -26,15 +26,28 @@ import { Provider } from "react-redux"
 
 import App from "./components/App"
 
-import configureStore from "./store"
+import configureStore, { Dependencies as StoreDependencies } from "./store"
 
 import registerServiceWorker from "./registerServiceWorker"
 
 import "./index.sass"
 
-const store = configureStore()
+declare namespace window {
+  export let onPlacesAPILoad: () => void
+}
 
-store.runPersistentSaga()
+const store = configureStore()
+const deps: StoreDependencies = {
+  placesPromise: new Promise(resolve => {
+    if (google.maps.places) {
+      resolve(google.maps.places)
+    } else {
+      window.onPlacesAPILoad = () => resolve(google.maps.places)
+    }
+  }),
+}
+
+store.runPersistentSaga(deps)
 registerServiceWorker()
 
 render(

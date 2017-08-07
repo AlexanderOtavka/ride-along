@@ -30,6 +30,9 @@ import {
   autocompleteReducer,
   autocompletePersistentSaga,
 } from "./autocomplete"
+import Dependencies from "./Dependencies"
+
+export { Dependencies }
 
 export interface StateModel {
   readonly rides: RidesModel
@@ -44,20 +47,21 @@ const reducer = combineReducers<StateModel>({
   autocomplete: autocompleteReducer,
 })
 
-function* persistentSaga(): SagaIterator {
-  yield all([call(autocompletePersistentSaga)])
+function* persistentSaga(deps: Dependencies): SagaIterator {
+  yield all([call(autocompletePersistentSaga, deps)])
 }
 
 export default function configureStore(initialState: StateModel | null = null) {
   const sagaMiddleware = createSagaMiddleware()
   const enhancer = composeWithDevTools(applyMiddleware(sagaMiddleware))
 
-  const store = initialState !== null
-    ? createStore<StateModel>(reducer, initialState, enhancer)
-    : createStore<StateModel>(reducer, enhancer)
+  const store =
+    initialState !== null
+      ? createStore<StateModel>(reducer, initialState, enhancer)
+      : createStore<StateModel>(reducer, enhancer)
 
-  const runPersistentSaga = () => {
-    sagaMiddleware.run(persistentSaga)
+  const runPersistentSaga = (deps: Dependencies) => {
+    sagaMiddleware.run(persistentSaga, deps)
   }
 
   return { ...store, runPersistentSaga }
