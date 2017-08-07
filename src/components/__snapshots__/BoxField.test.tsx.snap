@@ -2,122 +2,102 @@
 
 exports[`BoxField when it is a date 1`] = `
 <div
-  className="ReactForm"
+  className="boxField foo"
 >
+  <input
+    className="input"
+    disabled={false}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onMouseDown={[Function]}
+    onTouchStart={[Function]}
+    placeholder="bar"
+    type="date"
+    value=""
+  />
   <div
-    className="boxField foo"
-  >
-    <input
-      className="input"
-      disabled={false}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onMouseDown={[Function]}
-      onTouchStart={[Function]}
-      placeholder="bar"
-      type="date"
-      value=""
-    />
-    <div
-      className="backdrop"
-    />
-  </div>
+    className="backdrop"
+  />
 </div>
 `;
 
 exports[`BoxField when it is a submit 1`] = `
 <div
-  className="ReactForm"
+  className="boxField foo"
 >
+  <input
+    className="input"
+    disabled={false}
+    onMouseDown={[Function]}
+    onTouchStart={[Function]}
+    type="submit"
+    value={undefined}
+  />
   <div
-    className="boxField foo"
-  >
-    <input
-      className="input"
-      disabled={false}
-      onMouseDown={[Function]}
-      onTouchStart={[Function]}
-      type="submit"
-      value={undefined}
-    />
-    <div
-      className="backdrop"
-    />
-  </div>
+    className="backdrop"
+  />
 </div>
 `;
 
 exports[`BoxField with className 1`] = `
 <div
-  className="ReactForm"
+  className="boxField foo"
 >
+  <input
+    className="input"
+    disabled={false}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onMouseDown={[Function]}
+    onTouchStart={[Function]}
+    placeholder={undefined}
+    type="text"
+    value=""
+  />
   <div
-    className="boxField foo"
-  >
-    <input
-      className="input"
-      disabled={false}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onMouseDown={[Function]}
-      onTouchStart={[Function]}
-      placeholder={undefined}
-      type="text"
-      value=""
-    />
-    <div
-      className="backdrop"
-    />
-  </div>
+    className="backdrop"
+  />
 </div>
 `;
 
 exports[`BoxField with placeholder 1`] = `
 <div
-  className="ReactForm"
+  className="boxField"
 >
+  <input
+    className="input"
+    disabled={false}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onMouseDown={[Function]}
+    onTouchStart={[Function]}
+    placeholder="foo"
+    type="text"
+    value=""
+  />
   <div
-    className="boxField"
-  >
-    <input
-      className="input"
-      disabled={false}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onMouseDown={[Function]}
-      onTouchStart={[Function]}
-      placeholder="foo"
-      type="text"
-      value=""
-    />
-    <div
-      className="backdrop"
-    />
-  </div>
+    className="backdrop"
+  />
 </div>
 `;
 
 exports[`BoxField without optional props 1`] = `
 <div
-  className="ReactForm"
+  className="boxField"
 >
+  <input
+    className="input"
+    disabled={false}
+    onBlur={[Function]}
+    onChange={[Function]}
+    onMouseDown={[Function]}
+    onTouchStart={[Function]}
+    placeholder={undefined}
+    type="text"
+    value=""
+  />
   <div
-    className="boxField"
-  >
-    <input
-      className="input"
-      disabled={false}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onMouseDown={[Function]}
-      onTouchStart={[Function]}
-      placeholder={undefined}
-      type="text"
-      value=""
-    />
-    <div
-      className="backdrop"
-    />
-  </div>
+    className="backdrop"
+  />
 </div>
 `;
