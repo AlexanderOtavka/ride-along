@@ -41,7 +41,7 @@ import CurrentLocationSVG from "../drawables/crosshairs-gps.svg"
 export interface Props {
   isSearchMode: boolean
   values: RideSearchModel
-  onSearchModeChange: (isSearchMode: boolean) => void
+  onSearchModeChange: (isSearchMode: boolean, values: RideSearchModel) => void
   onValuesChange: (values: RideSearchModel) => void
 }
 
@@ -59,7 +59,7 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
               ev.preventDefault()
 
               if (!isSearchMode) {
-                props.onSearchModeChange(true)
+                props.onSearchModeChange(true, values)
               }
 
               submitForm()
@@ -87,18 +87,25 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
                 {!values.departLocation &&
                   <IconButton
                     icon={<CurrentLocationSVG />}
-                    onClick={() =>
-                      props.onValuesChange({
+                    onClick={() => {
+                      const newValues = {
                         ...values,
                         departLocation: "Current Location",
-                      })}
+                      }
+
+                      if (isSearchMode) {
+                        props.onValuesChange(newValues)
+                      } else {
+                        props.onSearchModeChange(true, newValues)
+                      }
+                    }}
                   />}
               </BoxField>
 
               {isSearchMode
                 ? <Link
                     to={routes.rides.root(values.mode)}
-                    onClick={() => props.onSearchModeChange(false)}
+                    onClick={() => props.onSearchModeChange(false, values)}
                     title="Close"
                   >
                     <IconButton

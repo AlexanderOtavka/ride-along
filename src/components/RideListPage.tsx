@@ -70,8 +70,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
   }
 
   const updateQuery = (values: RideSearchModel) => {
-    const urlValues = isSearchMode ? values : { mode: values.mode }
-    history.replace("?" + querystring.stringify(urlValues))
+    history.replace("?" + querystring.stringify(values))
   }
 
   return (
@@ -79,10 +78,10 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
       <RideListHeader
         isSearchMode={isSearchMode}
         values={query}
-        onSearchModeChange={newIsSearchMode => {
+        onSearchModeChange={(newIsSearchMode, newValues) => {
           if (newIsSearchMode) {
             history.push(routes.rides.search)
-            updateQuery({ mode: query.mode })
+            updateQuery(newValues)
           } else {
             history.goBack()
           }
