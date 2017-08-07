@@ -20,6 +20,9 @@
  */
 
 import jest from "jest"
+import path from "path"
+
+import paths from "../config/paths"
 
 process.env.NODE_ENV = "test"
 process.env.PUBLIC_URL = ""
@@ -40,5 +43,7 @@ const argv = process.argv.slice(2)
 if (!process.env.CI && argv.indexOf("--coverage") === -1) {
   argv.push("--watch")
 }
+
+argv.push("--coverageDirectory", path.join(paths.report, "coverage"))
 
 jest.run(argv)

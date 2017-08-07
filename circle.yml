@@ -21,16 +21,28 @@
 machine:
   node:
     version: 6.9.5
+
   environment:
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
-    CI: "true"
 
 dependencies:
   override:
     - yarn
+    - yarn global add lighthouse serve
+
   cache_directories:
     - ~/.cache/yarn
+
+compile:
+  override:
+    - yarn build
 
 test:
   override:
     - yarn test
+
+    - serve -s build -p 5000:
+        background: true
+    - mkdir ./report
+    - lighthouse http://localhost:5000 --output=json --output-path=./report/lighthouse.json
+    - yarn check-lighthouse -- ./report/lighthouse.json

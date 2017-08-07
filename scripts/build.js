@@ -103,6 +103,13 @@ measureFileSizesBeforeBuild(paths.appBuild)
       buildFolder,
       useYarn
     )
+
+    if (process.env.CI) {
+      // We have to manually kill in CI mode since the bundle analyzer will want
+      // to open the report in the browser.  When not in CI mode, we shouldn't
+      // kill because it prevents the report from opening.
+      process.exit(0)
+    }
   })
   .catch(err => {
     console.error(chalk.red("Failed to compile.\n"))
