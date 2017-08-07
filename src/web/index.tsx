@@ -24,9 +24,9 @@ import { render } from "react-dom"
 import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
 
-import App from "./components/App"
+import App from "./App"
 
-import configureStore, { Dependencies as StoreDependencies } from "./store"
+import configureStore, { Dependencies as StoreDependencies } from "../store"
 
 import registerServiceWorker from "./registerServiceWorker"
 
@@ -49,6 +49,7 @@ const deps: StoreDependencies = {
 }
 
 store.runPersistentSaga(deps)
+
 registerServiceWorker()
 
 render(

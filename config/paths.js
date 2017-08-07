@@ -61,10 +61,10 @@ function getServedPath(appPackageJson) {
 // config after eject: we're in ./config/
 export default {
   dotenv: resolveApp(".env"),
-  appBuild: resolveApp("build"),
-  appPublic: resolveApp("public"),
-  appHtml: resolveApp("public/index.html"),
-  appIndexJs: resolveApp("src/index.tsx"),
+  webBuild: resolveApp("build/web"),
+  webPublic: resolveApp("src/web/public"),
+  webHtml: resolveApp("src/web/public/index.html"),
+  webIndexJs: resolveApp("src/web/index.tsx"),
   appPackageJson: resolveApp("package.json"),
   appSrc: resolveApp("src"),
   yarnLockFile: resolveApp("yarn.lock"),

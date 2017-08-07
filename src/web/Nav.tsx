@@ -78,7 +78,9 @@ function Nav({
         icon={<DotsSVG className={styles.navIcon} />}
       >
         <MenuItem caption={isTipsHidden ? "Show Tips" : "Hide Tips"} />
-        <Link to={feedbackPath}><MenuItem caption="Feedback" /></Link>
+        <Link to={feedbackPath}>
+          <MenuItem caption="Feedback" />
+        </Link>
       </IconMenu>
     </nav>
   )
