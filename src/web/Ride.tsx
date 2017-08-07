@@ -57,9 +57,10 @@ function Ride(props: Props) {
 
   const arrivalDate = formatDate(props.arrivalDateTime)
   const arrivalTime = formatTime(props.arrivalDateTime)
-  const arrivalDateTime = departureDate === arrivalDate
-    ? arrivalTime
-    : `${arrivalDate} ${arrivalTime}`
+  const arrivalDateTime =
+    departureDate === arrivalDate
+      ? arrivalTime
+      : `${arrivalDate} ${arrivalTime}`
 
   return (
     <article className={styles.ride}>
@@ -68,8 +69,12 @@ function Ride(props: Props) {
           <MapMarkerSVG className={styles.icon} />
         </div>
         <div className={styles.text}>
-          <h2 className={styles.location}>{props.departureLocation}</h2>
-          <p className={styles.dateTime}>{departureDateTime}</p>
+          <h2 className={styles.location}>
+            {props.departureLocation}
+          </h2>
+          <p className={styles.dateTime}>
+            {departureDateTime}
+          </p>
         </div>
       </section>
 
@@ -80,8 +85,12 @@ function Ride(props: Props) {
           <MapMarkerSVG className={styles.icon} />
         </div>
         <div className={styles.text}>
-          <h2 className={styles.location}>{props.arrivalLocation}</h2>
-          <p className={styles.dateTime}>{arrivalDateTime}</p>
+          <h2 className={styles.location}>
+            {props.arrivalLocation}
+          </h2>
+          <p className={styles.dateTime}>
+            {arrivalDateTime}
+          </p>
         </div>
       </section>
     </article>

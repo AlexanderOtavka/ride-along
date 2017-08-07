@@ -167,14 +167,14 @@ export default {
     // We ship a few polyfills by default:
     require.resolve("./polyfills"),
     // Finally, this is your app's code:
-    paths.appIndexJs,
+    paths.webIndexJs,
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
   ],
   output: {
     // The build folder.  It is not used in dev but WebpackDevServer crashes without it.
-    path: paths.appBuild,
+    path: paths.webBuild,
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: !isProduction,
     // Generated JS file names (with nested folders).
@@ -333,7 +333,7 @@ export default {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
+      template: paths.webHtml,
       minify: isProduction
         ? {
             removeComments: true,
@@ -424,7 +424,7 @@ export default {
             staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
             // Work around Windows path issue in SWPrecacheWebpackPlugin:
             // https://github.com/facebookincubator/create-react-app/issues/2235
-            stripPrefix: paths.appBuild.replace(/\\/g, "/") + "/",
+            stripPrefix: paths.webBuild.replace(/\\/g, "/") + "/",
           }),
         ]
       : [

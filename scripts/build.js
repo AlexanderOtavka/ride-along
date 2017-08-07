@@ -54,17 +54,17 @@ const config = require("../config/webpack.config").default
 const useYarn = fs.existsSync(paths.yarnLockFile)
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([paths.webHtml, paths.webIndexJs])) {
   process.exit(1)
 }
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
-measureFileSizesBeforeBuild(paths.appBuild)
+measureFileSizesBeforeBuild(paths.webBuild)
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild)
+    fs.emptyDirSync(paths.webBuild)
     // Merge with the public folder
     copyPublicFolder()
     // Start the webpack build
@@ -89,13 +89,13 @@ measureFileSizesBeforeBuild(paths.appBuild)
     }
 
     console.info("File sizes after gzip:\n")
-    printFileSizesAfterBuild(stats, previousFileSizes, paths.appBuild)
+    printFileSizesAfterBuild(stats, previousFileSizes, paths.webBuild)
     console.info()
 
     const appPackage = require(paths.appPackageJson)
     const publicUrl = paths.publicUrl
     const publicPath = config.output.publicPath
-    const buildFolder = path.relative(process.cwd(), paths.appBuild)
+    const buildFolder = path.relative(process.cwd(), paths.webBuild)
     printHostingInstructions(
       appPackage,
       publicUrl,
@@ -153,8 +153,8 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
+  fs.copySync(paths.webPublic, paths.webBuild, {
     dereference: true,
-    filter: file => file !== paths.appHtml,
+    filter: file => file !== paths.webHtml,
   })
 }
