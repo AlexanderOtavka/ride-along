@@ -36,6 +36,10 @@ function itWithProps(isSearchMode: boolean, values: RideSearchModel) {
           values={values}
           onSearchModeChange={() => undefined}
           onValuesChange={() => undefined}
+          onDepartBoxChange={() => undefined}
+          onDepartBoxBlur={() => undefined}
+          onArriveBoxChange={() => undefined}
+          onArriveBoxBlur={() => undefined}
         />
       </MemoryRouter>
     )

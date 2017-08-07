@@ -20,7 +20,7 @@
 
 @import "style/colors"
 @import "style/layout"
-@import "style/animations"
+@import "style/effects"
 
 .listItem
   display: block
@@ -30,21 +30,6 @@
     border: none
 
 .link
-  position: relative
+  +touch-highlight
+
   display: block
-  outline: none
-
-  &::after
-    +fullbleed
-
-    content: ""
-    pointer-events: none
-    opacity: 0
-    background-color: black
-    transition: opacity $touch-effect-timing
-
-  &:focus::after
-    opacity: 0.05
-
-  &:active::after
-    opacity: 0.1

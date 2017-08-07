@@ -40,7 +40,6 @@ export interface RideModel {
 
 export interface RidesModel {
   readonly list: ReadonlyArray<RideModel>
-  readonly isDoneLoading: boolean
 }
 
 // Actions
@@ -51,19 +50,20 @@ export namespace ridesActions {
   export type LoadMore = {}
   export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
 
-  export type Receive = {
-    list: ReadonlyArray<RideModel>;
-    isDoneLoading: boolean;
-  }
+  export type Receive = { list: ReadonlyArray<RideModel> }
   export const receive = actionCreator<Receive>("RECEIVE")
 
   export type Search = Partial<RideSearchModel>
   export const search = actionCreator<Search>("SEARCH")
+
+  export type CancelSearch = {}
+  export const cancelSearch = actionCreator<CancelSearch>("CANCEL_SEARCH")
 }
 
 // Reducers
 
 export const ridesReducer = reducerWithInitialState<RidesModel>({
   list: require("../constants/exampleRides").default,
-  isDoneLoading: true,
-}).case(ridesActions.receive, (state, payload) => payload)
+})
+  .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
+  .build()

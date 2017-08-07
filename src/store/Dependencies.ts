@@ -1,7 +1,7 @@
 /**
- * @file App.test.tsx
+ * @file Dependencies.ts
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 8/7/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,23 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import { render } from "react-dom"
-import { MemoryRouter } from "react-router-dom"
-import { Provider } from "react-redux"
+/// <reference types="googlemaps" />
 
-import App from "./App"
-
-import configureStore from "../store"
-
-it("renders without crashing", () => {
-  const div = document.createElement("div")
-  render(
-    <Provider store={configureStore()}>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    </Provider>,
-    div
-  )
-})
+export default interface Dependencies {
+  getPlacesAPI: () => Promise<typeof google.maps.places>
+}
