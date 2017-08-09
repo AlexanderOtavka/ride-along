@@ -35,7 +35,7 @@ export interface Props {
 }
 
 function formatDate(date: Date) {
-  const month = date.getMonth() + 1
+  const month = date.getMonth() + 1 // Date.getMonth() starts counting at 0
   if (date.getFullYear() !== new Date().getFullYear()) {
     return `${month}/${date.getDate()}/${date.getFullYear()}`
   } else {
