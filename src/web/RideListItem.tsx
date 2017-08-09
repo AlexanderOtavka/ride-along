@@ -72,7 +72,7 @@ function RideListItem({ uri, isLast = false, ...props }: Props) {
   return (
     <li className={classnames(styles.listItem, isLast && styles.last)}>
       <Link to={uri} className={styles.link}>
-        <Ride>
+        <article className={styles.ride}>
           <RideSection
             className={styles.departure}
             icon={<MapMarkerSVG />}
@@ -86,7 +86,7 @@ function RideListItem({ uri, isLast = false, ...props }: Props) {
             location={props.arrivalLocation}
             dateTime={arrivalDateTime}
           />
-        </Ride>
+        </article>
       </Link>
     </li>
   )
