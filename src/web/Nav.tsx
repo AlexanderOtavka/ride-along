@@ -39,7 +39,7 @@ export interface Props {
 }
 
 function Nav({
-  ridesPath = routes.rides.root(),
+  ridesPath = routes.ridesList.root(),
   profilePath = routes.profile.root,
   feedbackPath = routes.feedback,
 }: Props) {

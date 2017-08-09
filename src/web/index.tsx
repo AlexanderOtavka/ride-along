@@ -26,7 +26,7 @@ import { Provider } from "react-redux"
 
 import App from "./App"
 
-import configureStore, { Dependencies as StoreDependencies } from "../store"
+import configureStore from "../store"
 
 import registerServiceWorker from "./registerServiceWorker"
 
@@ -37,9 +37,9 @@ declare namespace window {
 }
 
 const store = configureStore()
-const deps: StoreDependencies = {
+const deps = {
   getPlacesAPI: () =>
-    new Promise(resolve => {
+    new Promise<typeof google.maps.places>(resolve => {
       if (google.maps.places) {
         resolve(google.maps.places)
       } else {

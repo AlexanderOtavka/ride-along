@@ -61,6 +61,8 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
       >
         {({ submitForm, values }: any) =>
           <form
+            action={routes.ridesList.search()}
+            method="get"
             onSubmit={ev => {
               ev.preventDefault()
 
@@ -70,8 +72,6 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
 
               submitForm()
             }}
-            action={routes.rides.search}
-            method="get"
           >
             <div className={styles.headerTop}>
               <BoxField
@@ -112,7 +112,7 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
 
               {isSearchMode
                 ? <Link
-                    to={routes.rides.root(values.mode)}
+                    to={routes.ridesList.root(values.mode)}
                     onClick={() => props.onSearchModeChange(false, values)}
                     title="Close"
                   >

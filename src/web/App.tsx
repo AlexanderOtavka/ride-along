@@ -23,6 +23,8 @@ import React from "react"
 import { Route, Switch } from "react-router-dom"
 import { asyncComponent } from "react-async-component"
 
+import * as routes from "../constants/routes"
+
 import styles from "./App.sass"
 
 export interface Props {}
@@ -30,6 +32,10 @@ export interface Props {}
 const RideListPage = asyncComponent({
   resolve: () =>
     import(/* webpackChunkName: "RideListPage" */ "./RideListPage"),
+})
+
+const AddRidePage = asyncComponent({
+  resolve: () => import(/* webpackChunkName: "AddRidePage" */ "./AddRidePage"),
 })
 
 const Nav = asyncComponent({
@@ -40,7 +46,12 @@ function App(props: Props) {
   return (
     <div className={styles.app}>
       <Switch>
-        <Route exact path="/(search)?" component={RideListPage} />
+        <Route
+          exact
+          path={routes.ridesList.matchPath}
+          component={RideListPage}
+        />
+        <Route exact path={routes.ride.new()} component={AddRidePage} />
         <Route render={() => <Nav />} />
       </Switch>
     </div>

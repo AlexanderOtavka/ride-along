@@ -21,7 +21,7 @@
 
 import React from "react"
 import { connect, DispatchProp } from "react-redux"
-import { RouteComponentProps } from "react-router-dom"
+import { Link, RouteComponentProps } from "react-router-dom"
 import { Button } from "react-toolbox/lib/button"
 import classnames from "classnames"
 import querystring from "querystring"
@@ -73,7 +73,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
   const query: RideSearchModel = {
     mode: "request",
     ...querystring.parse(
-      props.location.search.substring(1) // chop off the ?
+      props.location.search.substring(1) // chop off the leading ?
     ),
   }
 
@@ -88,7 +88,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
         values={query}
         onSearchModeChange={(newIsSearchMode, newValues) => {
           if (newIsSearchMode) {
-            history.push(routes.rides.search)
+            history.push(routes.ridesList.search)
             updateQuery(newValues)
           } else {
             dispatch(ridesActions.cancelSearch({}))
@@ -148,7 +148,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
             <RideListItem
               {...ride}
               key={uid}
-              uri={routes.rides.ride(uid)}
+              uri={routes.ride.detail(uid)}
               isLast={i === props.rideList.length - 1}
             />
           )}
@@ -157,13 +157,15 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
             <p className={styles.listFooterText}>
               Don't see what you're looking for?
             </p>
-            <Button className={styles.addRideButton}>Add Ride</Button>
+            <Link to={routes.ride.new(query)}>
+              <Button className={styles.addRideButton}>Add Ride</Button>
+            </Link>
           </footer>
         </ul>
       </main>
 
       <footer className={styles.navFooter}>
-        <Nav ridesPath={location.pathname} />
+        <Nav ridesPath={props.location.pathname} />
       </footer>
     </div>
   )
