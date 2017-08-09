@@ -20,71 +20,7 @@
 
 @import "style/colors"
 
-$chevron-width: 16px
-$midpoint-offset: $chevron-width / 2
-
 .ride
   display: block
   background-color: $off-white
   position: relative
-
-.departure,
-.arrival
-  display: inline-flex
-  align-items: center
-
-.departure
-  flex-direction: row
-  text-align: left
-  background-color: $light-grey1
-  width: calc(50% - #{$midpoint-offset})
-
-.arrival
-  flex-direction: row-reverse
-  text-align: right
-  padding-left: $chevron-width
-  width: calc(50% + #{$midpoint-offset})
-
-.rightChevron
-  position: absolute
-  top: 0
-  height: 100%
-  left: calc(50% - #{$midpoint-offset})
-  width: $chevron-width
-  fill: $light-grey1
-
-.iconCircle
-  $size: 32px
-  $margin: 16px
-
-  display: flex
-  align-items: center
-  justify-content: center
-  width: $size
-  height: $size
-  margin: $margin
-  border-radius: 50%
-  background-color: $grey3
-
-.icon
-  $size: 24px
-
-  width: $size
-  height: $size
-  fill: $off-white
-
-.text
-  margin: 16px 0
-  flex: 1 0 0.001px
-
-.location
-  margin: 0
-  font-weight: 400
-  font-size: 14px
-  color: $grey1
-
-.dateTime
-  margin: 0
-  font-weight: 300
-  font-size: 14px
-  color: $grey3

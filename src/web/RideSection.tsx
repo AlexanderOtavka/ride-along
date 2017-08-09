@@ -1,7 +1,7 @@
 /**
- * @file Ride.tsx
+ * @file RideSection.tsx
  *
- * Created by Zander Otavka on 6/10/17.
+ * Created by Zander Otavka on 8/9/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -20,19 +20,33 @@
  */
 
 import React from "react"
+import classnames from "classnames"
 
-import styles from "./Ride.sass"
+import styles from "./RideSection.sass"
 
 export interface Props {
-  children?: React.ReactNode
+  icon: React.ReactChild
+  location: React.ReactChild
+  dateTime: React.ReactChild
+  className?: string
 }
 
-function Ride(props: Props) {
+function RideSection(props: Props) {
   return (
-    <article className={styles.ride}>
-      {props.children}
-    </article>
+    <section className={classnames(styles.section, props.className)}>
+      <div className={styles.iconCircle}>
+        {props.icon}
+      </div>
+      <div className={styles.text}>
+        <h2 className={styles.location}>
+          {props.location}
+        </h2>
+        <p className={styles.dateTime}>
+          {props.dateTime}
+        </p>
+      </div>
+    </section>
   )
 }
 
-export default Ride
+export default RideSection

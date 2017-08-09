@@ -22,6 +22,9 @@
 @import "style/layout"
 @import "style/effects"
 
+$chevron-width: 16px
+$midpoint-offset: $chevron-width / 2
+
 .listItem
   display: block
   border-bottom: 1px solid $off-white
@@ -33,3 +36,23 @@
   +touch-highlight
 
   display: block
+
+.departure
+  flex-direction: row
+  text-align: left
+  background-color: $light-grey1
+  width: calc(50% - #{$midpoint-offset})
+
+.arrival
+  flex-direction: row-reverse
+  text-align: right
+  padding-left: $chevron-width
+  width: calc(50% + #{$midpoint-offset})
+
+.rightChevron
+  position: absolute
+  top: 0
+  height: 100%
+  left: calc(50% - #{$midpoint-offset})
+  width: $chevron-width
+  fill: $light-grey1

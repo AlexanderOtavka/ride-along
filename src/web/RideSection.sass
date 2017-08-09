@@ -1,10 +1,9 @@
 /**
- * @file Ride.tsx
+ * RideSection.sass
  *
- * Created by Zander Otavka on 6/10/17.
+ * Created by Zander Otavka on 8/9/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
- * @license
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,20 +18,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
+@import "style/colors"
 
-import styles from "./Ride.sass"
+.section
+  display: inline-flex
+  align-items: center
 
-export interface Props {
-  children?: React.ReactNode
-}
+.iconCircle
+  $size: 32px
+  $margin: 16px
 
-function Ride(props: Props) {
-  return (
-    <article className={styles.ride}>
-      {props.children}
-    </article>
-  )
-}
+  display: flex
+  align-items: center
+  justify-content: center
+  width: $size
+  height: $size
+  margin: $margin
+  border-radius: 50%
+  background-color: $grey3
+  color: $off-white
 
-export default Ride
+.text
+  margin: 16px 0
+  flex: 1 0 0.001px
+
+.location
+  margin: 0
+  font-weight: 400
+  font-size: 14px
+  color: $grey1
+
+.dateTime
+  margin: 0
+  font-weight: 300
+  font-size: 14px
+  color: $grey3
