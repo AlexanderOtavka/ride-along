@@ -88,8 +88,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
         values={query}
         onSearchModeChange={(newIsSearchMode, newValues) => {
           if (newIsSearchMode) {
-            history.push(routes.ridesList.search)
-            updateQuery(newValues)
+            history.push(routes.ridesList.search(newValues))
           } else {
             dispatch(ridesActions.cancelSearch({}))
             dispatch(autocompleteActions.cancel({}))
