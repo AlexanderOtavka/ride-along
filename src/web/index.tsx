@@ -32,18 +32,25 @@ import registerServiceWorker from "./registerServiceWorker"
 
 import "./index.sass"
 
+type Google = typeof google
+
 declare namespace window {
   export let onPlacesAPILoad: () => void
+  export const google: Google | undefined
 }
 
 const store = configureStore()
 const deps = {
   getPlacesAPI: () =>
     new Promise<typeof google.maps.places>(resolve => {
-      if (google.maps.places) {
-        resolve(google.maps.places)
+      if (window.google) {
+        resolve(window.google.maps.places)
       } else {
-        window.onPlacesAPILoad = () => resolve(google.maps.places)
+        window.onPlacesAPILoad = () => {
+          if (window.google) {
+            resolve(window.google.maps.places)
+          }
+        }
       }
     }),
 }
