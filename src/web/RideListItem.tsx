@@ -33,10 +33,10 @@ import MapMarkerSVG from "../drawables/map-marker.svg"
 
 export interface Props {
   uri: string
-  departureLocation: string
-  departureDateTime: Date
-  arrivalLocation: string
-  arrivalDateTime: Date
+  departLocation: string
+  departDateTime: Date
+  arriveLocation: string
+  arriveDateTime: Date
   isLast?: boolean
 }
 
@@ -57,12 +57,12 @@ function formatTime(date: Date) {
 }
 
 function RideListItem({ uri, isLast = false, ...props }: Props) {
-  const departureDate = formatDate(props.departureDateTime)
-  const departureTime = formatTime(props.departureDateTime)
+  const departureDate = formatDate(props.departDateTime)
+  const departureTime = formatTime(props.departDateTime)
   const departureDateTime = `${departureDate} ${departureTime}`
 
-  const arrivalDate = formatDate(props.arrivalDateTime)
-  const arrivalTime = formatTime(props.arrivalDateTime)
+  const arrivalDate = formatDate(props.arriveDateTime)
+  const arrivalTime = formatTime(props.arriveDateTime)
   const arrivalDateTime =
     departureDate === arrivalDate
       ? arrivalTime
@@ -75,14 +75,14 @@ function RideListItem({ uri, isLast = false, ...props }: Props) {
           <RideSection
             className={styles.departure}
             icon={<MapMarkerSVG />}
-            location={props.departureLocation}
+            location={props.departLocation}
             dateTime={departureDateTime}
           />
           <RightChevronSVG className={styles.rightChevron} />
           <RideSection
             className={styles.arrival}
             icon={<MapMarkerSVG />}
-            location={props.arrivalLocation}
+            location={props.arriveLocation}
             dateTime={arrivalDateTime}
           />
         </article>

@@ -22,6 +22,8 @@
 import actionCreatorFactory from "typescript-fsa"
 import { reducerWithInitialState } from "typescript-fsa-reducers"
 
+import exampleRides from "../constants/exampleRides"
+
 // Models
 
 export interface RideSearchModel {
@@ -32,10 +34,10 @@ export interface RideSearchModel {
 
 export interface RideModel {
   readonly uid: string
-  readonly departureLocation: string
-  readonly departureDateTime: Date
-  readonly arrivalLocation: string
-  readonly arrivalDateTime: Date
+  readonly departLocation: string
+  readonly departDateTime: Date
+  readonly arriveLocation: string
+  readonly arriveDateTime: Date
 }
 
 export interface RidesModel {
@@ -63,7 +65,7 @@ export namespace ridesActions {
 // Reducers
 
 export const ridesReducer = reducerWithInitialState<RidesModel>({
-  list: require("../constants/exampleRides").default,
+  list: exampleRides,
 })
   .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
   .build()
