@@ -92,27 +92,27 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
           } else {
             dispatch(ridesActions.cancelSearch({}))
             dispatch(autocompleteActions.cancel({}))
-            history.goBack()
+            history.push(routes.ridesList.root(newValues.mode))
           }
         }}
         onValuesChange={values => {
           dispatch(ridesActions.search(values))
           updateQuery(values)
         }}
-        onDepartBoxChange={value =>
+        onDepartBoxChange={search =>
           dispatch(
             autocompleteActions.getList.started({
               field: "departLocation",
-              search: value,
+              search,
             })
           )}
         onDepartBoxBlur={() =>
           requestAnimationFrame(() => dispatch(autocompleteActions.cancel({})))}
-        onArriveBoxChange={value =>
+        onArriveBoxChange={search =>
           dispatch(
             autocompleteActions.getList.started({
               field: "arriveLocation",
-              search: value,
+              search,
             })
           )}
         onArriveBoxBlur={() =>

@@ -57,7 +57,14 @@ function AddRidePage(props: Props) {
           }}
         >
           <header className={styles.header}>
-            <Link to={routes.ridesList.search(query)}>
+            <Link
+              to={
+                query.arriveLocation !== undefined ||
+                query.departLocation !== undefined
+                  ? routes.ridesList.search(query)
+                  : routes.ridesList.root(query.mode)
+              }
+            >
               <IconButton icon={<BackSVG className={styles.backIcon} />} />
             </Link>
 
