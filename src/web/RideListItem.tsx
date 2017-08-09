@@ -24,7 +24,6 @@ import { Link } from "react-router-dom"
 import classnames from "classnames"
 import leftPad from "left-pad"
 
-import Ride from "./Ride"
 import RideSection from "./RideSection"
 
 import styles from "./RideListItem.sass"
