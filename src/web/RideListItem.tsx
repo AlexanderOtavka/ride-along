@@ -22,9 +22,10 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import classnames from "classnames"
-import leftPad from "left-pad"
 
 import RideSection from "./RideSection"
+
+import { formatDateShort, formatTime } from "./util"
 
 import styles from "./RideListItem.sass"
 
@@ -40,28 +41,12 @@ export interface Props {
   isLast?: boolean
 }
 
-function formatDate(date: Date) {
-  const month = date.getMonth() + 1 // Date.getMonth() starts counting at 0
-  if (date.getFullYear() !== new Date().getFullYear()) {
-    return `${month}/${date.getDate()}/${date.getFullYear()}`
-  } else {
-    return `${month}/${date.getDate()}`
-  }
-}
-
-function formatTime(date: Date) {
-  const hours = date.getHours() % 12 || 12
-  const minutes = leftPad(date.getMinutes(), 2, "0")
-  const amPM = date.getHours() < 12 ? "AM" : "PM"
-  return `${hours}:${minutes} ${amPM}`
-}
-
 function RideListItem({ uri, isLast = false, ...props }: Props) {
-  const departureDate = formatDate(props.departDateTime)
+  const departureDate = formatDateShort(props.departDateTime)
   const departureTime = formatTime(props.departDateTime)
   const departureDateTime = `${departureDate} ${departureTime}`
 
-  const arrivalDate = formatDate(props.arriveDateTime)
+  const arrivalDate = formatDateShort(props.arriveDateTime)
   const arrivalTime = formatTime(props.arriveDateTime)
   const arrivalDateTime =
     departureDate === arrivalDate
