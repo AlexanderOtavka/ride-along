@@ -448,6 +448,6 @@ export default {
   // cumbersome.
   performance: {
     hints: isProduction ? "warning" : false,
-    maxAssetSize: 300000, // 300kb
+    maxAssetSize: 400000, // 400kb
   },
 }
