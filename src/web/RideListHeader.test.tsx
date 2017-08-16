@@ -54,8 +54,8 @@ describe("RideListHandler", () => {
     itWithProps(false, { mode: "offer" })
     itWithProps(false, {
       mode: "request",
-      departLocation: "foo",
-      arriveLocation: "bar",
+      departSearch: "foo",
+      arriveSearch: "bar",
     })
   })
 
@@ -64,10 +64,10 @@ describe("RideListHandler", () => {
     itWithProps(true, { mode: "offer" })
     itWithProps(true, {
       mode: "offer",
-      departLocation: "foo",
-      arriveLocation: "bar",
+      departSearch: "foo",
+      arriveSearch: "bar",
     })
-    itWithProps(true, { mode: "request", departLocation: "foo" })
-    itWithProps(true, { mode: "offer", arriveLocation: "bar" })
+    itWithProps(true, { mode: "request", departSearch: "foo" })
+    itWithProps(true, { mode: "offer", arriveSearch: "bar" })
   })
 })

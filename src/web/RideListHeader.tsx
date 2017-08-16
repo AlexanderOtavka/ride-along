@@ -75,7 +75,7 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
           >
             <div className={styles.headerTop}>
               <BoxField
-                field="departLocation"
+                field="departSearch"
                 type={isSearchMode ? "text" : "submit"}
                 placeholder={
                   isSearchMode
@@ -136,7 +136,7 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
             >
               <DownChevronSVG className={styles.downChevron} />
               <BoxField
-                field="arriveLocation"
+                field="arriveSearch"
                 placeholder="Destination"
                 onChange={ev => props.onArriveBoxChange(ev.currentTarget.value)}
                 onBlur={props.onArriveBoxBlur}

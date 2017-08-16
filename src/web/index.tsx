@@ -25,10 +25,10 @@ import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
 
 import App from "./App"
+import registerServiceWorker from "./registerServiceWorker"
 
 import configureStore from "../store"
-
-import registerServiceWorker from "./registerServiceWorker"
+import Dependencies from "../store/Dependencies"
 
 import "./index.sass"
 
@@ -40,7 +40,7 @@ declare namespace window {
 }
 
 const store = configureStore()
-const deps = {
+const deps: Dependencies = {
   getPlacesAPI: () =>
     new Promise<typeof google.maps.places>(resolve => {
       if (window.google) {
@@ -53,6 +53,7 @@ const deps = {
         }
       }
     }),
+  poweredByGoogleNode: document.createElement("div"),
 }
 
 store.runPersistentSaga(deps)
@@ -62,7 +63,7 @@ registerServiceWorker()
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <App poweredByGoogleNode={deps.poweredByGoogleNode} />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

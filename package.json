@@ -12,23 +12,30 @@
     "check-lighthouse": "babel-node scripts/check-lighthouse.js"
   },
   "babel": {
-    "presets": ["es2015"],
-    "plugins": ["transform-object-rest-spread"]
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
   },
   "dependencies": {
     "@types/classnames": "^2.2.0",
     "@types/googlemaps": "^3.26.14",
     "@types/left-pad": "^1.1.1",
+    "@types/lodash": "^4.14.72",
     "@types/react": "^15.0.26",
     "@types/react-dom": "^15.5.0",
     "@types/react-redux": "^4.4.43",
     "@types/react-router-dom": "^4.0.4",
     "classnames": "^2.2.5",
     "left-pad": "^1.1.3",
+    "lodash": "^4.17.4",
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
     "querystring": "^0.2.0",
     "react-async-component": "^1.0.0-beta.3",
+    "react-display-name": "^0.2.3",
     "react-form": "^1.2.8",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
@@ -103,9 +110,18 @@
   "private": true,
   "jest": {
     "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
-    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}"],
-    "setupFiles": ["<rootDir>/config/polyfills.js"],
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/src/**/?(*.)test.ts?(x)"
@@ -126,6 +142,10 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": ["yon run prettier", "git add", "yon run tslint"]
+    "*.{js,ts,tsx}": [
+      "yon run prettier",
+      "git add",
+      "yon run tslint"
+    ]
   }
 }

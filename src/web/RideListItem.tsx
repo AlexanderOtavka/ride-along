@@ -25,7 +25,7 @@ import classnames from "classnames"
 
 import RideSection from "./RideSection"
 
-import { formatDateShort, formatTime } from "./util"
+import { formatDateShort, formatTime } from "../util/format"
 
 import styles from "./RideListItem.sass"
 

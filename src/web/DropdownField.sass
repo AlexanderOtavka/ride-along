@@ -1,7 +1,7 @@
 /**
- * AddRidePage.sass
+ * DropdownField.sass
  *
- * Created by Zander Otavka on 8/7/17.
+ * Created by Zander Otavka on 8/12/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,48 +19,12 @@
  */
 
 @import "style/colors"
-@import "style/layout"
 
-.page
-  +fullbleed
-  display: flex
-  flex-direction: column
+.dropdown, .input
+  padding: 0
 
-.header
-  height: 56px
-  display: flex
-  flex-direction: row
-  align-items: center
-  padding-left: 16px
-  color: $off-white
-  font-size: 18px
+.values
+  margin-top: -1px !important
 
-  button
-    color: inherit !important
-
-  .request &
-    background: $primary-yellow
-
-  .offer &
-    background: $primary-green
-
-.backIcon
-  width: 24px !important
-
-.headerTitle
-  margin-left: 20px
-  flex: 1
-
-.createButton
-  height: 100%
-
-.main
-  flex: 1
-
-.dropdownInputBar
-  &::before, &::after
-    .request &
-      background-color: $primary-yellow
-
-    .offer &
-      background-color: $primary-green
+.inputElement
+  border-bottom: 1px solid $light-grey2

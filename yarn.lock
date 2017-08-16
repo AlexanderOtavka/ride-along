@@ -33,6 +33,10 @@
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/left-pad/-/left-pad-1.1.1.tgz#29ab68a1a10e849140c9ba3e71a412534dfa0c7b"
 
+"@types/lodash@^4.14.72":
+  version "4.14.72"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.72.tgz#f090cf6eb1fee1647a0efa1ebe18b0b78ed551c6"
+
 "@types/node@*", "@types/node@^8.0.5":
   version "8.0.19"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.19.tgz#e46e2b0243de7d03f15b26b45c59ebb84f657a4e"
@@ -5698,6 +5702,10 @@ react-dev-utils@^3.0.0, react-dev-utils@^3.0.2:
     sockjs-client "1.1.4"
     strip-ansi "3.0.1"
     text-table "0.2.0"
+
+react-display-name@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-display-name/-/react-display-name-0.2.3.tgz#f50204d430c9ca819bc0bade0306e9175d8d1987"
 
 react-dom@^15.5.4:
   version "15.6.1"

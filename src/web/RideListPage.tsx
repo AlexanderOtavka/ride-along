@@ -20,15 +20,19 @@
  */
 
 import React from "react"
-import { connect, DispatchProp } from "react-redux"
-import { Link, RouteComponentProps } from "react-router-dom"
+import { connect as connectRedux, DispatchProp } from "react-redux"
+import { Link } from "react-router-dom"
 import { Button } from "react-toolbox/lib/button"
 import classnames from "classnames"
-import querystring from "querystring"
+import { compose } from "redux"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
 import RideListItem from "./RideListItem"
+
+import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
+
+import { pickSearch } from "../util/pick"
 
 import { StateModel } from "../store"
 import { RideModel, RideSearchModel, ridesActions } from "../store/rides"
@@ -53,33 +57,28 @@ interface StateProps {
 
 interface DispatchProps extends DispatchProp<StateModel> {}
 
-export interface Props extends RouteComponentProps<MatchParams> {}
+export interface Props
+  extends QueryComponentProps<MatchParams, RideSearchModel> {}
 
 type AllProps = Readonly<StateProps & DispatchProps & Props>
 
-const withConnect = connect<
-  StateProps,
-  DispatchProps,
-  Props
->((state: StateModel) => ({
-  rideList: state.rides.list,
-  autocompleteList: state.autocomplete.list,
-  autocompleteField: state.autocomplete.field,
-}))
+const withController = compose(
+  connectQuery(pickSearch),
+  connectRedux<StateProps, DispatchProps, Props>((state: StateModel) => ({
+    rideList: state.rides.list,
+    autocompleteList: state.autocomplete.list,
+    autocompleteField: state.autocomplete.field,
+  }))
+)
 
-function RideListPage({ dispatch, history, ...props }: AllProps) {
+function RideListPage({
+  dispatch,
+  history,
+  query,
+  setQuery,
+  ...props,
+}: AllProps) {
   const isSearchMode = !!props.match.params[0]
-
-  const query: RideSearchModel = {
-    mode: "request",
-    ...querystring.parse(
-      props.location.search.substring(1) // chop off the leading ?
-    ),
-  }
-
-  const updateQuery = (values: RideSearchModel) => {
-    history.replace("?" + querystring.stringify(values))
-  }
 
   return (
     <div className={classnames(styles.page, styles[query.mode])}>
@@ -96,13 +95,13 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
           }
         }}
         onValuesChange={values => {
-          dispatch(ridesActions.search(values))
-          updateQuery(values)
+          dispatch(ridesActions.search.started(values))
+          setQuery(values)
         }}
         onDepartBoxChange={search =>
           dispatch(
             autocompleteActions.getList.started({
-              field: "departLocation",
+              field: "departSearch",
               search,
             })
           )}
@@ -111,7 +110,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
         onArriveBoxChange={search =>
           dispatch(
             autocompleteActions.getList.started({
-              field: "arriveLocation",
+              field: "arriveSearch",
               search,
             })
           )}
@@ -131,7 +130,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
               key={prediction.place_id || description}
               className={styles.autocompleteItem}
               onClick={() => {
-                updateQuery({
+                setQuery({
                   ...query,
                   [props.autocompleteField]: description,
                 })
@@ -143,11 +142,11 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
         </ul>
 
         <ul className={styles.rideList}>
-          {props.rideList.map(({ uid, ...ride }, i) =>
+          {props.rideList.map(({ id, ...ride }, i) =>
             <RideListItem
               {...ride}
-              key={uid}
-              uri={routes.ride.detail(uid)}
+              key={id}
+              uri={routes.ride.detail(id)}
               isLast={i === props.rideList.length - 1}
             />
           )}
@@ -170,4 +169,4 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
   )
 }
 
-export default withConnect(RideListPage)
+export default withController(RideListPage)

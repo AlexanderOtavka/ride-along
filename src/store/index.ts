@@ -24,15 +24,13 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import createSagaMiddleware, { SagaIterator } from "redux-saga"
 import { all, call } from "redux-saga/effects"
 
-import { RidesModel, ridesReducer } from "./rides"
+import { RidesModel, ridesReducer, ridesPersistentSaga } from "./rides"
 import {
   AutocompleteModel,
   autocompleteReducer,
   autocompletePersistentSaga,
 } from "./autocomplete"
 import Dependencies from "./Dependencies"
-
-export { Dependencies }
 
 export interface StateModel {
   readonly rides: RidesModel
@@ -48,7 +46,10 @@ const reducer = combineReducers<StateModel>({
 })
 
 function* persistentSaga(deps: Dependencies): SagaIterator {
-  yield all([call(autocompletePersistentSaga, deps)])
+  yield all([
+    call(autocompletePersistentSaga, deps),
+    call(ridesPersistentSaga, deps),
+  ])
 }
 
 export default function configureStore(initialState: StateModel | null = null) {

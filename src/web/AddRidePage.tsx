@@ -20,32 +20,94 @@
  */
 
 import React from "react"
-import { Link, RouteComponentProps } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Button, IconButton } from "react-toolbox/lib/button"
 import classnames from "classnames"
 import { Form } from "react-form"
-import querystring from "querystring"
+import { connect as connectRedux, DispatchProp } from "react-redux"
+import { compose } from "redux"
 
 import Nav from "./Nav"
+import RideVertical from "./RideVertical"
+import DropdownField from "./DropdownField"
+
+import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
+import watchProp from "../controllers/watchProp"
+
+import { formatDateLong, formatTime } from "../util/format"
+import { pickSearch } from "../util/pick"
+
+import { StateModel } from "../store"
+import { ridesActions, RideSearchModel, RideModel } from "../store/rides"
+
 import * as routes from "../constants/routes"
-import { RideSearchModel } from "../store/rides"
 
 import styles from "./AddRidePage.sass"
 
 import BackSVG from "../drawables/arrow-left.svg"
 
-export interface Props extends RouteComponentProps<{}> {}
+type Query = RideSearchModel
 
-function AddRidePage(props: Props) {
-  const query: RideSearchModel = {
-    mode: "request",
-    ...querystring.parse(
-      props.location.search.substring(1) // chop off the leading ?
-    ),
+interface StateProps {
+  departSuggestions: ReadonlyArray<google.maps.places.PlaceResult>
+  arriveSuggestions: ReadonlyArray<google.maps.places.PlaceResult>
+  draft: Partial<RideModel>
+}
+
+interface DispatchProps extends DispatchProp<StateModel> {}
+
+export interface Props extends QueryComponentProps<{}, Query> {}
+
+type AllProps = Readonly<StateProps & DispatchProps & Props>
+
+const withController = compose(
+  connectQuery(pickSearch),
+  connectRedux<StateProps, DispatchProps, Props>(({ rides }: StateModel) => ({
+    departSuggestions: rides.departSuggestions,
+    arriveSuggestions: rides.arriveSuggestions,
+    draft: rides.draft,
+  })),
+  watchProp<AllProps, Query>(
+    props => props.query,
+    (query, oldQuery, { dispatch }) => {
+      dispatch(ridesActions.search.started(query))
+    }
+  )
+)
+
+function suggestionToDropdownItem(suggestion: google.maps.places.PlaceResult) {
+  return {
+    value: suggestion.place_id,
+    label: suggestion.name,
   }
+}
+
+const dropdownTheme = {
+  inputBox: styles.dropdownInputBox,
+  valueKey: "",
+}
+
+function AddRidePage({
+  query,
+  departSuggestions,
+  arriveSuggestions,
+  dispatch,
+  ...props,
+}: AllProps) {
+  const arriveDateObj = new Date()
+  const departDateObj = new Date()
+
+  const hasDepartSuggestions = departSuggestions && departSuggestions.length > 0
+  const hasArriveSuggestions = arriveSuggestions && arriveSuggestions.length > 0
 
   return (
-    <Form component={false}>
+    <Form
+      component={false}
+      values={props.draft}
+      onChange={({ values }: any) => {
+        dispatch(ridesActions.updateDraft(values))
+      }}
+    >
       {({ submitForm }: any) =>
         <form
           className={classnames(styles.page, styles[query.mode])}
@@ -59,8 +121,8 @@ function AddRidePage(props: Props) {
           <header className={styles.header}>
             <Link
               to={
-                query.arriveLocation !== undefined ||
-                query.departLocation !== undefined
+                query.arriveSearch !== undefined ||
+                query.departSearch !== undefined
                   ? routes.ridesList.search(query)
                   : routes.ridesList.root(query.mode)
               }
@@ -75,7 +137,41 @@ function AddRidePage(props: Props) {
             </Button>
           </header>
 
-          <main className={styles.main} />
+          {hasDepartSuggestions && hasArriveSuggestions
+            ? <main className={styles.main}>
+                <RideVertical
+                  departLocation={
+                    <DropdownField
+                      field="departLocation"
+                      source={departSuggestions.map(suggestionToDropdownItem)}
+                      theme={dropdownTheme}
+                    />
+                  }
+                  departDateTime={
+                    formatDateLong(arriveDateObj) +
+                    ", " +
+                    formatTime(arriveDateObj)
+                  }
+                  arriveLocation={
+                    <DropdownField
+                      field="arriveLocation"
+                      source={arriveSuggestions.map(suggestionToDropdownItem)}
+                      theme={dropdownTheme}
+                    />
+                  }
+                  arriveDateTime={
+                    formatDateLong(departDateObj) +
+                    ", " +
+                    formatTime(departDateObj)
+                  }
+                />
+              </main>
+            : <main className={styles.main}>
+                {/* TODO: make this look nicer */}
+                <h1>Error</h1>
+                {!hasDepartSuggestions && <div>No depart suggestions</div>}
+                {!hasArriveSuggestions && <div>No arrive suggestions</div>}
+              </main>}
 
           <footer className={styles.footer}>
             <Nav />
@@ -85,4 +181,4 @@ function AddRidePage(props: Props) {
   )
 }
 
-export default AddRidePage
+export default withController(AddRidePage)

@@ -25,6 +25,7 @@ import { SagaIterator } from "redux-saga"
 import { call, put, throttle } from "redux-saga/effects"
 
 import Dependencies from "./Dependencies"
+import { RideSearchFields } from "./rides"
 
 /// <reference types="googlemaps" />
 type AutocompleteService = google.maps.places.AutocompleteService
@@ -36,7 +37,7 @@ type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
 export type AutocompletePredictionModel = google.maps.places.QueryAutocompletePrediction
 
 export interface AutocompleteModel {
-  readonly field: string
+  readonly field: keyof RideSearchFields | ""
   readonly list: ReadonlyArray<AutocompletePredictionModel>
 }
 
@@ -46,7 +47,7 @@ export namespace autocompleteActions {
   const actionCreator = actionCreatorFactory("Autocomplete")
 
   export type GetListParams = {
-    field: string
+    field: keyof RideSearchFields
     search: string
   }
   export type GetListResult = {
@@ -82,13 +83,14 @@ export function getPlacePredictions(
   service: AutocompleteService,
   PlacesServiceStatus: PlacesServiceStatusType,
   request: AutocompletionRequest
-): Promise<AutocompletePredictionModel[]> {
+) {
   return new Promise<AutocompletePredictionModel[]>((resolve, reject) => {
     service.getQueryPredictions(request, (result, status) => {
-      if (status === PlacesServiceStatus.OK) {
+      if (
+        status === PlacesServiceStatus.OK ||
+        status === PlacesServiceStatus.ZERO_RESULTS
+      ) {
         resolve(result)
-      } else if (status === PlacesServiceStatus.ZERO_RESULTS) {
-        resolve([])
       } else {
         reject(new Error(`Failed with status: ${status}`))
       }

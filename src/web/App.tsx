@@ -27,7 +27,9 @@ import * as routes from "../constants/routes"
 
 import styles from "./App.sass"
 
-export interface Props {}
+export interface Props {
+  poweredByGoogleNode?: HTMLDivElement
+}
 
 const RideListPage = asyncComponent({
   resolve: () =>
@@ -44,7 +46,14 @@ const Nav = asyncComponent({
 
 function App(props: Props) {
   return (
-    <div className={styles.app}>
+    <div
+      className={styles.app}
+      ref={el => {
+        if (el && props.poweredByGoogleNode) {
+          el.appendChild(props.poweredByGoogleNode)
+        }
+      }}
+    >
       <Switch>
         <Route
           exact

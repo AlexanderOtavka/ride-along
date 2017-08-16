@@ -1,5 +1,5 @@
 /**
- * @file util.ts
+ * @file format.ts
  *
  * Created by Zander Otavka on 8/9/17.
  * Copyright (C) 2016  Grinnell AppDev.

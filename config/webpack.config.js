@@ -52,15 +52,6 @@ const publicUrl = publicPath.slice(0, -1)
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl)
 
-// Assert this just to be safe.
-// Development builds of React are slow and not intended for production.
-if (
-  isProduction &&
-  env.stringified["process.env"].NODE_ENV !== '"production"'
-) {
-  throw new Error("Production builds must have NODE_ENV=production.")
-}
-
 // Note: defined here because it will be used more than once.
 const cssFilename = "static/css/[name].[contenthash:8].css"
 
@@ -78,7 +69,6 @@ const cssLoaders = [
     loader: require.resolve("css-loader"),
     options: {
       modules: true,
-      localIdentName: "[name]_[local]_[hash:base64:2]",
       importLoaders: 1,
       minimize: isProduction,
       sourceMap: isProduction,
@@ -367,6 +357,7 @@ export default {
             name: "main",
             children: true,
             async: "commons",
+            minChunks: 2,
           }),
           // Minify the code.
           new webpack.optimize.UglifyJsPlugin({
