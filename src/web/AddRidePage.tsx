@@ -26,15 +26,16 @@ import classnames from "classnames"
 import { Form } from "react-form"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { compose } from "redux"
+import subDays from "date-fns/sub_days"
 
 import Nav from "./Nav"
 import RideVertical from "./RideVertical"
 import DropdownField from "./DropdownField"
+import DateTimeField from "./DateTimeField"
 
 import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
 import watchProp from "../controllers/watchProp"
 
-import { formatDateLong, formatTime } from "../util/format"
 import { pickSearch } from "../util/pick"
 
 import { StateModel } from "../store"
@@ -94,9 +95,6 @@ function AddRidePage({
   dispatch,
   ...props,
 }: AllProps) {
-  const arriveDateObj = new Date()
-  const departDateObj = new Date()
-
   const hasDepartSuggestions = departSuggestions && departSuggestions.length > 0
   const hasArriveSuggestions = arriveSuggestions && arriveSuggestions.length > 0
 
@@ -148,9 +146,10 @@ function AddRidePage({
                     />
                   }
                   departDateTime={
-                    formatDateLong(arriveDateObj) +
-                    ", " +
-                    formatTime(arriveDateObj)
+                    <DateTimeField
+                      field="departDateTime"
+                      datePickerProps={{ minDate: subDays(new Date(), 1) }}
+                    />
                   }
                   arriveLocation={
                     <DropdownField
@@ -160,9 +159,15 @@ function AddRidePage({
                     />
                   }
                   arriveDateTime={
-                    formatDateLong(departDateObj) +
-                    ", " +
-                    formatTime(departDateObj)
+                    <DateTimeField
+                      field="arriveDateTime"
+                      datePickerProps={{
+                        minDate: subDays(
+                          props.draft.departDateTime || new Date(),
+                          1
+                        ),
+                      }}
+                    />
                   }
                 />
               </main>

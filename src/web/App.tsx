@@ -50,6 +50,7 @@ function App(props: Props) {
       className={styles.app}
       ref={el => {
         if (el && props.poweredByGoogleNode) {
+          // TODO: make this actually show
           el.appendChild(props.poweredByGoogleNode)
         }
       }}

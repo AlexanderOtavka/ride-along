@@ -24,6 +24,8 @@ import { reducerWithInitialState } from "typescript-fsa-reducers"
 import { SagaIterator, buffers, delay } from "redux-saga"
 import { call, put, actionChannel, take, fork } from "redux-saga/effects"
 import isEqual from "lodash/isEqual"
+import omitBy from "lodash/omitBy"
+import maxDate from "date-fns/max"
 
 import Dependencies from "./Dependencies"
 
@@ -46,17 +48,20 @@ export interface RideSearchModel extends RideSearchFields {
   readonly mode: "request" | "offer"
 }
 
-export interface RideModel {
-  readonly id: string
+export interface DraftModel {
   readonly departLocation: string
   readonly departDateTime: Date
   readonly arriveLocation: string
   readonly arriveDateTime: Date
 }
 
+export interface RideModel extends DraftModel {
+  readonly id: string
+}
+
 export interface RidesModel {
   readonly list: ReadonlyArray<RideModel>
-  readonly draft: Partial<RideModel>
+  readonly draft: DraftModel
   readonly departSuggestions: ReadonlyArray<PlaceResult>
   readonly arriveSuggestions: ReadonlyArray<PlaceResult>
 }
@@ -84,7 +89,10 @@ export namespace ridesActions {
   export type CancelSearch = {}
   export const cancelSearch = actionCreator<CancelSearch>("CANCEL_SEARCH")
 
-  export type UpdateDraft = Partial<RideModel>
+  export type ResetDraft = { date: Date }
+  export const resetDraft = actionCreator<ResetDraft>("RESET_DRAFT")
+
+  export type UpdateDraft = Partial<DraftModel>
   export const updateDraft = actionCreator<UpdateDraft>("UPDATE_DRAFT")
 
   export type CreateParams = {}
@@ -97,17 +105,31 @@ export namespace ridesActions {
 // Reducers
 
 function getDefaultLocation(
-  currentLocation: string | undefined,
-  suggestions: ReadonlyArray<PlaceResult> | undefined
-): string | undefined {
-  return currentLocation === undefined && suggestions && suggestions.length > 0
+  suggestions: ReadonlyArray<PlaceResult> | undefined,
+  currentLocation: string = ""
+) {
+  return suggestions &&
+  suggestions.length > 0 &&
+  // true if suggestions list does not contain currentLocation.
+  // We don't have to look through the list for an empty currentLocation.
+  (currentLocation === "" ||
+    !suggestions.reduce(
+      (hasLocation, suggestion) =>
+        hasLocation || suggestion.place_id === currentLocation,
+      false
+    ))
     ? suggestions[0].place_id
     : currentLocation
 }
 
 export const ridesReducer = reducerWithInitialState<RidesModel>({
   list: exampleRides, // TODO: start with empty list
-  draft: {},
+  draft: {
+    departLocation: "",
+    departDateTime: new Date(),
+    arriveLocation: "",
+    arriveDateTime: new Date(),
+  },
   departSuggestions: [],
   arriveSuggestions: [],
 })
@@ -118,20 +140,33 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     draft: {
       ...draft,
       departLocation: getDefaultLocation(
-        draft.departLocation,
-        result.departSuggestions
+        result.departSuggestions,
+        draft.departLocation
       ),
       arriveLocation: getDefaultLocation(
-        draft.arriveLocation,
-        result.arriveSuggestions
+        result.arriveSuggestions,
+        draft.arriveLocation
       ),
     },
   }))
-  .case(ridesActions.updateDraft, (state, payload) => ({
+  .case(ridesActions.updateDraft, ({ draft, ...state }, payload) => ({
     ...state,
     draft: {
-      ...state.draft,
-      departLocation: payload.departLocation,
+      ...draft,
+      ...omitBy(payload, x => x === undefined),
+      arriveDateTime: maxDate(
+        payload.departDateTime || draft.departDateTime,
+        payload.arriveDateTime || draft.arriveDateTime
+      ),
+    },
+  }))
+  .case(ridesActions.resetDraft, (state, { date }) => ({
+    ...state,
+    draft: {
+      departLocation: getDefaultLocation(state.departSuggestions),
+      departDateTime: date,
+      arriveLocation: getDefaultLocation(state.arriveSuggestions),
+      arriveDateTime: date,
     },
   }))
   .build()

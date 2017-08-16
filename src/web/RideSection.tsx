@@ -41,9 +41,9 @@ function RideSection(props: Props) {
         <h2 className={styles.location}>
           {props.location}
         </h2>
-        <p className={styles.dateTime}>
+        <div className={styles.dateTime}>
           {props.dateTime}
-        </p>
+        </div>
       </div>
     </section>
   )

@@ -155,7 +155,12 @@ function RideListPage({
             <p className={styles.listFooterText}>
               Don't see what you're looking for?
             </p>
-            <Link to={routes.ride.new(query)}>
+            <Link
+              to={routes.ride.new(query)}
+              onClick={() => {
+                dispatch(ridesActions.resetDraft({ date: new Date() }))
+              }}
+            >
               <Button className={styles.addRideButton}>Add Ride</Button>
             </Link>
           </footer>
