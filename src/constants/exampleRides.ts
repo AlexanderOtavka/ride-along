@@ -1,11 +1,14 @@
+import { RideModel } from "../store/rides"
+
 // dummy ride data
-export default [
+const _default: RideModel[] = [
   {
     id: "foo1",
     departLocation: "Grinnell College",
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo2",
@@ -13,6 +16,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo3",
@@ -20,6 +24,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo4",
@@ -27,6 +32,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo5",
@@ -34,6 +40,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo6",
@@ -41,6 +48,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo7",
@@ -48,6 +56,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo8",
@@ -55,6 +64,7 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
   {
     id: "foo9",
@@ -62,5 +72,8 @@ export default [
     departDateTime: new Date(),
     arriveLocation: "Walmart",
     arriveDateTime: new Date(),
+    seatTotal: 1,
   },
 ]
+
+export default _default

@@ -20,21 +20,11 @@
  */
 
 import pick from "lodash/pick"
-import { RideSearchModel, RideModel } from "../store/rides"
+import { RideSearchModel } from "../store/rides"
 
 export function pickSearch(query: any): RideSearchModel {
   return {
     mode: "request",
     ...pick(query, ["mode", "departSearch", "arriveSearch"]),
   }
-}
-
-export function pickDraft(query: any): Partial<RideModel> {
-  return pick(query, [
-    "id",
-    "departLocation",
-    "departDateTime",
-    "arriveLocation",
-    "arriveDateTime",
-  ])
 }

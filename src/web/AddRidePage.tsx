@@ -23,7 +23,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Button, IconButton } from "react-toolbox/lib/button"
 import classnames from "classnames"
-import { Form } from "react-form"
+import { Form, FormField } from "react-form"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { compose } from "redux"
 import subDays from "date-fns/sub_days"
@@ -135,6 +135,7 @@ function AddRidePage({
             </Button>
           </header>
 
+          {/* TODO: fix theme colors of UI elements */}
           {hasDepartSuggestions && hasArriveSuggestions
             ? <main className={styles.main}>
                 <RideVertical
@@ -170,6 +171,23 @@ function AddRidePage({
                     />
                   }
                 />
+                <FormField field="seatTotal">
+                  {({ getValue, setValue }: any) =>
+                    <label className={styles.seatCount}>
+                      <input
+                        className={styles.seatCountInput}
+                        type="number"
+                        placeholder="#"
+                        value={getValue() || ""}
+                        onChange={ev => setValue(+ev.currentTarget.value || 0)}
+                        onFocus={ev => ev.currentTarget.select()}
+                      />
+                      <p className={styles.seatCountLabel}>
+                        {query.mode === "request" ? "Rider" : "Seat"}
+                        {getValue() !== 1 && "s"}
+                      </p>
+                    </label>}
+                </FormField>
               </main>
             : <main className={styles.main}>
                 {/* TODO: make this look nicer */}

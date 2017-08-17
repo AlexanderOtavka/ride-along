@@ -53,6 +53,7 @@ export interface DraftModel {
   readonly departDateTime: Date
   readonly arriveLocation: string
   readonly arriveDateTime: Date
+  readonly seatTotal: number
 }
 
 export interface RideModel extends DraftModel {
@@ -104,7 +105,7 @@ export namespace ridesActions {
 
 // Reducers
 
-function getDefaultLocation(
+export function getDefaultLocation(
   suggestions: ReadonlyArray<PlaceResult> | undefined,
   currentLocation: string = ""
 ) {
@@ -129,6 +130,7 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     departDateTime: new Date(),
     arriveLocation: "",
     arriveDateTime: new Date(),
+    seatTotal: 0,
   },
   departSuggestions: [],
   arriveSuggestions: [],
@@ -158,6 +160,10 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
         payload.departDateTime || draft.departDateTime,
         payload.arriveDateTime || draft.arriveDateTime
       ),
+      seatTotal:
+        payload.seatTotal === undefined
+          ? draft.seatTotal
+          : Math.min(Math.max(payload.seatTotal, 0), 99),
     },
   }))
   .case(ridesActions.resetDraft, (state, { date }) => ({
@@ -167,6 +173,7 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
       departDateTime: date,
       arriveLocation: getDefaultLocation(state.arriveSuggestions),
       arriveDateTime: date,
+      seatTotal: 0,
     },
   }))
   .build()

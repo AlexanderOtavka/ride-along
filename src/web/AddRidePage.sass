@@ -20,6 +20,7 @@
 
 @import "style/colors"
 @import "style/layout"
+@import "style/animations"
 
 .page
   +fullbleed
@@ -64,6 +65,53 @@
 
     .offer &
       background-color: $primary-green
+
+.seatCount
+  display: inline-flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+  position: relative
+  width: 72px
+  height: 72px
+  background: $off-white
+  color: $grey1
+  padding: 12px
+
+  &::after
+    content: ""
+    display: block
+    position: absolute
+    top: 12px
+    right: 0
+    bottom: 12px
+    left: 0
+    pointer-events: none
+    border-right: 1px solid $light-grey1
+
+.seatCountInput
+  position: relative
+  width: 32px
+  height: 32px
+  font-size: 24px
+  background: none
+  border: none
+  border-bottom: 1px solid $light-grey1
+  text-align: center
+  outline: none
+  color: inherit
+
+  &:focus
+    .request &
+      border-bottom: 1px solid $primary-yellow
+
+    .offer &
+      border-bottom: 1px solid $primary-green
+
+.seatCountLabel
+  margin: 0
+  text-transform: uppercase
+  font-size: 10px
 
 .footer
   background-color: $off-white
