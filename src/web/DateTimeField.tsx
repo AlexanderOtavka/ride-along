@@ -23,6 +23,8 @@ import React from "react"
 import { FormField } from "react-form"
 import { DatePicker, DatePickerProps } from "react-toolbox/lib/date_picker"
 import { TimePicker, TimePickerProps } from "react-toolbox/lib/time_picker"
+import mergeWith from "lodash/mergeWith"
+import classnames from "classnames"
 
 import { formatDateLong } from "../util/format"
 
@@ -34,30 +36,53 @@ export interface Props {
   timePickerProps?: Partial<TimePickerProps>
 }
 
-const sharedPickerTheme = {
-  input: styles.input,
-  inputElement: styles.inputElement,
+function mergeClassNames(objValue: any, sourceValue: any) {
+  return typeof objValue === "string" && typeof sourceValue === "string"
+    ? classnames(objValue, sourceValue)
+    : undefined
 }
 
-function DateTimeField(props: Props) {
+function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
+  const sharedTheme = {
+    input: styles.input,
+    inputElement: styles.inputElement,
+  }
+
+  const dateTheme = mergeWith(
+    {},
+    sharedTheme,
+    datePickerProps && datePickerProps.theme,
+    mergeClassNames
+  )
+
+  const timeTheme = mergeWith(
+    {
+      hand: styles.hand,
+      knob: styles.knob,
+    },
+    sharedTheme,
+    timePickerProps && timePickerProps.theme,
+    mergeClassNames
+  )
+
   return (
     <FormField field={props.field}>
       {({ getValue, setValue }: any) =>
         <div className={styles.fieldset}>
           <DatePicker
-            {...props.datePickerProps}
+            {...datePickerProps}
             value={getValue()}
             onChange={setValue}
             sundayFirstDayOfWeek={true}
             inputFormat={formatDateLong}
-            theme={sharedPickerTheme}
+            theme={dateTheme}
           />
           <TimePicker
-            {...props.timePickerProps}
+            {...timePickerProps}
             value={getValue()}
             onChange={setValue}
             format="ampm"
-            theme={sharedPickerTheme}
+            theme={timeTheme}
           />
         </div>}
     </FormField>

@@ -83,11 +83,6 @@ function suggestionToDropdownItem(suggestion: google.maps.places.PlaceResult) {
   }
 }
 
-const dropdownTheme = {
-  inputBox: styles.dropdownInputBox,
-  valueKey: "",
-}
-
 function AddRidePage({
   query,
   departSuggestions,
@@ -97,6 +92,10 @@ function AddRidePage({
 }: AllProps) {
   const hasDepartSuggestions = departSuggestions && departSuggestions.length > 0
   const hasArriveSuggestions = arriveSuggestions && arriveSuggestions.length > 0
+
+  const dateTimeTheme = {
+    dialog: classnames(styles.dateTimeDialog, styles[query.mode]),
+  }
 
   return (
     <Form
@@ -135,28 +134,30 @@ function AddRidePage({
             </Button>
           </header>
 
-          {/* TODO: fix theme colors of UI elements */}
           {hasDepartSuggestions && hasArriveSuggestions
             ? <main className={styles.main}>
                 <RideVertical
                   departLocation={
+                    /* TODO: customize suggestion display with template */
                     <DropdownField
                       field="departLocation"
                       source={departSuggestions.map(suggestionToDropdownItem)}
-                      theme={dropdownTheme}
                     />
                   }
                   departDateTime={
                     <DateTimeField
                       field="departDateTime"
-                      datePickerProps={{ minDate: subDays(new Date(), 1) }}
+                      datePickerProps={{
+                        minDate: subDays(new Date(), 1),
+                        theme: dateTimeTheme,
+                      }}
+                      timePickerProps={{ theme: dateTimeTheme }}
                     />
                   }
                   arriveLocation={
                     <DropdownField
                       field="arriveLocation"
                       source={arriveSuggestions.map(suggestionToDropdownItem)}
-                      theme={dropdownTheme}
                     />
                   }
                   arriveDateTime={
@@ -167,27 +168,32 @@ function AddRidePage({
                           props.draft.departDateTime || new Date(),
                           1
                         ),
+                        theme: dateTimeTheme,
                       }}
+                      timePickerProps={{ theme: dateTimeTheme }}
                     />
                   }
                 />
-                <FormField field="seatTotal">
-                  {({ getValue, setValue }: any) =>
-                    <label className={styles.seatCount}>
-                      <input
-                        className={styles.seatCountInput}
-                        type="number"
-                        placeholder="#"
-                        value={getValue() || ""}
-                        onChange={ev => setValue(+ev.currentTarget.value || 0)}
-                        onFocus={ev => ev.currentTarget.select()}
-                      />
-                      <p className={styles.seatCountLabel}>
-                        {query.mode === "request" ? "Rider" : "Seat"}
-                        {getValue() !== 1 && "s"}
-                      </p>
-                    </label>}
-                </FormField>
+                <div className={styles.extraFields}>
+                  <FormField field="seatTotal">
+                    {({ getValue, setValue }: any) =>
+                      <label className={styles.seatCount}>
+                        <input
+                          className={styles.seatCountInput}
+                          type="number"
+                          placeholder="#"
+                          value={getValue() || ""}
+                          onChange={ev =>
+                            setValue(+ev.currentTarget.value || 0)}
+                          onFocus={ev => ev.currentTarget.select()}
+                        />
+                        <p className={styles.seatCountLabel}>
+                          {query.mode === "request" ? "Rider" : "Seat"}
+                          {getValue() !== 1 && "s"}
+                        </p>
+                      </label>}
+                  </FormField>
+                </div>
               </main>
             : <main className={styles.main}>
                 {/* TODO: make this look nicer */}

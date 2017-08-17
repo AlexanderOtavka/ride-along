@@ -56,15 +56,33 @@
   height: 100%
 
 .main
+  --dropdown-color-primary: var(--primary-color)
+  --color-text: $grey1
+
   flex: 1
 
-.dropdownInputBar
-  &::before, &::after
-    .request &
-      background-color: $primary-yellow
+  .request &
+    --primary-color: $primary-yellow
 
-    .offer &
-      background-color: $primary-green
+  .offer &
+    --primary-color: $primary-green
+
+.dateTimeDialog
+  --datepicker-primary-color: var(--primary-color)
+  --calendar-primary-color: var(--primary-color)
+  --timepicker-primary-color: var(--primary-color)
+  --clock-primary-color: var(--primary-color)
+  --dropdown-color-primary: var(--primary-color)
+
+  &.request
+    --primary-color: $primary-yellow
+
+  &.offer
+    --primary-color: $primary-green
+
+.extraFields
+  border-top: 1px solid $light-grey1
+  background: $off-white
 
 .seatCount
   display: inline-flex
@@ -100,6 +118,9 @@
   text-align: center
   outline: none
   color: inherit
+
+  &::placeholder
+    color: $grey3
 
   &:focus
     .request &
