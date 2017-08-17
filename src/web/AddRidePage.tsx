@@ -193,6 +193,8 @@ function AddRidePage({
                         </p>
                       </label>}
                   </FormField>
+                  {/* TODO: add notification preferences */}
+                  {/* TODO: add easy round trip creation */}
                 </div>
               </main>
             : <main className={styles.main}>
