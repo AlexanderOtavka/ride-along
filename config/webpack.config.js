@@ -418,6 +418,8 @@ export default {
           }),
         ]
       : [
+          // Merge all chunks together so vscode debugger works.
+          new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
           // This is necessary to emit hot updates (currently CSS only):
           new webpack.HotModuleReplacementPlugin(),
           // Watcher doesn't work well if you mistype casing in a path so we use
