@@ -69,6 +69,7 @@ const cssLoaders = [
     loader: require.resolve("css-loader"),
     options: {
       modules: true,
+      localIdentName: "[name]_[local]_[hash:base64:2]",
       importLoaders: 1,
       minimize: isProduction,
       sourceMap: isProduction,
