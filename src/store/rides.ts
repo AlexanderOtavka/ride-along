@@ -24,7 +24,6 @@ import { reducerWithInitialState } from "typescript-fsa-reducers"
 import { SagaIterator, buffers, delay } from "redux-saga"
 import { call, put, actionChannel, take, fork } from "redux-saga/effects"
 import isEqual from "lodash/isEqual"
-import omitBy from "lodash/omitBy"
 import maxDate from "date-fns/max"
 
 import Dependencies from "./Dependencies"
@@ -93,7 +92,7 @@ export namespace ridesActions {
   export type ResetDraft = { date: Date }
   export const resetDraft = actionCreator<ResetDraft>("RESET_DRAFT")
 
-  export type UpdateDraft = Partial<DraftModel>
+  export type UpdateDraft = DraftModel
   export const updateDraft = actionCreator<UpdateDraft>("UPDATE_DRAFT")
 
   export type CreateParams = {}
@@ -154,16 +153,9 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   .case(ridesActions.updateDraft, ({ draft, ...state }, payload) => ({
     ...state,
     draft: {
-      ...draft,
-      ...omitBy(payload, x => x === undefined),
-      arriveDateTime: maxDate(
-        payload.departDateTime || draft.departDateTime,
-        payload.arriveDateTime || draft.arriveDateTime
-      ),
-      seatTotal:
-        payload.seatTotal === undefined
-          ? draft.seatTotal
-          : Math.min(Math.max(payload.seatTotal, 0), 99),
+      ...payload,
+      arriveDateTime: maxDate(payload.departDateTime, payload.arriveDateTime),
+      seatTotal: Math.min(Math.max(payload.seatTotal, 0), 99),
     },
   }))
   .case(ridesActions.resetDraft, (state, { date }) => ({

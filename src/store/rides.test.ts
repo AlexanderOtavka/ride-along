@@ -99,7 +99,10 @@ describe("ridesReducer", () => {
   describe("with update draft action", () => {
     it("when seat total is out of bounds", () => {
       expect(
-        ridesReducer(STATE, ridesActions.updateDraft({ seatTotal: 1000 }))
+        ridesReducer(
+          STATE,
+          ridesActions.updateDraft({ ...STATE.draft, seatTotal: 1000 })
+        )
       ).toEqual({
         ...STATE,
         draft: {
@@ -109,7 +112,10 @@ describe("ridesReducer", () => {
       })
 
       expect(
-        ridesReducer(STATE, ridesActions.updateDraft({ seatTotal: -10 }))
+        ridesReducer(
+          STATE,
+          ridesActions.updateDraft({ ...STATE.draft, seatTotal: -10 })
+        )
       ).toEqual({
         ...STATE,
         draft: {
