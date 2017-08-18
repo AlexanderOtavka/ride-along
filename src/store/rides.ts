@@ -21,20 +21,34 @@
 
 import actionCreatorFactory, { Action } from "typescript-fsa"
 import { reducerWithInitialState } from "typescript-fsa-reducers"
-import { SagaIterator, buffers, delay } from "redux-saga"
-import { call, put, actionChannel, take, fork } from "redux-saga/effects"
-import isEqual from "lodash/isEqual"
 import maxDate from "date-fns/max"
+import { MiddlewareAPI } from "redux"
+import { combineEpics, ActionsObservable } from "redux-observable"
 
-import Dependencies from "./Dependencies"
+import { Observable } from "rxjs/Observable"
+import "rxjs/add/observable/of"
+import "rxjs/add/observable/from"
+import "rxjs/add/observable/zip"
+import "rxjs/add/operator/filter"
+import "rxjs/add/operator/map"
+import "rxjs/add/operator/mergeMap"
+import "rxjs/add/operator/catch"
+import "rxjs/add/operator/debounceTime"
 
+import { StateModel } from "./index"
+
+import createTypeChecker from "../util/createTypeChecker"
 import exampleRides from "../constants/exampleRides"
 
 /// <reference types="googlemaps" />
 type PlaceResult = google.maps.places.PlaceResult
 type PlacesService = google.maps.places.PlacesService
-type TextSearchRequest = google.maps.places.TextSearchRequest
 type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
+
+export interface RidesDependencies {
+  placesServicePromise: Promise<PlacesService>
+  placesServiceStatusPromise: Promise<PlacesServiceStatusType>
+}
 
 // Models
 
@@ -174,82 +188,58 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
 
 export function getSearchResults(
   service: PlacesService,
-  PlacesServiceStatus: PlacesServiceStatusType,
-  request: TextSearchRequest
+  Status: PlacesServiceStatusType,
+  query: string | undefined
 ) {
-  return new Promise<PlaceResult[]>((resolve, reject) => {
-    service.textSearch(request, (result, status) => {
-      if (
-        status === PlacesServiceStatus.OK ||
-        status === PlacesServiceStatus.ZERO_RESULTS
-      ) {
-        resolve(result)
-      } else {
-        reject(new Error(`Failed with status: ${status}`))
-      }
-    })
+  return new Observable<PlaceResult[] | undefined>(observer => {
+    if (query) {
+      service.textSearch({ query }, (result, status) => {
+        if (status === Status.OK || status === Status.ZERO_RESULTS) {
+          observer.next(result)
+          observer.complete()
+        } else {
+          observer.error(new Error(`Failed with status: ${status}`))
+        }
+      })
+    } else {
+      observer.next(query === "" ? [] : undefined)
+      observer.complete()
+    }
   })
 }
 
-export function* searchWorkerSaga(
-  service: PlacesService,
-  PlacesServiceStatus: PlacesServiceStatusType,
-  { payload }: Action<ridesActions.SearchParams>
-): SagaIterator {
-  try {
-    const departSuggestions: PlaceResult[] = payload.departSearch
-      ? yield call(getSearchResults, service, PlacesServiceStatus, {
-          query: payload.departSearch,
-        })
-      : payload.departSearch === undefined ? undefined : []
-
-    const arriveSuggestions: PlaceResult[] = payload.arriveSearch
-      ? yield call(getSearchResults, service, PlacesServiceStatus, {
-          query: payload.arriveSearch,
-        })
-      : payload.arriveSearch === undefined ? undefined : []
-
-    yield put(
-      ridesActions.search.done({
-        params: payload,
-        result: {
-          departSuggestions,
-          arriveSuggestions,
-        },
-      })
+export function searchEpic(
+  actionsObservable: ActionsObservable<Action<any>>,
+  store: MiddlewareAPI<StateModel>,
+  { placesServicePromise, placesServiceStatusPromise }: RidesDependencies
+) {
+  return actionsObservable
+    .filter(createTypeChecker(ridesActions.search.started))
+    .debounceTime(500)
+    .flatMap(({ payload }) =>
+      Observable.zip(
+        placesServicePromise,
+        placesServiceStatusPromise
+      ).flatMap(([service, Status]) =>
+        Observable.zip(
+          getSearchResults(service, Status, payload.departSearch),
+          getSearchResults(service, Status, payload.arriveSearch),
+          (departSuggestions, arriveSuggestions) => ({
+            departSuggestions,
+            arriveSuggestions,
+          })
+        )
+          .map(result => ridesActions.search.done({ params: payload, result }))
+          .catch(error =>
+            Observable.of(
+              ridesActions.search.failed({
+                params: payload,
+                error,
+              })
+            )
+          )
+      )
     )
-  } catch (error) {
-    yield put(
-      ridesActions.search.failed({
-        params: payload,
-        error: error.message,
-      })
-    )
-  }
 }
 
-export function* searchPersistentSaga(deps: Dependencies): SagaIterator {
-  const places: typeof google.maps.places = yield call(deps.getPlacesAPI)
-  const service = new places.PlacesService(deps.poweredByGoogleNode)
-
-  const channel = yield actionChannel(
-    ridesActions.search.started.type,
-    buffers.sliding(1)
-  )
-  let oldPayload: ridesActions.SearchParams | undefined
-
-  while (true) {
-    let action: Action<ridesActions.SearchParams>
-    do {
-      action = yield take(channel)
-    } while (isEqual(action.payload, oldPayload))
-    oldPayload = action.payload
-
-    yield fork(searchWorkerSaga, service, places.PlacesServiceStatus, action)
-    yield call(delay, 1000)
-  }
-}
-
-export function* ridesPersistentSaga(deps: Dependencies): SagaIterator {
-  yield fork(searchPersistentSaga, deps)
-}
+export const ridesEpic = combineEpics(searchEpic)

@@ -1,7 +1,7 @@
 /**
- * @file App.test.tsx
+ * @file createTypeChecker.ts
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 8/17/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,29 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from "react"
-import { render } from "react-dom"
-import { MemoryRouter } from "react-router-dom"
-import { Provider } from "react-redux"
+import { Action, isType, ActionCreator } from "typescript-fsa"
 
-import App from "./App"
-
-import configureStore from "../store"
-
-it("renders without crashing", () => {
-  const div = document.createElement("div")
-  const store = configureStore({
-    placesServicePromise: Promise.resolve<any>({}),
-    autocompleteServicePromise: Promise.resolve<any>({}),
-    placesServiceStatusPromise: Promise.resolve<any>({}),
-  })
-
-  render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    </Provider>,
-    div
-  )
-})
+export default function createTypeChecker<T>(actionCreator: ActionCreator<T>) {
+  return (action: Action<any>): action is Action<T> =>
+    isType(action, actionCreator)
+}

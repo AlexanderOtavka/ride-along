@@ -28,42 +28,47 @@ import App from "./App"
 import registerServiceWorker from "./registerServiceWorker"
 
 import configureStore from "../store"
-import Dependencies from "../store/Dependencies"
 
 import "./index.sass"
 
 type Google = typeof google
 
 declare namespace window {
-  export let onPlacesAPILoad: () => void
   export const google: Google | undefined
+  export let onPlacesAPILoad: () => void
 }
 
-const store = configureStore()
-const deps: Dependencies = {
-  getPlacesAPI: () =>
-    new Promise<typeof google.maps.places>(resolve => {
+const poweredByGoogleNode = document.createElement("div")
+const placesAPIPromise = new Promise<typeof google.maps.places>(resolve => {
+  if (window.google) {
+    resolve(window.google.maps.places)
+  } else {
+    window.onPlacesAPILoad = () => {
       if (window.google) {
         resolve(window.google.maps.places)
-      } else {
-        window.onPlacesAPILoad = () => {
-          if (window.google) {
-            resolve(window.google.maps.places)
-          }
-        }
       }
-    }),
-  poweredByGoogleNode: document.createElement("div"),
-}
+    }
+  }
+})
 
-store.runPersistentSaga(deps)
+const store = configureStore({
+  placesServicePromise: placesAPIPromise.then(
+    places => new places.PlacesService(poweredByGoogleNode)
+  ),
+  autocompleteServicePromise: placesAPIPromise.then(
+    places => new places.AutocompleteService()
+  ),
+  placesServiceStatusPromise: placesAPIPromise.then(
+    places => places.PlacesServiceStatus
+  ),
+})
 
 registerServiceWorker()
 
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <App poweredByGoogleNode={deps.poweredByGoogleNode} />
+      <App poweredByGoogleNode={poweredByGoogleNode} />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")
