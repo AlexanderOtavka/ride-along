@@ -66,6 +66,8 @@ describe("ridesReducer", () => {
     list: [],
     departSuggestions: [],
     arriveSuggestions: [],
+    lastCreated: undefined,
+    isCreating: false,
     draft: {
       departLocation: "",
       departDateTime: new Date(2017, 1, 1),

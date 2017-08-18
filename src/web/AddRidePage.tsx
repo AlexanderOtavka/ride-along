@@ -104,6 +104,10 @@ function AddRidePage({
       onChange={({ values }: any) => {
         dispatch(ridesActions.updateDraft(values))
       }}
+      onSubmit={(values: any) => {
+        dispatch(ridesActions.create.started(values))
+        props.history.push(routes.ride.detail("lastCreated"))
+      }}
     >
       {({ submitForm }: any) =>
         <form
@@ -129,6 +133,7 @@ function AddRidePage({
 
             <span className={styles.headerTitle}>New Ride</span>
 
+            {/* TODO: validate, and don't let them create if it's wrong */}
             <Button className={styles.createButton} type="submit">
               Create
             </Button>

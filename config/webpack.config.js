@@ -353,10 +353,12 @@ export default {
             analyzerMode: "static",
             reportFilename: path.join(paths.report, "bundle-analyzer.html"),
           }),
-          // Move modules shared by all children of main back into main
+          // Move modules shared by enough children of main back into main
           new webpack.optimize.CommonsChunkPlugin({
             name: "main",
             children: true,
+            // Tweak this number for optimal chunking
+            minChunks: 3,
           }),
           // Minify the code.
           new webpack.optimize.UglifyJsPlugin({
@@ -451,6 +453,7 @@ export default {
   // cumbersome.
   performance: {
     hints: isProduction ? "warning" : false,
-    maxEntrypointSize: 400000, // 400kb
+    maxAssetSize: 300 * 1000,
+    maxEntrypointSize: 450 * 1000,
   },
 }

@@ -45,10 +45,6 @@ import * as routes from "../constants/routes"
 
 import styles from "./RideListPage.sass"
 
-interface MatchParams {
-  0: "search" | undefined
-}
-
 interface StateProps {
   rideList: ReadonlyArray<RideModel>
   autocompleteList: ReadonlyArray<AutocompletePredictionModel>
@@ -58,7 +54,7 @@ interface StateProps {
 interface DispatchProps extends DispatchProp<StateModel> {}
 
 export interface Props
-  extends QueryComponentProps<MatchParams, RideSearchModel> {}
+  extends QueryComponentProps<["search" | undefined], RideSearchModel> {}
 
 type AllProps = Readonly<StateProps & DispatchProps & Props>
 

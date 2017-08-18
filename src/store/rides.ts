@@ -24,6 +24,7 @@ import { reducerWithInitialState } from "typescript-fsa-reducers"
 import maxDate from "date-fns/max"
 import { MiddlewareAPI } from "redux"
 import { combineEpics, ActionsObservable } from "redux-observable"
+import { database } from "firebase"
 
 import { Observable } from "rxjs/Observable"
 import "rxjs/add/observable/of"
@@ -38,6 +39,7 @@ import "rxjs/add/operator/debounceTime"
 import { StateModel } from "./index"
 
 import createTypeChecker from "../util/createTypeChecker"
+import { toFirebase } from "../util/firebaseConvert"
 import exampleRides from "../constants/exampleRides"
 
 /// <reference types="googlemaps" />
@@ -48,6 +50,7 @@ type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
 export interface RidesDependencies {
   placesServicePromise: Promise<PlacesService>
   placesServiceStatusPromise: Promise<PlacesServiceStatusType>
+  ridesListRefPromise: Promise<database.Reference>
 }
 
 // Models
@@ -76,6 +79,8 @@ export interface RideModel extends DraftModel {
 export interface RidesModel {
   readonly list: ReadonlyArray<RideModel>
   readonly draft: DraftModel
+  readonly isCreating: boolean
+  readonly lastCreated: string | undefined
   readonly departSuggestions: ReadonlyArray<PlaceResult>
   readonly arriveSuggestions: ReadonlyArray<PlaceResult>
 }
@@ -109,8 +114,8 @@ export namespace ridesActions {
   export type UpdateDraft = DraftModel
   export const updateDraft = actionCreator<UpdateDraft>("UPDATE_DRAFT")
 
-  export type CreateParams = {}
-  export type CreateResult = { id: string }
+  export type CreateParams = DraftModel
+  export type CreateResult = { id: string | undefined }
   export const create = actionCreator.async<CreateParams, CreateResult>(
     "CREATE"
   )
@@ -145,6 +150,8 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     arriveDateTime: new Date(),
     seatTotal: 0,
   },
+  isCreating: false,
+  lastCreated: undefined,
   departSuggestions: [],
   arriveSuggestions: [],
 })
@@ -182,9 +189,22 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
       seatTotal: 0,
     },
   }))
+  .case(ridesActions.create.started, state => ({
+    ...state,
+    isCreating: true,
+  }))
+  .case(ridesActions.create.done, (state, { result }) => ({
+    ...state,
+    isCreating: false,
+    lastCreated: result.id,
+  }))
+  .case(ridesActions.create.failed, state => ({
+    ...state,
+    isCreating: false,
+  }))
   .build()
 
-// Sagas
+// Epics
 
 export function getSearchResults(
   service: PlacesService,
@@ -242,4 +262,50 @@ export function searchEpic(
     )
 }
 
-export const ridesEpic = combineEpics(searchEpic)
+export function createStartedToUpdateDraftEpic(
+  actionsObservable: ActionsObservable<Action<any>>
+) {
+  return actionsObservable
+    .filter(createTypeChecker(ridesActions.create.started))
+    .map(({ payload }) => ridesActions.updateDraft(payload))
+}
+
+export function createDoneToResetDraftEpic(
+  actionsObservable: ActionsObservable<Action<any>>
+) {
+  return actionsObservable
+    .filter(createTypeChecker(ridesActions.create.done))
+    .map(({ payload }) => ridesActions.resetDraft({ date: new Date() }))
+}
+
+export function createRideEpic(
+  actionsObservable: ActionsObservable<Action<any>>,
+  store: MiddlewareAPI<StateModel>,
+  { ridesListRefPromise }: RidesDependencies
+) {
+  return actionsObservable
+    .filter(createTypeChecker(ridesActions.create.started))
+    .flatMap(({ payload }) =>
+      Observable.from(ridesListRefPromise).flatMap(ridesListRef =>
+        Observable.from(ridesListRef.push(toFirebase(payload)))
+          .map((ref: database.Reference) =>
+            ridesActions.create.done({
+              params: payload,
+              result: { id: ref.key || undefined },
+            })
+          )
+          .catch(error =>
+            Observable.of(
+              ridesActions.create.failed({ params: payload, error })
+            )
+          )
+      )
+    )
+}
+
+export const ridesEpic = combineEpics(
+  searchEpic,
+  createStartedToUpdateDraftEpic,
+  createDoneToResetDraftEpic,
+  createRideEpic
+)

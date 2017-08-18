@@ -92,7 +92,7 @@ export const autocompleteReducer = reducerWithInitialState<AutocompleteModel>({
   }))
   .build()
 
-// Sagas
+// Epics
 
 export function getPlacePredictions(
   service: AutocompleteService,

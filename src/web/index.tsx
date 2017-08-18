@@ -23,6 +23,7 @@ import React from "react"
 import { render } from "react-dom"
 import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
+import * as firebase from "firebase/app"
 
 import App from "./App"
 import registerServiceWorker from "./registerServiceWorker"
@@ -51,6 +52,20 @@ const placesAPIPromise = new Promise<typeof google.maps.places>(resolve => {
   }
 })
 
+const firebaseAPIKey = process.env.REACT_APP_FIREBASE_API_KEY
+const firebaseProjectID = process.env.REACT_APP_FIREBASE_PROJECT_ID
+firebase.initializeApp({
+  apiKey: firebaseAPIKey,
+  projectId: firebaseProjectID,
+  authDomain: `${firebaseProjectID}.firebaseapp.com`,
+  databaseURL: `https://${firebaseProjectID}.firebaseio.com`,
+  storageBucket: `${firebaseProjectID}.appspot.com`,
+})
+
+const firebaseDatabasePromise = import(/* webpackChunkName: "firebase-database" */ "firebase/database").then(
+  () => firebase.database()
+)
+
 const store = configureStore({
   placesServicePromise: placesAPIPromise.then(
     places => new places.PlacesService(poweredByGoogleNode)
@@ -60,6 +75,9 @@ const store = configureStore({
   ),
   placesServiceStatusPromise: placesAPIPromise.then(
     places => places.PlacesServiceStatus
+  ),
+  ridesListRefPromise: firebaseDatabasePromise.then(database =>
+    database.ref("ridesList")
   ),
 })
 

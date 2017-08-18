@@ -1,7 +1,7 @@
 /**
- * @file routes.ts
+ * @file firebase-database.d.ts
  *
- * Created by Zander Otavka on 6/9/17.
+ * Created by Zander Otavka on 8/17/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,27 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import querystring from "querystring"
+declare module "firebase/database" {
 
-import { RideSearchModel } from "../store/rides"
-
-const stringifyQuery = (query?: { [key: string]: any }) =>
-  query ? "?" + querystring.stringify(query) : ""
-
-export const ridesList = {
-  root: (mode?: "request" | "offer") => (mode ? `/?mode=${mode}` : "/"),
-  search: (query?: RideSearchModel) => "/search" + stringifyQuery(query),
-  matchPath: "/(search)?",
 }
-
-export const ride = {
-  root: "/rides",
-  detail: (id: string) => `/rides/${id}`,
-  new: (query?: RideSearchModel) => "/rides/new" + stringifyQuery(query),
-}
-
-export const profile = {
-  root: "/me",
-}
-
-export const feedback = "/feedback"

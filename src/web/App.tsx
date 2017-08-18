@@ -36,6 +36,11 @@ const RideListPage = asyncComponent({
     import(/* webpackChunkName: "RideListPage" */ "./RideListPage"),
 })
 
+const RideDetailPage = asyncComponent({
+  resolve: () =>
+    import(/* webpackChunkName: "RideDetailPage" */ "./RideDetailPage"),
+})
+
 const AddRidePage = asyncComponent({
   resolve: () => import(/* webpackChunkName: "AddRidePage" */ "./AddRidePage"),
 })
@@ -62,6 +67,11 @@ function App(props: Props) {
           component={RideListPage}
         />
         <Route exact path={routes.ride.new()} component={AddRidePage} />
+        <Route
+          exact
+          path={routes.ride.detail(":id")}
+          component={RideDetailPage}
+        />
         <Route render={() => <Nav />} />
       </Switch>
     </div>
