@@ -117,6 +117,8 @@ function RideListPage({
       <main
         className={classnames(styles.main, isSearchMode && styles.isSearchMode)}
       >
+        {/* TODO: fix autocomplete on desktop */}
+        {/* TODO: improve autocomplete acessibility */}
         <ul
           className={styles.autocompleteList}
           hidden={props.autocompleteList.length === 0}
