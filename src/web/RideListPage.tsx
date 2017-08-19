@@ -180,6 +180,7 @@ function RideListPage({
                 <p className={styles.listFooterText}>
                   Don't see what you're looking for?
                 </p>
+
                 {!query.departSearch
                   ? <Button
                       className={styles.listFooterButton}
@@ -217,17 +218,43 @@ function RideListPage({
               </footer>
             : <footer>
                 <p className={styles.listFooterText}>
-                  We couldn't find any
-                  {!hasDepartSearchSuggestions && " departure locations "}
+                  We couldn't find any matches on Google Maps for your
+                  {!hasDepartSearchSuggestions && " departure location "}
                   {!(
                     hasDepartSearchSuggestions || hasArriveSearchSuggestions
                   ) && " or "}
-                  {!hasArriveSearchSuggestions && " destinations "}
-                  on Google Maps that match your search.
+                  {!hasArriveSearchSuggestions && " destination "}
+                  search.
                 </p>
                 <p className={styles.listFooterText}>
                   Make sure you spelled the address or search correctly.
                 </p>
+
+                {!hasDepartSearchSuggestions
+                  ? <Button
+                      className={styles.listFooterButton}
+                      onClick={() => {
+                        const input = document.getElementById(
+                          ids.RIDE_DEPART_SEARCH_INPUT
+                        ) as HTMLInputElement
+
+                        input.select()
+                      }}
+                    >
+                      Edit Departure Location
+                    </Button>
+                  : <Button
+                      className={styles.listFooterButton}
+                      onClick={() => {
+                        const input = document.getElementById(
+                          ids.RIDE_ARRIVE_SEARCH_INPUT
+                        ) as HTMLInputElement
+
+                        input.select()
+                      }}
+                    >
+                      Edit Destination
+                    </Button>}
               </footer>}
         </section>
       </main>

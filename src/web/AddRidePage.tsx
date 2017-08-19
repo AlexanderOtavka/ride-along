@@ -214,11 +214,11 @@ function AddRidePage({
                 <section className={styles.errorPanel}>
                   <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
                   <p className={styles.errorPanelText}>
-                    We couldn't find any
-                    {!hasDepartSuggestions && " departure "}
+                    We couldn't find any matches on Google Maps for your
+                    {!hasDepartSuggestions && " departure location "}
                     {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
-                    {!hasArriveSuggestions && " arrival "}
-                    locations on Google Maps that match your search.
+                    {!hasArriveSuggestions && " destination "}
+                    search.
                   </p>
                   <p className={styles.errorPanelText}>
                     Make sure you spelled the address or search correctly.
