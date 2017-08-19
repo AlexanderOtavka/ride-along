@@ -34,13 +34,14 @@ export interface Props extends DropdownProps {
 function DropdownField({ theme, field, ...props }: Props) {
   return (
     <FormField field={field}>
-      {({ getValue, setValue }: any) =>
+      {({ getValue, setValue, setTouched }: any) =>
         <Dropdown
           {...props}
           value={getValue()}
           onChange={setValue}
+          onBlur={() => setTouched()}
           theme={{
-            valueKey: "",
+            valueKey: "", // TODO: remove this once the typedefs update
             ...theme,
             ...mapValues(
               {

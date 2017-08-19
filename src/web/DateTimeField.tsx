@@ -67,7 +67,7 @@ function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
 
   return (
     <FormField field={props.field}>
-      {({ getValue, setValue }: any) =>
+      {({ getValue, setValue, setTouched }: any) =>
         <div className={styles.fieldset}>
           <DatePicker
             {...datePickerProps}
@@ -76,6 +76,7 @@ function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
             sundayFirstDayOfWeek={true}
             inputFormat={formatDateLong}
             theme={dateTheme}
+            {...{ onBlur: () => setTouched() }} // TODO: fix when onBlur gets added to typedefs
           />
           <TimePicker
             {...timePickerProps}
@@ -83,6 +84,7 @@ function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
             onChange={setValue}
             format="ampm"
             theme={timeTheme}
+            onBlur={() => setTouched()}
           />
         </div>}
     </FormField>

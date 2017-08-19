@@ -181,7 +181,7 @@ function AddRidePage({
                 />
                 <div className={styles.extraFields}>
                   <FormField field="seatTotal">
-                    {({ getValue, setValue }: any) =>
+                    {({ getValue, setValue, setTouched }: any) =>
                       <label className={styles.seatCount}>
                         <input
                           className={styles.seatCountInput}
@@ -191,6 +191,7 @@ function AddRidePage({
                           onChange={ev =>
                             setValue(+ev.currentTarget.value || 0)}
                           onFocus={ev => ev.currentTarget.select()}
+                          onBlur={() => setTouched()}
                         />
                         <p className={styles.seatCountLabel}>
                           {query.mode === "request" ? "Rider" : "Seat"}
