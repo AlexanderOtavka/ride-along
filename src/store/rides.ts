@@ -215,7 +215,7 @@ export function getSearchResults(
     if (query) {
       service.textSearch({ query }, (result, status) => {
         if (status === Status.OK || status === Status.ZERO_RESULTS) {
-          observer.next(result)
+          observer.next(result || [])
           observer.complete()
         } else {
           observer.error(new Error(`Failed with status: ${status}`))
