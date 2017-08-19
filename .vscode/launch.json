@@ -11,9 +11,7 @@
       "cwd": "${workspaceRoot}",
       "preLaunchTask": null,
       "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
-      "runtimeArgs": [
-        "--nolazy"
-      ],
+      "runtimeArgs": ["--nolazy"],
       "sourceMaps": false
     },
     {
@@ -34,10 +32,7 @@
       "url": "http://localhost:3000",
       "webRoot": "${workspaceRoot}/src",
       "userDataDir": "${workspaceRoot}/.vscode/chrome",
-      "skipFiles": [
-        "node_modules/**",
-        "webpack/**"
-      ],
+      "skipFiles": ["node_modules/**", "webpack/**"],
       "sourceMapPathOverrides": {
         "webpack:///src/*": "${webRoot}/*"
       }
