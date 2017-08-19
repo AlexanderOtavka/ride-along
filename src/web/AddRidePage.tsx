@@ -97,6 +97,11 @@ function AddRidePage({
     dialog: classnames(styles.dateTimeDialog, styles[query.mode]),
   }
 
+  const backURI =
+    query.arriveSearch !== undefined || query.departSearch !== undefined
+      ? routes.ridesList.search(query)
+      : routes.ridesList.root(query.mode)
+
   return (
     <Form
       component={false}
@@ -120,30 +125,25 @@ function AddRidePage({
           }}
         >
           <header className={styles.header}>
-            <Link
-              to={
-                query.arriveSearch !== undefined ||
-                query.departSearch !== undefined
-                  ? routes.ridesList.search(query)
-                  : routes.ridesList.root(query.mode)
-              }
-            >
+            <Link to={backURI}>
               <IconButton icon={<BackSVG className={styles.backIcon} />} />
             </Link>
 
             <span className={styles.headerTitle}>New Ride</span>
 
             {/* TODO: validate, and don't let them create if it's wrong */}
-            <Button className={styles.createButton} type="submit">
-              Create
-            </Button>
+            {hasDepartSuggestions &&
+              hasArriveSuggestions &&
+              <Button className={styles.createButton} type="submit">
+                Create
+              </Button>}
           </header>
 
           {hasDepartSuggestions && hasArriveSuggestions
             ? <main className={styles.main}>
                 <RideVertical
                   departLocation={
-                    /* TODO: customize suggestion display with template */
+                    // TODO: customize suggestion display with template
                     <DropdownField
                       field="departLocation"
                       source={departSuggestions.map(suggestionToDropdownItem)}
@@ -204,10 +204,29 @@ function AddRidePage({
                 </div>
               </main>
             : <main className={styles.main}>
-                {/* TODO: make this look nicer */}
-                <h1>Error</h1>
-                {!hasDepartSuggestions && <div>No depart suggestions</div>}
-                {!hasArriveSuggestions && <div>No arrive suggestions</div>}
+                <RideVertical
+                  departLocation={query.departSearch || ""}
+                  departDateTime=""
+                  arriveLocation={query.arriveSearch || ""}
+                  arriveDateTime=""
+                />
+
+                <section className={styles.errorPanel}>
+                  <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
+                  <p className={styles.errorPanelText}>
+                    We couldn't find any
+                    {!hasDepartSuggestions && " departure "}
+                    {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
+                    {!hasArriveSuggestions && " arrival "}
+                    locations on Google Maps that match your search.
+                  </p>
+                  <p className={styles.errorPanelText}>
+                    Make sure you spelled the address or search correctly.
+                  </p>
+                  <Link to={backURI}>
+                    <Button>Back to Search</Button>
+                  </Link>
+                </section>
               </main>}
 
           <footer className={styles.footer}>
