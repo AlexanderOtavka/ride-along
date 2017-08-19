@@ -31,6 +31,7 @@ import ModeButton from "./ModeButton"
 import { RideSearchModel } from "../store/rides"
 
 import * as routes from "../constants/routes"
+import * as ids from "../constants/ids"
 
 import styles from "./RideListHeader.sass"
 
@@ -50,16 +51,18 @@ export interface Props {
 }
 
 function RideListHeader({ isSearchMode, ...props }: Props) {
+  const values = isSearchMode ? props.values : { mode: props.values.mode }
+
   return (
     <header className={classnames(styles.header, styles[props.values.mode])}>
       <Form
-        values={isSearchMode ? props.values : { mode: props.values.mode }}
+        values={values}
         onChange={(state: any, ...args: any[]) => {
           props.onValuesChange(state.values)
         }}
         component={false}
       >
-        {({ submitForm, values }: any) =>
+        {({ submitForm }: any) =>
           <form
             action={routes.ridesList.search()}
             method="get"
@@ -75,6 +78,7 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
           >
             <div className={styles.headerTop}>
               <BoxField
+                id={ids.RIDE_DEPART_SEARCH_INPUT}
                 field="departSearch"
                 type={isSearchMode ? "text" : "submit"}
                 placeholder={
@@ -86,19 +90,24 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
                 }
                 autoFocus={
                   isSearchMode &&
-                  values.departLocation === undefined &&
-                  values.arriveLocation === undefined
+                  values.departSearch === undefined &&
+                  values.arriveSearch === undefined
                 }
                 onChange={ev => props.onDepartBoxChange(ev.currentTarget.value)}
                 onBlur={props.onDepartBoxBlur}
+                onKeyPress={ev => {
+                  if (!isSearchMode && /\w|\d/.test(ev.key)) {
+                    props.onSearchModeChange(true, values)
+                  }
+                }}
               >
-                {!values.departLocation &&
+                {!values.departSearch &&
                   <IconButton
                     icon={<CurrentLocationSVG />}
                     onClick={() => {
-                      const newValues = {
+                      const newValues: RideSearchModel = {
                         ...values,
-                        departLocation: "Current Location",
+                        departSearch: "Current Location",
                       }
 
                       if (isSearchMode) {
@@ -136,6 +145,7 @@ function RideListHeader({ isSearchMode, ...props }: Props) {
             >
               <DownChevronSVG className={styles.downChevron} />
               <BoxField
+                id={ids.RIDE_ARRIVE_SEARCH_INPUT}
                 field="arriveSearch"
                 placeholder="Destination"
                 onChange={ev => props.onArriveBoxChange(ev.currentTarget.value)}

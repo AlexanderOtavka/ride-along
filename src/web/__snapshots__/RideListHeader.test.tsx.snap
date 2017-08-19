@@ -16,11 +16,13 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","arrive
         className="boxField"
       >
         <input
-          autoFocus={true}
+          autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -79,6 +81,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","arrive
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -116,11 +119,13 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","depart
         className="boxField"
       >
         <input
-          autoFocus={true}
+          autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -130,20 +135,6 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","depart
         <div
           className="backdrop"
         />
-        <button
-          className=""
-          data-react-toolbox="button"
-          disabled={false}
-          href={undefined}
-          onClick={[Function]}
-          onMouseDown={[Function]}
-          onMouseLeave={[Function]}
-          onMouseUp={[Function]}
-          onTouchStart={[Function]}
-          type="button"
-        >
-          <svg />
-        </button>
       </div>
       <a
         href="/?mode=offer"
@@ -179,6 +170,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","depart
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -219,8 +211,10 @@ exports[`RideListHandler when in search mode with values={"mode":"offer"} 1`] = 
           autoFocus={true}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -279,6 +273,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer"} 1`] = 
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -316,11 +311,13 @@ exports[`RideListHandler when in search mode with values={"mode":"request","depa
         className="boxField"
       >
         <input
-          autoFocus={true}
+          autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -330,20 +327,6 @@ exports[`RideListHandler when in search mode with values={"mode":"request","depa
         <div
           className="backdrop"
         />
-        <button
-          className=""
-          data-react-toolbox="button"
-          disabled={false}
-          href={undefined}
-          onClick={[Function]}
-          onMouseDown={[Function]}
-          onMouseLeave={[Function]}
-          onMouseUp={[Function]}
-          onTouchStart={[Function]}
-          type="button"
-        >
-          <svg />
-        </button>
       </div>
       <a
         href="/?mode=request"
@@ -379,6 +362,7 @@ exports[`RideListHandler when in search mode with values={"mode":"request","depa
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -419,8 +403,10 @@ exports[`RideListHandler when in search mode with values={"mode":"request"} 1`] 
           autoFocus={true}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -479,6 +465,7 @@ exports[`RideListHandler when in search mode with values={"mode":"request"} 1`] 
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -519,8 +506,10 @@ exports[`RideListHandler when not in search mode with values={"mode":"offer"} 1`
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           type="submit"
@@ -619,6 +608,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"offer"} 1`
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -655,8 +645,10 @@ exports[`RideListHandler when not in search mode with values={"mode":"request","
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           type="submit"
@@ -755,6 +747,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"request","
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -791,8 +784,10 @@ exports[`RideListHandler when not in search mode with values={"mode":"request"} 
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           type="submit"
@@ -891,6 +886,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"request"} 
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}

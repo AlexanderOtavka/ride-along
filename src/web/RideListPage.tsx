@@ -21,7 +21,7 @@
 
 import React from "react"
 import { connect as connectRedux, DispatchProp } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, RouteComponentProps } from "react-router-dom"
 import { Button } from "react-toolbox/lib/button"
 import classnames from "classnames"
 import { compose } from "redux"
@@ -42,28 +42,50 @@ import {
 } from "../store/autocomplete"
 
 import * as routes from "../constants/routes"
+import * as ids from "../constants/ids"
 
 import styles from "./RideListPage.sass"
+
+type RouteParams = ["search" | undefined]
 
 interface StateProps {
   rideList: ReadonlyArray<RideModel>
   autocompleteList: ReadonlyArray<AutocompletePredictionModel>
   autocompleteField: string
+  hasDepartSearchSuggestions: boolean
+  hasArriveSearchSuggestions: boolean
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
 
-export interface Props
-  extends QueryComponentProps<["search" | undefined], RideSearchModel> {}
+export interface Props extends RouteComponentProps<RouteParams> {}
 
-type AllProps = Readonly<StateProps & DispatchProps & Props>
+interface SubProps
+  extends Props,
+    QueryComponentProps<RouteParams, RideSearchModel> {}
+
+type AllProps = StateProps & DispatchProps & SubProps
 
 const withController = compose(
   connectQuery(pickSearch),
-  connectRedux<StateProps, DispatchProps, Props>((state: StateModel) => ({
+  connectRedux<
+    StateProps,
+    DispatchProps,
+    SubProps
+  >((state: StateModel, props) => ({
     rideList: state.rides.list,
     autocompleteList: state.autocomplete.list,
     autocompleteField: state.autocomplete.field,
+    hasDepartSearchSuggestions:
+      !props ||
+      !props.query.departSearch ||
+      (state.rides.departSuggestions &&
+        state.rides.departSuggestions.length > 0),
+    hasArriveSearchSuggestions:
+      !props ||
+      !props.query.arriveSearch ||
+      (state.rides.arriveSuggestions &&
+        state.rides.arriveSuggestions.length > 0),
   }))
 )
 
@@ -72,6 +94,8 @@ function RideListPage({
   history,
   query,
   setQuery,
+  hasDepartSearchSuggestions,
+  hasArriveSearchSuggestions,
   ...props,
 }: AllProps) {
   const isSearchMode = !!props.match.params[0]
@@ -139,30 +163,73 @@ function RideListPage({
           )}
         </ul>
 
-        <ul className={styles.rideList}>
-          {props.rideList.map(({ id, ...ride }, i) =>
-            <RideListItem
-              {...ride}
-              key={id}
-              uri={routes.ride.detail(id)}
-              isLast={i === props.rideList.length - 1}
-            />
-          )}
+        <section className={styles.rideListWrapper}>
+          <ul className={styles.rideList}>
+            {props.rideList.map(({ id, ...ride }, i) =>
+              <RideListItem
+                {...ride}
+                key={id}
+                uri={routes.ride.detail(id)}
+                isLast={i === props.rideList.length - 1}
+              />
+            )}
+          </ul>
 
-          <footer>
-            <p className={styles.listFooterText}>
-              Don't see what you're looking for?
-            </p>
-            <Link
-              to={routes.ride.new(query)}
-              onClick={() => {
-                dispatch(ridesActions.resetDraft({ date: new Date() }))
-              }}
-            >
-              <Button className={styles.addRideButton}>Add Ride</Button>
-            </Link>
-          </footer>
-        </ul>
+          {hasDepartSearchSuggestions && hasArriveSearchSuggestions
+            ? <footer>
+                <p className={styles.listFooterText}>
+                  Don't see what you're looking for?
+                </p>
+                {!query.departSearch
+                  ? <Button
+                      className={styles.listFooterButton}
+                      onClick={() => {
+                        document.getElementById(
+                          ids.RIDE_DEPART_SEARCH_INPUT
+                        )!.focus()
+                      }}
+                    >
+                      Add Departure Location
+                    </Button>
+                  : !query.arriveSearch
+                    ? <Button
+                        className={styles.listFooterButton}
+                        onClick={() => {
+                          document.getElementById(
+                            ids.RIDE_ARRIVE_SEARCH_INPUT
+                          )!.focus()
+                        }}
+                      >
+                        Add Destination
+                      </Button>
+                    : <Link
+                        to={routes.ride.new(query)}
+                        onClick={() => {
+                          dispatch(
+                            ridesActions.resetDraft({ date: new Date() })
+                          )
+                        }}
+                      >
+                        <Button className={styles.listFooterButton}>
+                          Create Ride Listing
+                        </Button>
+                      </Link>}
+              </footer>
+            : <footer>
+                <p className={styles.listFooterText}>
+                  We couldn't find any
+                  {!hasDepartSearchSuggestions && " departure locations "}
+                  {!(
+                    hasDepartSearchSuggestions || hasArriveSearchSuggestions
+                  ) && " or "}
+                  {!hasArriveSearchSuggestions && " destinations "}
+                  on Google Maps that match your search.
+                </p>
+                <p className={styles.listFooterText}>
+                  Make sure you spelled the address or search correctly.
+                </p>
+              </footer>}
+        </section>
       </main>
 
       <footer className={styles.navFooter}>
