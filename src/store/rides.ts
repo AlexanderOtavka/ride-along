@@ -81,6 +81,7 @@ export interface RidesModel {
   readonly draft: DraftModel
   readonly isCreating: boolean
   readonly lastCreated: string | undefined
+  readonly isSearching: boolean
   readonly departSuggestions: ReadonlyArray<PlaceResult>
   readonly arriveSuggestions: ReadonlyArray<PlaceResult>
 }
@@ -152,13 +153,19 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   },
   isCreating: false,
   lastCreated: undefined,
+  isSearching: false,
   departSuggestions: [],
   arriveSuggestions: [],
 })
   .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
+  .case(ridesActions.search.started, state => ({
+    ...state,
+    isSearching: true,
+  }))
   .case(ridesActions.search.done, ({ draft, ...state }, { result }) => ({
     ...state,
     ...result,
+    isSearching: false,
     draft: {
       ...draft,
       departLocation: getDefaultLocation(

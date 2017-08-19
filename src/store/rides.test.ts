@@ -64,10 +64,11 @@ describe("getDefaultLocation", () => {
 describe("ridesReducer", () => {
   const STATE: RidesModel = {
     list: [],
+    isSearching: false,
     departSuggestions: [],
     arriveSuggestions: [],
-    lastCreated: undefined,
     isCreating: false,
+    lastCreated: undefined,
     draft: {
       departLocation: "",
       departDateTime: new Date(2017, 1, 1),

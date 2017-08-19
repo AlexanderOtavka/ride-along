@@ -52,6 +52,7 @@ interface StateProps {
   rideList: ReadonlyArray<RideModel>
   autocompleteList: ReadonlyArray<AutocompletePredictionModel>
   autocompleteField: string
+  isSearching: boolean
   hasDepartSearchSuggestions: boolean
   hasArriveSearchSuggestions: boolean
 }
@@ -72,20 +73,19 @@ const withController = compose(
     StateProps,
     DispatchProps,
     SubProps
-  >((state: StateModel, props) => ({
-    rideList: state.rides.list,
-    autocompleteList: state.autocomplete.list,
-    autocompleteField: state.autocomplete.field,
+  >(({ rides, autocomplete }: StateModel, props) => ({
+    rideList: rides.list,
+    autocompleteList: autocomplete.list,
+    autocompleteField: autocomplete.field,
+    isSearching: rides.isSearching,
     hasDepartSearchSuggestions:
       !props ||
       !props.query.departSearch ||
-      (state.rides.departSuggestions &&
-        state.rides.departSuggestions.length > 0),
+      (rides.departSuggestions && rides.departSuggestions.length > 0),
     hasArriveSearchSuggestions:
       !props ||
       !props.query.arriveSearch ||
-      (state.rides.arriveSuggestions &&
-        state.rides.arriveSuggestions.length > 0),
+      (rides.arriveSuggestions && rides.arriveSuggestions.length > 0),
   }))
 )
 
@@ -175,7 +175,8 @@ function RideListPage({
             )}
           </ul>
 
-          {hasDepartSearchSuggestions && hasArriveSearchSuggestions
+          {(hasDepartSearchSuggestions && hasArriveSearchSuggestions) ||
+          props.isSearching
             ? <footer>
                 <p className={styles.listFooterText}>
                   Don't see what you're looking for?
@@ -203,7 +204,8 @@ function RideListPage({
                       >
                         Add Destination
                       </Button>
-                    : <Link
+                    : !props.isSearching &&
+                      <Link
                         to={routes.ride.new(query)}
                         onClick={() => {
                           dispatch(
