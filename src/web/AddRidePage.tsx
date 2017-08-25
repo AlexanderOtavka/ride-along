@@ -199,6 +199,7 @@ function AddRidePage({
                         </p>
                       </label>}
                   </FormField>
+                  {/* TODO: add price selector */}
                   {/* TODO: add notification preferences */}
                   {/* TODO: add easy round trip creation */}
                 </div>
