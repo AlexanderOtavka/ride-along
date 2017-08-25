@@ -20,15 +20,19 @@
  */
 
 import React from "react"
-import { connect, DispatchProp } from "react-redux"
-import { RouteComponentProps } from "react-router-dom"
+import { connect as connectRedux, DispatchProp } from "react-redux"
+import { Link, RouteComponentProps } from "react-router-dom"
 import { Button } from "react-toolbox/lib/button"
 import classnames from "classnames"
-import querystring from "querystring"
+import { compose } from "redux"
 
 import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
 import RideListItem from "./RideListItem"
+
+import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
+
+import { pickSearch } from "../util/pick"
 
 import { StateModel } from "../store"
 import { RideModel, RideSearchModel, ridesActions } from "../store/rides"
@@ -38,48 +42,63 @@ import {
 } from "../store/autocomplete"
 
 import * as routes from "../constants/routes"
+import * as ids from "../constants/ids"
 
 import styles from "./RideListPage.sass"
 
-interface MatchParams {
-  0: "search" | undefined
-}
+type RouteParams = ["search" | undefined]
 
 interface StateProps {
   rideList: ReadonlyArray<RideModel>
   autocompleteList: ReadonlyArray<AutocompletePredictionModel>
   autocompleteField: string
+  isSearching: boolean
+  hasDepartSearchSuggestions: boolean
+  hasArriveSearchSuggestions: boolean
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
 
-export interface Props extends RouteComponentProps<MatchParams> {}
+export interface Props extends RouteComponentProps<RouteParams> {}
 
-type AllProps = Readonly<StateProps & DispatchProps & Props>
+interface SubProps
+  extends Props,
+    QueryComponentProps<RouteParams, RideSearchModel> {}
 
-const withConnect = connect<
-  StateProps,
-  DispatchProps,
-  Props
->((state: StateModel) => ({
-  rideList: state.rides.list,
-  autocompleteList: state.autocomplete.list,
-  autocompleteField: state.autocomplete.field,
-}))
+type AllProps = StateProps & DispatchProps & SubProps
 
-function RideListPage({ dispatch, history, ...props }: AllProps) {
+const withController = compose(
+  connectQuery(pickSearch),
+  connectRedux<
+    StateProps,
+    DispatchProps,
+    SubProps
+  >(({ rides, autocomplete }: StateModel, props) => ({
+    rideList: rides.list,
+    autocompleteList: autocomplete.list,
+    autocompleteField: autocomplete.field,
+    isSearching: rides.isSearching,
+    hasDepartSearchSuggestions:
+      !props ||
+      !props.query.departSearch ||
+      (rides.departSuggestions && rides.departSuggestions.length > 0),
+    hasArriveSearchSuggestions:
+      !props ||
+      !props.query.arriveSearch ||
+      (rides.arriveSuggestions && rides.arriveSuggestions.length > 0),
+  }))
+)
+
+function RideListPage({
+  dispatch,
+  history,
+  query,
+  setQuery,
+  hasDepartSearchSuggestions,
+  hasArriveSearchSuggestions,
+  ...props,
+}: AllProps) {
   const isSearchMode = !!props.match.params[0]
-
-  const query: RideSearchModel = {
-    mode: "request",
-    ...querystring.parse(
-      props.location.search.substring(1) // chop off the ?
-    ),
-  }
-
-  const updateQuery = (values: RideSearchModel) => {
-    history.replace("?" + querystring.stringify(values))
-  }
 
   return (
     <div className={classnames(styles.page, styles[query.mode])}>
@@ -88,32 +107,31 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
         values={query}
         onSearchModeChange={(newIsSearchMode, newValues) => {
           if (newIsSearchMode) {
-            history.push(routes.rides.search)
-            updateQuery(newValues)
+            history.push(routes.ridesList.search(newValues))
           } else {
             dispatch(ridesActions.cancelSearch({}))
             dispatch(autocompleteActions.cancel({}))
-            history.goBack()
+            history.push(routes.ridesList.root(newValues.mode))
           }
         }}
         onValuesChange={values => {
-          dispatch(ridesActions.search(values))
-          updateQuery(values)
+          dispatch(ridesActions.search.started(values))
+          setQuery(values)
         }}
-        onDepartBoxChange={value =>
+        onDepartBoxChange={search =>
           dispatch(
             autocompleteActions.getList.started({
-              field: "departLocation",
-              search: value,
+              field: "departSearch",
+              search,
             })
           )}
         onDepartBoxBlur={() =>
           requestAnimationFrame(() => dispatch(autocompleteActions.cancel({})))}
-        onArriveBoxChange={value =>
+        onArriveBoxChange={search =>
           dispatch(
             autocompleteActions.getList.started({
-              field: "arriveLocation",
-              search: value,
+              field: "arriveSearch",
+              search,
             })
           )}
         onArriveBoxBlur={() =>
@@ -123,6 +141,8 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
       <main
         className={classnames(styles.main, isSearchMode && styles.isSearchMode)}
       >
+        {/* TODO: fix autocomplete on desktop */}
+        {/* TODO: improve autocomplete acessibility */}
         <ul
           className={styles.autocompleteList}
           hidden={props.autocompleteList.length === 0}
@@ -132,7 +152,7 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
               key={prediction.place_id || description}
               className={styles.autocompleteItem}
               onClick={() => {
-                updateQuery({
+                setQuery({
                   ...query,
                   [props.autocompleteField]: description,
                 })
@@ -143,30 +163,109 @@ function RideListPage({ dispatch, history, ...props }: AllProps) {
           )}
         </ul>
 
-        <ul className={styles.rideList}>
-          {props.rideList.map(({ uid, ...ride }, i) =>
-            <RideListItem
-              {...ride}
-              key={uid}
-              uri={routes.rides.ride(uid)}
-              isLast={i === props.rideList.length - 1}
-            />
-          )}
+        <section className={styles.rideListWrapper}>
+          <ul className={styles.rideList}>
+            {props.rideList.map(({ id, ...ride }, i) =>
+              <RideListItem
+                {...ride}
+                key={id}
+                uri={routes.ride.detail(id)}
+                isLast={i === props.rideList.length - 1}
+              />
+            )}
+          </ul>
 
-          <footer>
-            <p className={styles.listFooterText}>
-              Don't see what you're looking for?
-            </p>
-            <Button className={styles.addRideButton}>Add Ride</Button>
-          </footer>
-        </ul>
+          {(hasDepartSearchSuggestions && hasArriveSearchSuggestions) ||
+          props.isSearching
+            ? <footer>
+                <p className={styles.listFooterText}>
+                  Don't see what you're looking for?
+                </p>
+
+                {!query.departSearch
+                  ? <Button
+                      className={styles.listFooterButton}
+                      onClick={() => {
+                        document.getElementById(
+                          ids.RIDE_DEPART_SEARCH_INPUT
+                        )!.focus()
+                      }}
+                    >
+                      Add Departure Location
+                    </Button>
+                  : !query.arriveSearch
+                    ? <Button
+                        className={styles.listFooterButton}
+                        onClick={() => {
+                          document.getElementById(
+                            ids.RIDE_ARRIVE_SEARCH_INPUT
+                          )!.focus()
+                        }}
+                      >
+                        Add Destination
+                      </Button>
+                    : !props.isSearching &&
+                      <Link
+                        to={routes.ride.new(query)}
+                        onClick={() => {
+                          dispatch(
+                            ridesActions.resetDraft({ date: new Date() })
+                          )
+                        }}
+                      >
+                        <Button className={styles.listFooterButton}>
+                          Create Ride Listing
+                        </Button>
+                      </Link>}
+              </footer>
+            : <footer>
+                <p className={styles.listFooterText}>
+                  We couldn't find any matches on Google Maps for your
+                  {!hasDepartSearchSuggestions && " departure location "}
+                  {!(
+                    hasDepartSearchSuggestions || hasArriveSearchSuggestions
+                  ) && " or "}
+                  {!hasArriveSearchSuggestions && " destination "}
+                  search.
+                </p>
+                <p className={styles.listFooterText}>
+                  Make sure you spelled the address or search correctly.
+                </p>
+
+                {!hasDepartSearchSuggestions
+                  ? <Button
+                      className={styles.listFooterButton}
+                      onClick={() => {
+                        const input = document.getElementById(
+                          ids.RIDE_DEPART_SEARCH_INPUT
+                        ) as HTMLInputElement
+
+                        input.select()
+                      }}
+                    >
+                      Edit Departure Location
+                    </Button>
+                  : <Button
+                      className={styles.listFooterButton}
+                      onClick={() => {
+                        const input = document.getElementById(
+                          ids.RIDE_ARRIVE_SEARCH_INPUT
+                        ) as HTMLInputElement
+
+                        input.select()
+                      }}
+                    >
+                      Edit Destination
+                    </Button>}
+              </footer>}
+        </section>
       </main>
 
       <footer className={styles.navFooter}>
-        <Nav ridesPath={location.pathname} />
+        <Nav ridesPath={props.location.pathname} />
       </footer>
     </div>
   )
 }
 
-export default withConnect(RideListPage)
+export default withController(RideListPage)

@@ -23,20 +23,54 @@ import React from "react"
 import { Link } from "react-router-dom"
 import classnames from "classnames"
 
-import Ride, { Props as RideProps } from "./Ride"
+import RideSection from "./RideSection"
+
+import { formatDateShort, formatTime } from "../util/format"
 
 import styles from "./RideListItem.sass"
 
-export interface Props extends RideProps {
+import RightChevronSVG from "../drawables/right-chevron.svg"
+import MapMarkerSVG from "../drawables/map-marker.svg"
+
+export interface Props {
   uri: string
+  departLocation: string
+  departDateTime: Date
+  arriveLocation: string
+  arriveDateTime: Date
   isLast?: boolean
 }
 
 function RideListItem({ uri, isLast = false, ...props }: Props) {
+  const departureDate = formatDateShort(props.departDateTime)
+  const departureTime = formatTime(props.departDateTime)
+  const departureDateTime = `${departureDate} ${departureTime}`
+
+  const arrivalDate = formatDateShort(props.arriveDateTime)
+  const arrivalTime = formatTime(props.arriveDateTime)
+  const arrivalDateTime =
+    departureDate === arrivalDate
+      ? arrivalTime
+      : `${arrivalDate} ${arrivalTime}`
+
   return (
     <li className={classnames(styles.listItem, isLast && styles.last)}>
       <Link to={uri} className={styles.link}>
-        <Ride {...props} />
+        <article className={styles.ride}>
+          <RideSection
+            className={styles.departure}
+            icon={<MapMarkerSVG />}
+            location={props.departLocation}
+            dateTime={departureDateTime}
+          />
+          <RightChevronSVG className={styles.rightChevron} />
+          <RideSection
+            className={styles.arrival}
+            icon={<MapMarkerSVG />}
+            location={props.arriveLocation}
+            dateTime={arrivalDateTime}
+          />
+        </article>
       </Link>
     </li>
   )

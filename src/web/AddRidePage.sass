@@ -1,0 +1,153 @@
+/**
+ * AddRidePage.sass
+ *
+ * Created by Zander Otavka on 8/7/17.
+ * Copyright (C) 2016  Grinnell AppDev.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "style/colors"
+@import "style/layout"
+@import "style/animations"
+
+.page
+  +fullbleed
+  display: flex
+  flex-direction: column
+
+.header
+  height: 56px
+  display: flex
+  flex-direction: row
+  align-items: center
+  padding-left: 16px
+  color: $off-white
+  font-size: 18px
+
+  button
+    color: inherit !important
+
+  .request &
+    background: $primary-yellow
+
+  .offer &
+    background: $primary-green
+
+.backIcon
+  width: 24px !important
+
+.headerTitle
+  margin-left: 20px
+  flex: 1
+
+.createButton
+  height: 100%
+
+.main
+  --dropdown-color-primary: var(--primary-color)
+  --color-text: $grey1
+
+  flex: 1
+
+  .request &
+    --primary-color: $primary-yellow
+
+  .offer &
+    --primary-color: $primary-green
+
+.dateTimeDialog
+  --datepicker-primary-color: var(--primary-color)
+  --calendar-primary-color: var(--primary-color)
+  --timepicker-primary-color: var(--primary-color)
+  --clock-primary-color: var(--primary-color)
+  --dropdown-color-primary: var(--primary-color)
+
+  &.request
+    --primary-color: $primary-yellow
+
+  &.offer
+    --primary-color: $primary-green
+
+.extraFields
+  border-top: 1px solid $light-grey1
+  background: $off-white
+
+.seatCount
+  display: inline-flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+  position: relative
+  width: 72px
+  height: 72px
+  background: $off-white
+  color: $grey1
+  padding: 12px
+
+  &::after
+    content: ""
+    display: block
+    position: absolute
+    top: 12px
+    right: 0
+    bottom: 12px
+    left: 0
+    pointer-events: none
+    border-right: 1px solid $light-grey1
+
+.seatCountInput
+  position: relative
+  width: 32px
+  height: 32px
+  font-size: 24px
+  background: none
+  border: none
+  border-bottom: 1px solid $light-grey1
+  text-align: center
+  outline: none
+  color: inherit
+
+  &::placeholder
+    color: $grey3
+
+  &:focus
+    .request &
+      border-bottom: 1px solid $primary-yellow
+
+    .offer &
+      border-bottom: 1px solid $primary-green
+
+.seatCountLabel
+  margin: 0
+  text-transform: uppercase
+  font-size: 10px
+
+.errorPanel
+  padding: 16px
+  display: flex
+  flex-direction: column
+  align-items: center
+
+.errorPanelHeading
+  margin: 0
+  font-size: 20px
+  font-weight: normal
+  font-style: italic
+
+.errorPanelText
+  margin: 16px 0 0 0
+
+.footer
+  background-color: $off-white

@@ -1,7 +1,7 @@
 /**
- * @file Dependencies.ts
+ * @file pick.ts
  *
- * Created by Zander Otavka on 8/7/17.
+ * Created by Zander Otavka on 8/14/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,9 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// <reference types="googlemaps" />
+import pick from "lodash/pick"
+import { RideSearchModel } from "../store/rides"
 
-export default interface Dependencies {
-  getPlacesAPI: () => Promise<typeof google.maps.places>
-  poweredByGoogleNode: HTMLDivElement
+export function pickSearch(query: any): RideSearchModel {
+  return {
+    mode: "request",
+    ...pick(query, ["mode", "departSearch", "arriveSearch"]),
+  }
 }

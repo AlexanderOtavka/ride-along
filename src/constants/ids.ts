@@ -1,7 +1,7 @@
 /**
- * @file Dependencies.ts
+ * @file ids.ts
  *
- * Created by Zander Otavka on 8/7/17.
+ * Created by Zander Otavka on 8/18/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,9 +19,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// <reference types="googlemaps" />
-
-export default interface Dependencies {
-  getPlacesAPI: () => Promise<typeof google.maps.places>
-  poweredByGoogleNode: HTMLDivElement
-}
+export const RIDE_DEPART_SEARCH_INPUT = "ride-depart-search-input"
+export const RIDE_ARRIVE_SEARCH_INPUT = "ride-depart-arrive-input"

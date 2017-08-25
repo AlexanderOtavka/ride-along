@@ -52,15 +52,6 @@ const publicUrl = publicPath.slice(0, -1)
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl)
 
-// Assert this just to be safe.
-// Development builds of React are slow and not intended for production.
-if (
-  isProduction &&
-  env.stringified["process.env"].NODE_ENV !== '"production"'
-) {
-  throw new Error("Production builds must have NODE_ENV=production.")
-}
-
 // Note: defined here because it will be used more than once.
 const cssFilename = "static/css/[name].[contenthash:8].css"
 
@@ -362,11 +353,12 @@ export default {
             analyzerMode: "static",
             reportFilename: path.join(paths.report, "bundle-analyzer.html"),
           }),
-          // Move modules shared by all async children of main into a seperate chunk
+          // Move modules shared by enough children of main back into main
           new webpack.optimize.CommonsChunkPlugin({
             name: "main",
             children: true,
-            async: "commons",
+            // Tweak this number for optimal chunking
+            minChunks: 3,
           }),
           // Minify the code.
           new webpack.optimize.UglifyJsPlugin({
@@ -428,6 +420,8 @@ export default {
           }),
         ]
       : [
+          // Merge all chunks together so vscode debugger works.
+          new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
           // This is necessary to emit hot updates (currently CSS only):
           new webpack.HotModuleReplacementPlugin(),
           // Watcher doesn't work well if you mistype casing in a path so we use
@@ -459,5 +453,7 @@ export default {
   // cumbersome.
   performance: {
     hints: isProduction ? "warning" : false,
+    maxAssetSize: 300 * 1000,
+    maxEntrypointSize: 450 * 1000,
   },
 }

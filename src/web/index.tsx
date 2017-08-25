@@ -23,39 +23,70 @@ import React from "react"
 import { render } from "react-dom"
 import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
+import * as firebase from "firebase/app"
 
 import App from "./App"
-
-import configureStore, { Dependencies as StoreDependencies } from "../store"
-
 import registerServiceWorker from "./registerServiceWorker"
+
+import configureStore from "../store"
 
 import "./index.sass"
 
+type Google = typeof google
+
 declare namespace window {
+  export const google: Google | undefined
   export let onPlacesAPILoad: () => void
 }
 
-const store = configureStore()
-const deps: StoreDependencies = {
-  getPlacesAPI: () =>
-    new Promise(resolve => {
-      if (google.maps.places) {
-        resolve(google.maps.places)
-      } else {
-        window.onPlacesAPILoad = () => resolve(google.maps.places)
+const poweredByGoogleNode = document.createElement("div")
+const placesAPIPromise = new Promise<typeof google.maps.places>(resolve => {
+  if (window.google) {
+    resolve(window.google.maps.places)
+  } else {
+    window.onPlacesAPILoad = () => {
+      if (window.google) {
+        resolve(window.google.maps.places)
       }
-    }),
-}
+    }
+  }
+})
 
-store.runPersistentSaga(deps)
+const firebaseAPIKey = process.env.REACT_APP_FIREBASE_API_KEY
+const firebaseProjectID = process.env.REACT_APP_FIREBASE_PROJECT_ID
+firebase.initializeApp({
+  apiKey: firebaseAPIKey,
+  projectId: firebaseProjectID,
+  authDomain: `${firebaseProjectID}.firebaseapp.com`,
+  databaseURL: `https://${firebaseProjectID}.firebaseio.com`,
+  storageBucket: `${firebaseProjectID}.appspot.com`,
+})
+
+const firebaseDatabasePromise = import(/* webpackChunkName: "firebase-database" */ "firebase/database").then(
+  () => firebase.database()
+)
+
+const store = configureStore({
+  placesServicePromise: placesAPIPromise.then(
+    places => new places.PlacesService(poweredByGoogleNode)
+  ),
+  autocompleteServicePromise: placesAPIPromise.then(
+    places => new places.AutocompleteService()
+  ),
+  placesServiceStatusPromise: placesAPIPromise.then(
+    places => places.PlacesServiceStatus
+  ),
+  ridesListRefPromise: firebaseDatabasePromise.then(database =>
+    database.ref("ridesList")
+  ),
+})
 
 registerServiceWorker()
 
 render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <App poweredByGoogleNode={poweredByGoogleNode} />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

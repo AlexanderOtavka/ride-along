@@ -23,13 +23,26 @@ import React from "react"
 import { Route, Switch } from "react-router-dom"
 import { asyncComponent } from "react-async-component"
 
+import * as routes from "../constants/routes"
+
 import styles from "./App.sass"
 
-export interface Props {}
+export interface Props {
+  poweredByGoogleNode?: HTMLDivElement
+}
 
 const RideListPage = asyncComponent({
   resolve: () =>
     import(/* webpackChunkName: "RideListPage" */ "./RideListPage"),
+})
+
+const RideDetailPage = asyncComponent({
+  resolve: () =>
+    import(/* webpackChunkName: "RideDetailPage" */ "./RideDetailPage"),
+})
+
+const AddRidePage = asyncComponent({
+  resolve: () => import(/* webpackChunkName: "AddRidePage" */ "./AddRidePage"),
 })
 
 const Nav = asyncComponent({
@@ -38,9 +51,27 @@ const Nav = asyncComponent({
 
 function App(props: Props) {
   return (
-    <div className={styles.app}>
+    <div
+      className={styles.app}
+      ref={el => {
+        if (el && props.poweredByGoogleNode) {
+          // TODO: make this actually show
+          el.appendChild(props.poweredByGoogleNode)
+        }
+      }}
+    >
       <Switch>
-        <Route exact path="/(search)?" component={RideListPage} />
+        <Route
+          exact
+          path={routes.ridesList.matchPath}
+          component={RideListPage}
+        />
+        <Route exact path={routes.ride.new()} component={AddRidePage} />
+        <Route
+          exact
+          path={routes.ride.detail(":id")}
+          component={RideDetailPage}
+        />
         <Route render={() => <Nav />} />
       </Switch>
     </div>

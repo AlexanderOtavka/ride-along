@@ -1,10 +1,9 @@
 /**
- * @file Dependencies.ts
+ * DateTimeField.sass
  *
- * Created by Zander Otavka on 8/7/17.
+ * Created by Zander Otavka on 8/16/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
- * @license
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -19,9 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// <reference types="googlemaps" />
+@import "style/colors"
 
-export default interface Dependencies {
-  getPlacesAPI: () => Promise<typeof google.maps.places>
-  poweredByGoogleNode: HTMLDivElement
-}
+.fieldset
+  display: flex
+  flex-direction: row
+  margin: 0 -8px
+  padding: 0
+  border: none
+
+  & > *
+    margin: 8px
+
+.input
+  padding: 0
+
+.inputElement
+  border-bottom: 1px solid $light-grey2
+  line-height: 20px

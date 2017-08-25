@@ -41,21 +41,19 @@
   &.isSearchMode
     transform: translateY($header-slide-distance)
 
-.autocompleteList, .rideList
+.autocompleteList
   +fullbleed
 
   list-style-type: none
   margin: 0
   overflow-y: auto
-
-  .isSearchMode &
-    bottom: $header-slide-distance
-
-.autocompleteList
   background: $off-white
   z-index: 1
   padding: 16px 0
   text-align: left
+
+  .isSearchMode &
+    bottom: $header-slide-distance
 
 .autocompleteItem
   +touch-highlight
@@ -67,16 +65,26 @@
   overflow: hidden
   font-size: 18px
 
+.rideListWrapper
+  +fullbleed
+
+  overflow-y: auto
+  padding-bottom: 32px
+
+  .isSearchMode &
+    bottom: $header-slide-distance
+
 .rideList
   padding: 0
-  padding-bottom: 32px
+  list-style-type: none
+  margin: 0
 
 .listFooterText
   font-size: 14px
   color: $grey2
   margin: 16px
 
-.addRideButton
+.listFooterButton
   background-color: $off-white !important
 
   &:focus

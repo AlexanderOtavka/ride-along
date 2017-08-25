@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RideListHandler when in search mode with values={"mode":"offer","arriveLocation":"bar"} 1`] = `
+exports[`RideListHandler when in search mode with values={"mode":"offer","arriveSearch":"bar"} 1`] = `
 <header
   className="header offer"
 >
@@ -19,8 +19,10 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","arrive
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -79,6 +81,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","arrive
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -100,7 +103,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","arrive
 </header>
 `;
 
-exports[`RideListHandler when in search mode with values={"mode":"offer","departLocation":"foo","arriveLocation":"bar"} 1`] = `
+exports[`RideListHandler when in search mode with values={"mode":"offer","departSearch":"foo","arriveSearch":"bar"} 1`] = `
 <header
   className="header offer"
 >
@@ -119,8 +122,10 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","depart
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -165,6 +170,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer","depart
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -205,8 +211,10 @@ exports[`RideListHandler when in search mode with values={"mode":"offer"} 1`] = 
           autoFocus={true}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -265,6 +273,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer"} 1`] = 
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -286,7 +295,7 @@ exports[`RideListHandler when in search mode with values={"mode":"offer"} 1`] = 
 </header>
 `;
 
-exports[`RideListHandler when in search mode with values={"mode":"request","departLocation":"foo"} 1`] = `
+exports[`RideListHandler when in search mode with values={"mode":"request","departSearch":"foo"} 1`] = `
 <header
   className="header request"
 >
@@ -305,8 +314,10 @@ exports[`RideListHandler when in search mode with values={"mode":"request","depa
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -351,6 +362,7 @@ exports[`RideListHandler when in search mode with values={"mode":"request","depa
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -391,8 +403,10 @@ exports[`RideListHandler when in search mode with values={"mode":"request"} 1`] 
           autoFocus={true}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           placeholder="Departure location"
@@ -451,6 +465,7 @@ exports[`RideListHandler when in search mode with values={"mode":"request"} 1`] 
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -491,8 +506,10 @@ exports[`RideListHandler when not in search mode with values={"mode":"offer"} 1`
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           type="submit"
@@ -591,6 +608,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"offer"} 1`
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -608,7 +626,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"offer"} 1`
 </header>
 `;
 
-exports[`RideListHandler when not in search mode with values={"mode":"request","departLocation":"foo","arriveLocation":"bar"} 1`] = `
+exports[`RideListHandler when not in search mode with values={"mode":"request","departSearch":"foo","arriveSearch":"bar"} 1`] = `
 <header
   className="header request"
 >
@@ -627,8 +645,10 @@ exports[`RideListHandler when not in search mode with values={"mode":"request","
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           type="submit"
@@ -727,6 +747,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"request","
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}
@@ -763,8 +784,10 @@ exports[`RideListHandler when not in search mode with values={"mode":"request"} 
           autoFocus={false}
           className="input"
           disabled={false}
+          id="ride-depart-search-input"
           onBlur={[Function]}
           onChange={[Function]}
+          onKeyPress={[Function]}
           onMouseDown={[Function]}
           onTouchStart={[Function]}
           type="submit"
@@ -863,6 +886,7 @@ exports[`RideListHandler when not in search mode with values={"mode":"request"} 
         <input
           className="input"
           disabled={false}
+          id="ride-depart-arrive-input"
           onBlur={[Function]}
           onChange={[Function]}
           onMouseDown={[Function]}

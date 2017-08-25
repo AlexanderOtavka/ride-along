@@ -1,7 +1,7 @@
 /**
- * @file Dependencies.ts
+ * @file react-display-name.d.ts
  *
- * Created by Zander Otavka on 8/7/17.
+ * Created by Zander Otavka on 8/14/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// <reference types="googlemaps" />
+declare module "react-display-name" {
+  import { ComponentType } from "react"
 
-export default interface Dependencies {
-  getPlacesAPI: () => Promise<typeof google.maps.places>
-  poweredByGoogleNode: HTMLDivElement
+  const _default: (Component: ComponentType) => string
+  export default _default
 }

@@ -21,18 +21,20 @@
 
 import { createStore, combineReducers, applyMiddleware } from "redux"
 import { composeWithDevTools } from "redux-devtools-extension"
-import createSagaMiddleware, { SagaIterator } from "redux-saga"
-import { all, call } from "redux-saga/effects"
+import { createEpicMiddleware, combineEpics } from "redux-observable"
+import { Action } from "typescript-fsa"
 
-import { RidesModel, ridesReducer } from "./rides"
+import { RidesModel, ridesReducer, ridesEpic, RidesDependencies } from "./rides"
 import {
   AutocompleteModel,
   autocompleteReducer,
-  autocompletePersistentSaga,
+  autocompleteEpic,
+  AutocompleteDependencies,
 } from "./autocomplete"
-import Dependencies from "./Dependencies"
 
-export { Dependencies }
+export interface Dependencies
+  extends RidesDependencies,
+    AutocompleteDependencies {}
 
 export interface StateModel {
   readonly rides: RidesModel
@@ -47,22 +49,19 @@ const reducer = combineReducers<StateModel>({
   autocomplete: autocompleteReducer,
 })
 
-function* persistentSaga(deps: Dependencies): SagaIterator {
-  yield all([call(autocompletePersistentSaga, deps)])
-}
+const epic = combineEpics<Action<any>, StateModel, Dependencies>(
+  ridesEpic,
+  autocompleteEpic
+)
 
-export default function configureStore(initialState: StateModel | null = null) {
-  const sagaMiddleware = createSagaMiddleware()
-  const enhancer = composeWithDevTools(applyMiddleware(sagaMiddleware))
+export default function configureStore(
+  dependencies: Dependencies,
+  initialState?: StateModel
+) {
+  const epicMiddleware = createEpicMiddleware(epic, { dependencies })
+  const enhancer = composeWithDevTools(applyMiddleware(epicMiddleware))
 
-  const store =
-    initialState !== null
-      ? createStore<StateModel>(reducer, initialState, enhancer)
-      : createStore<StateModel>(reducer, enhancer)
-
-  const runPersistentSaga = (deps: Dependencies) => {
-    sagaMiddleware.run(persistentSaga, deps)
-  }
-
-  return { ...store, runPersistentSaga }
+  return initialState !== undefined
+    ? createStore<StateModel>(reducer, initialState, enhancer)
+    : createStore<StateModel>(reducer, enhancer)
 }

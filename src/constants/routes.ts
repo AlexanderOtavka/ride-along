@@ -19,11 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export const rides = {
-  root: (mode?: "request" | "offer") => (mode ? `/?mode=${mode}` : ""),
-  search: "/search",
+import querystring from "querystring"
+
+import { RideSearchModel } from "../store/rides"
+
+const stringifyQuery = (query?: { [key: string]: any }) =>
+  query ? "?" + querystring.stringify(query) : ""
+
+export const ridesList = {
+  root: (mode?: "request" | "offer") => (mode ? `/?mode=${mode}` : "/"),
+  search: (query?: RideSearchModel) => "/search" + stringifyQuery(query),
   matchPath: "/(search)?",
-  ride: (uid: string) => `/rides/${uid}`,
+}
+
+export const ride = {
+  root: "/rides",
+  detail: (id: string) => `/rides/${id}`,
+  new: (query?: RideSearchModel) => "/rides/new" + stringifyQuery(query),
 }
 
 export const profile = {

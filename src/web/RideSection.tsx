@@ -1,7 +1,7 @@
 /**
- * @file App.test.tsx
+ * @file RideSection.tsx
  *
- * Created by Zander Otavka on 6/2/17.
+ * Created by Zander Otavka on 8/9/17.
  * Copyright (C) 2016  Grinnell AppDev.
  *
  * @license
@@ -20,29 +20,33 @@
  */
 
 import React from "react"
-import { render } from "react-dom"
-import { MemoryRouter } from "react-router-dom"
-import { Provider } from "react-redux"
+import classnames from "classnames"
 
-import App from "./App"
+import styles from "./RideSection.sass"
 
-import configureStore from "../store"
+export interface Props {
+  icon: React.ReactChild
+  location: React.ReactChild
+  dateTime: React.ReactChild
+  className?: string
+}
 
-it("renders without crashing", () => {
-  const div = document.createElement("div")
-  const store = configureStore({
-    placesServicePromise: Promise.resolve<any>({}),
-    autocompleteServicePromise: Promise.resolve<any>({}),
-    placesServiceStatusPromise: Promise.resolve<any>({}),
-    ridesListRefPromise: Promise.resolve<any>({}),
-  })
-
-  render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    </Provider>,
-    div
+function RideSection(props: Props) {
+  return (
+    <section className={classnames(styles.section, props.className)}>
+      <div className={styles.iconCircle}>
+        {props.icon}
+      </div>
+      <div className={styles.text}>
+        <h2 className={styles.location}>
+          {props.location}
+        </h2>
+        <div className={styles.dateTime}>
+          {props.dateTime}
+        </div>
+      </div>
+    </section>
   )
-})
+}
+
+export default RideSection
