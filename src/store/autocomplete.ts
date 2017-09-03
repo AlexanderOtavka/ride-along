@@ -31,12 +31,13 @@ import "rxjs/add/operator/filter"
 import "rxjs/add/operator/map"
 import "rxjs/add/operator/mergeMap"
 import "rxjs/add/operator/catch"
-import "rxjs/add/operator/debounceTime"
+import "rxjs/add/operator/let"
 
 import { RideSearchFields } from "./rides"
 import { StateModel } from "./index"
 
 import createTypeChecker from "../util/createTypeChecker"
+import bufferedThrottleTime from "../util/bufferedThrottleTime"
 
 /// <reference types="googlemaps" />
 type AutocompleteService = google.maps.places.AutocompleteService
@@ -121,7 +122,7 @@ export function autocompleteEpic(
 ) {
   return actionsObservable
     .filter(createTypeChecker(autocompleteActions.getList.started))
-    .debounceTime(500)
+    .let(bufferedThrottleTime(1000))
     .flatMap(({ payload }) =>
       Observable.zip(
         autocompleteServicePromise,
