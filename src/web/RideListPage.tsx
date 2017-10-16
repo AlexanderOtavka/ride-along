@@ -366,102 +366,97 @@ function RideListPage({
       <main
         className={classnames(styles.main, isSearchMode && styles.isSearchMode)}
       >
-        <section className={styles.rideListWrapper}>
-          <ul className={styles.rideList}>
-            {props.rideList.map(({ id, ...ride }, i) =>
-              <RideListItem
-                {...ride}
-                key={id}
-                uri={routes.ride.detail(id)}
-                isLast={i === props.rideList.length - 1}
-              />
-            )}
-          </ul>
+        <ul className={styles.rideList}>
+          {props.rideList.map(({ id, ...ride }, i) =>
+            <RideListItem
+              {...ride}
+              key={id}
+              uri={routes.ride.detail(id)}
+              isLast={i === props.rideList.length - 1}
+            />
+          )}
+        </ul>
 
-          {(hasDepartSearchSuggestions && hasArriveSearchSuggestions) ||
-          props.isSearching
-            ? <footer>
-                <p className={styles.listFooterText}>
-                  Don't see what you're looking for?
-                </p>
+        {(hasDepartSearchSuggestions && hasArriveSearchSuggestions) ||
+        props.isSearching
+          ? <footer>
+              <p className={styles.listFooterText}>
+                Don't see what you're looking for?
+              </p>
 
-                {!query.departSearch
+              {!query.departSearch
+                ? <Button
+                    className={styles.listFooterButton}
+                    onClick={() => {
+                      document.getElementById(
+                        ids.RIDE_DEPART_SEARCH_INPUT
+                      )!.focus()
+                    }}
+                  >
+                    Add Departure Location
+                  </Button>
+                : !query.arriveSearch
                   ? <Button
                       className={styles.listFooterButton}
                       onClick={() => {
                         document.getElementById(
-                          ids.RIDE_DEPART_SEARCH_INPUT
+                          ids.RIDE_ARRIVE_SEARCH_INPUT
                         )!.focus()
                       }}
                     >
-                      Add Departure Location
+                      Add Destination
                     </Button>
-                  : !query.arriveSearch
-                    ? <Button
-                        className={styles.listFooterButton}
-                        onClick={() => {
-                          document.getElementById(
-                            ids.RIDE_ARRIVE_SEARCH_INPUT
-                          )!.focus()
-                        }}
-                      >
-                        Add Destination
+                  : !props.isSearching &&
+                    <Link
+                      to={routes.ride.new(query)}
+                      onClick={() => {
+                        dispatch(ridesActions.resetDraft({ date: new Date() }))
+                      }}
+                    >
+                      <Button className={styles.listFooterButton}>
+                        Create Ride Listing
                       </Button>
-                    : !props.isSearching &&
-                      <Link
-                        to={routes.ride.new(query)}
-                        onClick={() => {
-                          dispatch(
-                            ridesActions.resetDraft({ date: new Date() })
-                          )
-                        }}
-                      >
-                        <Button className={styles.listFooterButton}>
-                          Create Ride Listing
-                        </Button>
-                      </Link>}
-              </footer>
-            : <footer>
-                <p className={styles.listFooterText}>
-                  We couldn't find any matches on Google Maps for your
-                  {!hasDepartSearchSuggestions && " departure location "}
-                  {!(
-                    hasDepartSearchSuggestions || hasArriveSearchSuggestions
-                  ) && " or "}
-                  {!hasArriveSearchSuggestions && " destination "}
-                  search.
-                </p>
-                <p className={styles.listFooterText}>
-                  Make sure you spelled the address or search correctly.
-                </p>
+                    </Link>}
+            </footer>
+          : <footer>
+              <p className={styles.listFooterText}>
+                We couldn't find any matches on Google Maps for your
+                {!hasDepartSearchSuggestions && " departure location "}
+                {!(hasDepartSearchSuggestions || hasArriveSearchSuggestions) &&
+                  " or "}
+                {!hasArriveSearchSuggestions && " destination "}
+                search.
+              </p>
+              <p className={styles.listFooterText}>
+                Make sure you spelled the address or search correctly.
+              </p>
 
-                {!hasDepartSearchSuggestions
-                  ? <Button
-                      className={styles.listFooterButton}
-                      onClick={() => {
-                        const input = document.getElementById(
-                          ids.RIDE_DEPART_SEARCH_INPUT
-                        ) as HTMLInputElement
+              {!hasDepartSearchSuggestions
+                ? <Button
+                    className={styles.listFooterButton}
+                    onClick={() => {
+                      const input = document.getElementById(
+                        ids.RIDE_DEPART_SEARCH_INPUT
+                      ) as HTMLInputElement
 
-                        input.select()
-                      }}
-                    >
-                      Edit Departure Location
-                    </Button>
-                  : <Button
-                      className={styles.listFooterButton}
-                      onClick={() => {
-                        const input = document.getElementById(
-                          ids.RIDE_ARRIVE_SEARCH_INPUT
-                        ) as HTMLInputElement
+                      input.select()
+                    }}
+                  >
+                    Edit Departure Location
+                  </Button>
+                : <Button
+                    className={styles.listFooterButton}
+                    onClick={() => {
+                      const input = document.getElementById(
+                        ids.RIDE_ARRIVE_SEARCH_INPUT
+                      ) as HTMLInputElement
 
-                        input.select()
-                      }}
-                    >
-                      Edit Destination
-                    </Button>}
-              </footer>}
-        </section>
+                      input.select()
+                    }}
+                  >
+                    Edit Destination
+                  </Button>}
+            </footer>}
       </main>
 
       <footer className={styles.navFooter}>
