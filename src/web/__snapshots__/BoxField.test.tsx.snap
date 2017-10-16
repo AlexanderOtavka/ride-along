@@ -2,10 +2,10 @@
 
 exports[`BoxField when it is a date 1`] = `
 <div
-  className="boxField foo"
+  className="boxField"
 >
   <input
-    className="input"
+    className="input foo"
     disabled={false}
     onBlur={[Function]}
     onChange={[Function]}
@@ -23,10 +23,10 @@ exports[`BoxField when it is a date 1`] = `
 
 exports[`BoxField when it is a submit 1`] = `
 <div
-  className="boxField foo"
+  className="boxField"
 >
   <input
-    className="input"
+    className="input foo"
     disabled={false}
     onMouseDown={[Function]}
     onTouchStart={[Function]}
@@ -41,10 +41,10 @@ exports[`BoxField when it is a submit 1`] = `
 
 exports[`BoxField with className 1`] = `
 <div
-  className="boxField foo"
+  className="boxField"
 >
   <input
-    className="input"
+    className="input foo"
     disabled={false}
     onBlur={[Function]}
     onChange={[Function]}
