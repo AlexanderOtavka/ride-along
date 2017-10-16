@@ -31,6 +31,7 @@ export interface Props extends React.HTMLProps<HTMLInputElement> {
   field: string
   type?: "text" | "date" | "submit"
   theme?: RippleTheme
+  rootProps?: React.HTMLProps<HTMLDivElement>
 }
 
 const withRipple = ripple({
@@ -44,7 +45,7 @@ const withRipple = ripple({
 function BoxField({
   field,
   type = "text",
-  className,
+  rootProps,
   placeholder,
   value,
   theme,
@@ -66,11 +67,14 @@ function BoxField({
   }
 
   return (
-    <div className={classnames(styles.boxField, className)}>
+    <div
+      {...rootProps}
+      className={classnames(styles.boxField, rootProps && rootProps.className)}
+    >
       {type === "submit"
         ? <input
             {...props}
-            className={styles.input}
+            className={classnames(styles.input, props.className)}
             type="submit"
             value={placeholder}
             onMouseDown={handleMouseDown}
@@ -81,7 +85,7 @@ function BoxField({
               <input
                 {...props}
                 type={type}
-                className={styles.input}
+                className={classnames(styles.input, props.className)}
                 placeholder={placeholder}
                 value={getValue("")}
                 onChange={ev => {

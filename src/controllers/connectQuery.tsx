@@ -30,26 +30,29 @@ export interface QueryComponentProps<TRouteParams, TQuery>
   setQuery: (newQuery: any) => void
 }
 
-export default function connectQuery<TQuery extends {}>(
-  pick: (query: any) => TQuery
-) {
-  return <TRouteParams extends {}>(
+export default function connectQuery<
+  TQuery,
+  TRouteParams,
+  TProps extends RouteComponentProps<TRouteParams>
+>(pick: (query: any, props: TProps) => TQuery) {
+  return (
     Component: React.ComponentType<QueryComponentProps<TRouteParams, TQuery>>
   ) =>
-    class ConnectQuery extends React.Component<
-      RouteComponentProps<TRouteParams>
-    > {
+    class ConnectQuery extends React.Component<TProps> {
       static displayName = `ConnectQuery(${getDisplayName(Component)})`
 
       setQuery = (newQuery: any) => {
-        this.props.history.replace("?" + querystring.stringify(pick(newQuery)))
+        this.props.history.replace(
+          "?" + querystring.stringify(pick(newQuery, this.props))
+        )
       }
 
       render() {
         const query = pick(
           querystring.parse(
             this.props.location.search.substring(1) // chop off the leading ?
-          )
+          ),
+          this.props
         )
 
         return (

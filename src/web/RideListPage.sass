@@ -31,26 +31,44 @@
   overflow: hidden
   z-index: 0
 
-.main
+.header
   position: relative
-  z-index: 0
-  transition: transform $header-slide-timing
-  flex: 1
-  text-align: center
+  z-index: 1
 
-  &.isSearchMode
-    transform: translateY($header-slide-distance)
+.headerBottom, .headerTop
+  display: flex
+  padding: 16px
+
+.headerTop
+  position: relative
+  flex-direction: row
+  align-items: center
+  z-index: 1
+  transition: background $touch-effect-timing
+
+  .request &
+    background-color: $primary-yellow
+
+  .offer &
+    background-color: $primary-green
+
+.fieldWrapper
+  display: flex
+  flex-grow: 1
+  position: relative
 
 .autocompleteList
-  +fullbleed
-
+  position: absolute
+  top: 100%
+  left: 0
+  right: 0
   list-style-type: none
   margin: 0
-  overflow-y: auto
   background: $off-white
   z-index: 1
-  padding: 16px 0
+  padding: 8px 0
   text-align: left
+  box-shadow: $shadow1
 
   .isSearchMode &
     bottom: $header-slide-distance
@@ -64,6 +82,67 @@
   text-overflow: ellipsis
   overflow: hidden
   font-size: 18px
+
+  &.highlighted
+    background-color: $light-grey2
+
+.downChevron
+  position: absolute
+  top: 0
+  right: 0
+  left: 0
+  width: 100%
+
+  .request &
+    fill: $primary-yellow
+
+  .offer &
+    fill: $primary-green
+
+.headerBottom
+  position: absolute
+  right: 0
+  bottom: 0
+  left: 0
+  flex-direction: column
+  padding-top: 32px
+  z-index: 0
+  transition: transform $header-slide-timing
+
+  &.inSearchMode
+    transform: translateY($header-slide-distance)
+
+  .request &
+    background-color: darken($primary-yellow, 10%)
+
+  .offer &
+    background-color: darken($primary-green, 10%)
+
+.modeSwitch
+  display: flex
+  flex-direction: row
+  margin-left: 16px
+
+.closeButton
+  margin-right: 10px
+  margin-left: 26px
+
+.closeIcon
+  fill: $off-white !important
+  width: 28px !important
+
+.closeRipple
+  background-color: $off-white
+
+.main
+  position: relative
+  z-index: 0
+  transition: transform $header-slide-timing
+  flex: 1
+  text-align: center
+
+  &.isSearchMode
+    transform: translateY($header-slide-distance)
 
 .rideListWrapper
   +fullbleed

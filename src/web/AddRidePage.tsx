@@ -20,7 +20,7 @@
  */
 
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, RouteComponentProps } from "react-router-dom"
 import { Button, IconButton } from "react-toolbox/lib/button"
 import classnames from "classnames"
 import { Form, FormField } from "react-form"
@@ -59,10 +59,12 @@ interface DispatchProps extends DispatchProp<StateModel> {}
 
 export interface Props extends QueryComponentProps<{}, Query> {}
 
-type AllProps = Readonly<StateProps & DispatchProps & Props>
+interface SubProps extends QueryComponentProps<{}, Query> {}
+
+type AllProps = Readonly<StateProps & DispatchProps & SubProps>
 
 const withController = compose(
-  connectQuery(pickSearch),
+  connectQuery<Query, {}, RouteComponentProps<{}>>(query => pickSearch(query)),
   connectRedux<StateProps, DispatchProps, Props>(({ rides }: StateModel) => ({
     departSuggestions: rides.departSuggestions,
     arriveSuggestions: rides.arriveSuggestions,

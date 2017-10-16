@@ -21,6 +21,7 @@
 
 import { Action, isType, ActionCreator } from "typescript-fsa"
 
+// TODO: remove this in favor of actionCreator.match
 export default function createTypeChecker<T>(actionCreator: ActionCreator<T>) {
   return (action: Action<any>): action is Action<T> =>
     isType(action, actionCreator)

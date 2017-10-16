@@ -22,9 +22,12 @@
 import pick from "lodash/pick"
 import { RideSearchModel } from "../store/rides"
 
-export function pickSearch(query: any): RideSearchModel {
+export function pickSearch(query: any, isSearchMode = true): RideSearchModel {
   return {
     mode: "request",
-    ...pick(query, ["mode", "departSearch", "arriveSearch"]),
+    ...pick(
+      query,
+      isSearchMode ? ["mode", "departSearch", "arriveSearch"] : ["mode"]
+    ),
   }
 }
