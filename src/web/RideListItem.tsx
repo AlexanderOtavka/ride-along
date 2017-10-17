@@ -22,15 +22,25 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import classnames from "classnames"
+import { compose } from "redux"
+import { connect as connectRedux, DispatchProp } from "react-redux"
 
 import RideSection from "./RideSection"
 
 import { formatDateShort, formatTime } from "../util/format"
+import { StateModel } from "../store/index"
 
 import styles from "./RideListItem.sass"
 
 import RightChevronSVG from "../drawables/right-chevron.svg"
 import MapMarkerSVG from "../drawables/map-marker.svg"
+
+interface StateProps {
+  departLocationName: string
+  arriveLocationName: string
+}
+
+interface DispatchProps extends DispatchProp<StateModel> {}
 
 export interface Props {
   uri: string
@@ -41,7 +51,26 @@ export interface Props {
   isLast?: boolean
 }
 
-function RideListItem({ uri, isLast = false, ...props }: Props) {
+type AllProps = StateProps & DispatchProps & Props
+
+const withController = compose(
+  connectRedux<
+    StateProps,
+    DispatchProps,
+    Props
+  >(({ rides }: StateModel, props) => ({
+    departLocationName:
+      !!props && props.departLocation in rides.locations
+        ? rides.locations[props.departLocation].name
+        : "Loading...",
+    arriveLocationName:
+      !!props && props.arriveLocation in rides.locations
+        ? rides.locations[props.arriveLocation].name
+        : "Loading...",
+  }))
+)
+
+function RideListItem({ uri, isLast = false, ...props }: AllProps) {
   const departureDate = formatDateShort(props.departDateTime)
   const departureTime = formatTime(props.departDateTime)
   const departureDateTime = `${departureDate} ${departureTime}`
@@ -60,14 +89,14 @@ function RideListItem({ uri, isLast = false, ...props }: Props) {
           <RideSection
             className={styles.departure}
             icon={<MapMarkerSVG />}
-            location={props.departLocation}
+            location={props.departLocationName}
             dateTime={departureDateTime}
           />
           <RightChevronSVG className={styles.rightChevron} />
           <RideSection
             className={styles.arrival}
             icon={<MapMarkerSVG />}
-            location={props.arriveLocation}
+            location={props.arriveLocationName}
             dateTime={arrivalDateTime}
           />
         </article>
@@ -76,4 +105,4 @@ function RideListItem({ uri, isLast = false, ...props }: Props) {
   )
 }
 
-export default RideListItem
+export default withController(RideListItem)

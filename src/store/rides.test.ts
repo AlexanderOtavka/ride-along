@@ -63,6 +63,7 @@ describe("getDefaultLocation", () => {
 
 describe("ridesReducer", () => {
   const STATE: RidesModel = {
+    locations: {},
     list: [],
     isSearching: false,
     departSuggestions: [],

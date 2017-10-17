@@ -32,6 +32,8 @@ import "rxjs/add/observable/of"
 import "rxjs/add/observable/from"
 import "rxjs/add/observable/fromEvent"
 import "rxjs/add/observable/zip"
+import "rxjs/add/observable/merge"
+import "rxjs/add/observable/empty"
 import "rxjs/add/operator/filter"
 import "rxjs/add/operator/map"
 import "rxjs/add/operator/mergeMap"
@@ -51,6 +53,7 @@ export interface RidesDependencies {
   placesServicePromise: Promise<PlacesService>
   placesServiceStatusPromise: Promise<PlacesServiceStatusType>
   ridesListRefPromise: Promise<database.Reference>
+  locationsRefPromise: Promise<database.Reference>
 }
 
 // Models
@@ -76,7 +79,12 @@ export interface RideModel extends DraftModel {
   readonly id: string
 }
 
+export interface LocationMap {
+  readonly [id: string]: PlaceResult
+}
+
 export interface RidesModel {
+  readonly locations: LocationMap
   readonly list: ReadonlyArray<RideModel>
   readonly draft: DraftModel
   readonly isCreating: boolean
@@ -94,7 +102,10 @@ export namespace ridesActions {
   export type Added = RideModel
   export const added = actionCreator<Added>("ADDED")
 
-  export type FirebaseError = {}
+  export type LocationAdded = PlaceResult
+  export const locationReceived = actionCreator<LocationAdded>("LOCATION_ADDED")
+
+  export type FirebaseError = { message: string }
   export const firebaseError = actionCreator<FirebaseError>("FIREBASE_ERROR")
 
   export type LoadMore = {}
@@ -149,6 +160,7 @@ export function getDefaultLocation(
 }
 
 export const ridesReducer = reducerWithInitialState<RidesModel>({
+  locations: {},
   list: [],
   draft: {
     departLocation: "",
@@ -163,6 +175,13 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   departSuggestions: [],
   arriveSuggestions: [],
 })
+  .case(ridesActions.locationReceived, (state, payload) => ({
+    ...state,
+    locations: {
+      ...state.locations,
+      [payload.place_id]: payload,
+    },
+  }))
   .case(ridesActions.added, (state, payload) => ({
     ...state,
     list: [...state.list, payload],
@@ -224,20 +243,37 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
 // Epics
 
 export function getPlaceDetails(
+  locationsRef: database.Reference,
   service: PlacesService,
   Status: PlacesServiceStatusType,
-  placeId: string
+  placeId: string,
+  locations: LocationMap
 ) {
-  return new Observable<PlaceResult>(observer => {
-    service.getDetails({ placeId }, (result, status) => {
-      if (status === Status.OK) {
-        observer.next(result)
-        observer.complete()
-      } else {
-        observer.error(new Error(`Failed with status: ${status}`))
-      }
-    })
-  })
+  if (locations[placeId]) {
+    return Observable.of(locations[placeId])
+  } else {
+    return Observable.from(locationsRef.child(placeId).once("value"))
+      .map((snapshot: database.DataSnapshot) => {
+        if (snapshot.exists && snapshot.val() !== null) {
+          return snapshot.val() as PlaceResult
+        } else {
+          throw Error()
+        }
+      })
+      .catch(
+        () =>
+          new Observable<PlaceResult>(observer => {
+            service.getDetails({ placeId }, (result, status) => {
+              if (status === Status.OK) {
+                observer.next(result)
+                observer.complete()
+              } else {
+                observer.error(new Error(`Failed with status: ${status}`))
+              }
+            })
+          })
+      )
+  }
 }
 
 export function listEpic(
@@ -245,6 +281,7 @@ export function listEpic(
   store: MiddlewareAPI<StateModel>,
   {
     ridesListRefPromise,
+    locationsRefPromise,
     placesServicePromise,
     placesServiceStatusPromise,
   }: RidesDependencies
@@ -261,22 +298,35 @@ export function listEpic(
       id: snapshot.key || "",
     }))
     .flatMap(ride =>
-      Observable.zip(placesServicePromise, placesServiceStatusPromise)
-        .flatMap(([service, Status]) =>
-          Observable.zip(
-            // TODO: put these in firebase so we don't have to waste API calls
-            getPlaceDetails(service, Status, ride.departLocation),
-            getPlaceDetails(service, Status, ride.arriveLocation)
+      Observable.merge(
+        Observable.of(ridesActions.added(ride)),
+        Observable.zip(
+          locationsRefPromise,
+          placesServicePromise,
+          placesServiceStatusPromise
+        )
+          .flatMap(([locationsRef, service, Status]) =>
+            Observable.merge(
+              getPlaceDetails(
+                locationsRef,
+                service,
+                Status,
+                ride.departLocation,
+                store.getState().rides.locations
+              ).catch(() => Observable.empty<never>()),
+              getPlaceDetails(
+                locationsRef,
+                service,
+                Status,
+                ride.arriveLocation,
+                store.getState().rides.locations
+              ).catch(() => Observable.empty<never>())
+            )
           )
-        )
-        .map(([departPlace, arrivePlace]) =>
-          ridesActions.added({
-            ...ride,
-            departLocation: departPlace.name,
-            arriveLocation: arrivePlace.name,
-          })
-        )
-        .catch(err => Observable.of(ridesActions.firebaseError({ err })))
+          .map(location => ridesActions.locationReceived(location))
+      ).catch(error =>
+        Observable.of(ridesActions.firebaseError({ message: error.message }))
+      )
     )
 }
 
@@ -311,28 +361,26 @@ export function searchEpic(
     .filter(ridesActions.search.started.match)
     .debounceTime(500)
     .flatMap(({ payload }) =>
-      Observable.zip(
-        placesServicePromise,
-        placesServiceStatusPromise
-      ).flatMap(([service, Status]) =>
-        Observable.zip(
-          getSearchResults(service, Status, payload.departSearch),
-          getSearchResults(service, Status, payload.arriveSearch),
-          (departSuggestions, arriveSuggestions) => ({
-            departSuggestions,
-            arriveSuggestions,
-          })
-        )
-          .map(result => ridesActions.search.done({ params: payload, result }))
-          .catch(error =>
-            Observable.of(
-              ridesActions.search.failed({
-                params: payload,
-                error,
-              })
-            )
+      Observable.zip(placesServicePromise, placesServiceStatusPromise)
+        .flatMap(([service, Status]) =>
+          Observable.zip(
+            getSearchResults(service, Status, payload.departSearch),
+            getSearchResults(service, Status, payload.arriveSearch),
+            (departSuggestions, arriveSuggestions) => ({
+              departSuggestions,
+              arriveSuggestions,
+            })
           )
-      )
+        )
+        .map(result => ridesActions.search.done({ params: payload, result }))
+        .catch(error =>
+          Observable.of(
+            ridesActions.search.failed({
+              params: payload,
+              error,
+            })
+          )
+        )
     )
 }
 

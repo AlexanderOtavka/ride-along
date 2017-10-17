@@ -79,6 +79,9 @@ const store = configureStore({
   ridesListRefPromise: firebaseDatabasePromise.then(database =>
     database.ref("ridesList")
   ),
+  locationsRefPromise: firebaseDatabasePromise.then(database =>
+    database.ref("locations")
+  ),
 })
 
 registerServiceWorker()
