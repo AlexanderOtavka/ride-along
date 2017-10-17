@@ -45,6 +45,10 @@
   align-items: center
   z-index: 1
   transition: background $touch-effect-timing
+  overflow: hidden
+
+  .isSearchMode &
+    overflow: visible
 
   .request &
     background-color: $primary-yellow
@@ -70,9 +74,6 @@
   border-top: 1px solid $light-grey1
   text-align: left
   box-shadow: $shadow1
-
-  .isSearchMode &
-    bottom: $header-slide-distance
 
 .autocompleteItem
   +touch-highlight
@@ -110,7 +111,7 @@
   z-index: 0
   transition: transform $header-slide-timing
 
-  &.inSearchMode
+  .isSearchMode &
     transform: translateY($header-slide-distance)
 
   .request &

@@ -182,7 +182,12 @@ function RideListPage({
 
   return (
     <div className={classnames(styles.page, styles[query.mode])}>
-      <header className={styles.header}>
+      <header
+        className={classnames(
+          styles.header,
+          isSearchMode && styles.isSearchMode
+        )}
+      >
         <Form
           values={query}
           onChange={(state: any, ...args: any[]) => {
@@ -204,6 +209,16 @@ function RideListPage({
                 submitForm()
               }}
             >
+              {/* <input
+                type="submit"
+                value="SUBMIT"
+                style={{
+                  position: "fixed",
+                  zIndex: 999,
+                  top: "100px",
+                  background: "white",
+                }}
+              /> */}
               <div className={styles.headerTop}>
                 <Downshift
                   onChange={(item: AutocompletePredictionModel) => {
@@ -302,12 +317,7 @@ function RideListPage({
                     </RadioGroup>}
               </div>
 
-              <div
-                className={classnames(
-                  styles.headerBottom,
-                  isSearchMode && styles.inSearchMode
-                )}
-              >
+              <div className={styles.headerBottom}>
                 <DownChevronSVG className={styles.downChevron} />
 
                 <Downshift
