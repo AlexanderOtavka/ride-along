@@ -22,13 +22,16 @@
 import React from "react"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { Link, RouteComponentProps } from "react-router-dom"
-import { Button } from "react-toolbox/lib/button"
+import { Button, IconButton } from "react-toolbox/lib/button"
 import classnames from "classnames"
 import { compose } from "redux"
+import Downshift from "downshift"
+import { Form, RadioGroup } from "react-form"
 
-import RideListHeader from "./RideListHeader"
 import Nav from "./Nav"
 import RideListItem from "./RideListItem"
+import BoxField from "./BoxField"
+import ModeButton from "./ModeButton"
 
 import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
 
@@ -46,12 +49,16 @@ import * as ids from "../constants/ids"
 
 import styles from "./RideListPage.sass"
 
+import DownChevronSVG from "../drawables/down-chevron.svg"
+import CloseSVG from "../drawables/close.svg"
+import CurrentLocationSVG from "../drawables/crosshairs-gps.svg"
+
 type RouteParams = ["search" | undefined]
+type Query = RideSearchModel
 
 interface StateProps {
   rideList: ReadonlyArray<RideModel>
   autocompleteList: ReadonlyArray<AutocompletePredictionModel>
-  autocompleteField: string
   isSearching: boolean
   hasDepartSearchSuggestions: boolean
   hasArriveSearchSuggestions: boolean
@@ -61,14 +68,14 @@ interface DispatchProps extends DispatchProp<StateModel> {}
 
 export interface Props extends RouteComponentProps<RouteParams> {}
 
-interface SubProps
-  extends Props,
-    QueryComponentProps<RouteParams, RideSearchModel> {}
+interface SubProps extends Props, QueryComponentProps<RouteParams, Query> {}
 
 type AllProps = StateProps & DispatchProps & SubProps
 
 const withController = compose(
-  connectQuery(pickSearch),
+  connectQuery<Query, RouteParams, Props>((query, { match }) =>
+    pickSearch(query, !!match.params[0])
+  ),
   connectRedux<
     StateProps,
     DispatchProps,
@@ -76,7 +83,6 @@ const withController = compose(
   >(({ rides, autocomplete }: StateModel, props) => ({
     rideList: rides.list,
     autocompleteList: autocomplete.list,
-    autocompleteField: autocomplete.field,
     isSearching: rides.isSearching,
     hasDepartSearchSuggestions:
       !props ||
@@ -99,172 +105,334 @@ function RideListPage({
   ...props,
 }: AllProps) {
   const isSearchMode = !!props.match.params[0]
+  const departShouldAutoFocus =
+    isSearchMode &&
+    query.departSearch === undefined &&
+    query.arriveSearch === undefined
+
+  const onSearchModeChange = (newIsSearchMode: boolean, newValues: Query) => {
+    if (newIsSearchMode) {
+      history.push(routes.ridesList.search(newValues))
+    } else {
+      dispatch(ridesActions.cancelSearch({}))
+      dispatch(autocompleteActions.cancel({}))
+      history.push(routes.ridesList.root(newValues.mode))
+    }
+  }
+
+  const onValuesChange = (values: Query) => {
+    dispatch(ridesActions.search.started(values))
+    setQuery(values)
+  }
 
   return (
     <div className={classnames(styles.page, styles[query.mode])}>
-      <RideListHeader
-        isSearchMode={isSearchMode}
-        values={query}
-        onSearchModeChange={(newIsSearchMode, newValues) => {
-          if (newIsSearchMode) {
-            history.push(routes.ridesList.search(newValues))
-          } else {
-            dispatch(ridesActions.cancelSearch({}))
-            dispatch(autocompleteActions.cancel({}))
-            history.push(routes.ridesList.root(newValues.mode))
-          }
-        }}
-        onValuesChange={values => {
-          dispatch(ridesActions.search.started(values))
-          setQuery(values)
-        }}
-        onDepartBoxChange={search =>
-          dispatch(
-            autocompleteActions.getList.started({
-              field: "departSearch",
-              search,
-            })
-          )}
-        onDepartBoxBlur={() =>
-          requestAnimationFrame(() => dispatch(autocompleteActions.cancel({})))}
-        onArriveBoxChange={search =>
-          dispatch(
-            autocompleteActions.getList.started({
-              field: "arriveSearch",
-              search,
-            })
-          )}
-        onArriveBoxBlur={() =>
-          requestAnimationFrame(() => dispatch(autocompleteActions.cancel({})))}
-      />
+      <header
+        className={classnames(
+          styles.header,
+          isSearchMode && styles.isSearchMode
+        )}
+      >
+        <Form
+          values={query}
+          onChange={(state: any, ...args: any[]) => {
+            onValuesChange(state.values)
+          }}
+          component={false}
+        >
+          {({ submitForm }: any) =>
+            <form
+              action={routes.ridesList.search()}
+              method="get"
+              onSubmit={ev => {
+                ev.preventDefault()
+                submitForm()
+              }}
+            >
+              <div className={styles.headerTop}>
+                <Downshift
+                  onChange={(item: AutocompletePredictionModel) => {
+                    setQuery({
+                      ...query,
+                      departSearch: item.description,
+                    })
+                  }}
+                  onStateChange={changes => {
+                    if (changes.hasOwnProperty("isOpen") && !changes.isOpen) {
+                      dispatch(autocompleteActions.cancel({}))
+                    }
+                  }}
+                  defaultHighlightedIndex={0}
+                >
+                  {({
+                    getRootProps,
+                    getInputProps,
+                    getItemProps,
+                    isOpen,
+                    highlightedIndex,
+                    closeMenu,
+                  }) =>
+                    <div className={styles.fieldWrapper}>
+                      <BoxField
+                        field="departSearch"
+                        {...getInputProps({
+                          ref: el => {
+                            if (el && departShouldAutoFocus) {
+                              el.focus()
+                            }
+                          },
+                          id: ids.RIDE_DEPART_SEARCH_INPUT,
+                          type: isSearchMode ? "text" : "submit",
+                          placeholder: isSearchMode
+                            ? "Departure location"
+                            : query.mode === "offer"
+                              ? "Offer a ride"
+                              : "Request a ride",
+                          autoFocus: departShouldAutoFocus,
+                          onClick: () => {
+                            // Downshift somehow intercepts html submit events,
+                            // so we have to manually change the search mode.
+                            if (!isSearchMode) {
+                              onSearchModeChange(true, query)
+                            }
+                          },
+                          onChange: ev => {
+                            dispatch(
+                              autocompleteActions.getList.started({
+                                search: ev.currentTarget.value,
+                              })
+                            )
+                          },
+                          onKeyPress: ev => {
+                            if (!isSearchMode && /\w|\d/.test(ev.key)) {
+                              onSearchModeChange(true, query)
+                            }
+                          },
+                        })}
+                      >
+                        {!query.departSearch &&
+                          <IconButton
+                            icon={<CurrentLocationSVG />}
+                            onClick={() => {
+                              const newValues: RideSearchModel = {
+                                ...query,
+                                departSearch: "Current Location",
+                              }
+
+                              if (isSearchMode) {
+                                onValuesChange(newValues)
+                              } else {
+                                onSearchModeChange(true, newValues)
+                              }
+                            }}
+                          />}
+                      </BoxField>
+
+                      {isOpen &&
+                        props.autocompleteList.length > 0 &&
+                        <ul className={styles.autocompleteList}>
+                          {props.autocompleteList.map((item, index) =>
+                            <li
+                              key={item.place_id || item.description}
+                              className={classnames(
+                                styles.autocompleteItem,
+                                index === highlightedIndex && styles.highlighted
+                              )}
+                              {...getItemProps({ item, index })}
+                            >
+                              {item.description}
+                            </li>
+                          )}
+                        </ul>}
+                    </div>}
+                </Downshift>
+
+                {isSearchMode
+                  ? <Link
+                      to={routes.ridesList.root(query.mode)}
+                      onClick={() => onSearchModeChange(false, query)}
+                      title="Close"
+                    >
+                      <IconButton
+                        className={styles.closeButton}
+                        theme={{ ripple: styles.closeRipple } as any}
+                        icon={<CloseSVG className={styles.closeIcon} />}
+                      />
+                    </Link>
+                  : <RadioGroup field="mode" className={styles.modeSwitch}>
+                      <ModeButton mode="request" />
+                      <ModeButton mode="offer" />
+                    </RadioGroup>}
+              </div>
+
+              <div className={styles.headerBottom}>
+                <DownChevronSVG className={styles.downChevron} />
+
+                <Downshift
+                  onChange={(item: AutocompletePredictionModel) => {
+                    setQuery({
+                      ...query,
+                      arriveSearch: item.description,
+                    })
+                  }}
+                  onStateChange={changes => {
+                    if (changes.hasOwnProperty("isOpen") && !changes.isOpen) {
+                      dispatch(autocompleteActions.cancel({}))
+                    }
+                  }}
+                  defaultHighlightedIndex={0}
+                >
+                  {({
+                    getRootProps,
+                    getInputProps,
+                    getItemProps,
+                    isOpen,
+                    highlightedIndex,
+                    closeMenu,
+                  }) =>
+                    <div className={styles.fieldWrapper}>
+                      <BoxField
+                        field="arriveSearch"
+                        {...getInputProps({
+                          id: ids.RIDE_ARRIVE_SEARCH_INPUT,
+                          placeholder: "Destination",
+                          onChange: ev => {
+                            dispatch(
+                              autocompleteActions.getList.started({
+                                search: ev.currentTarget.value,
+                              })
+                            )
+                          },
+                        })}
+                      />
+
+                      {isOpen &&
+                        props.autocompleteList.length > 0 &&
+                        <ul className={styles.autocompleteList}>
+                          {props.autocompleteList.map((item, index) =>
+                            <li
+                              key={item.place_id || item.description}
+                              className={classnames(
+                                styles.autocompleteItem,
+                                index === highlightedIndex && styles.highlighted
+                              )}
+                              {...getItemProps({ item, index })}
+                            >
+                              {item.description}
+                            </li>
+                          )}
+                        </ul>}
+                    </div>}
+                </Downshift>
+              </div>
+
+              {isSearchMode && <input type="submit" hidden />}
+            </form>}
+        </Form>
+      </header>
 
       <main
         className={classnames(styles.main, isSearchMode && styles.isSearchMode)}
       >
-        {/* TODO: fix autocomplete on desktop */}
-        {/* TODO: improve autocomplete acessibility */}
-        <ul
-          className={styles.autocompleteList}
-          hidden={props.autocompleteList.length === 0}
-        >
-          {props.autocompleteList.map(({ description, ...prediction }) =>
-            <li
-              key={prediction.place_id || description}
-              className={styles.autocompleteItem}
-              onClick={() => {
-                setQuery({
-                  ...query,
-                  [props.autocompleteField]: description,
-                })
-              }}
-            >
-              {description}
-            </li>
+        <ul className={styles.rideList}>
+          {props.rideList.map(({ id, ...ride }, i) =>
+            <RideListItem
+              {...ride}
+              key={id}
+              uri={routes.ride.detail(id)}
+              isLast={i === props.rideList.length - 1}
+            />
           )}
         </ul>
 
-        <section className={styles.rideListWrapper}>
-          <ul className={styles.rideList}>
-            {props.rideList.map(({ id, ...ride }, i) =>
-              <RideListItem
-                {...ride}
-                key={id}
-                uri={routes.ride.detail(id)}
-                isLast={i === props.rideList.length - 1}
-              />
-            )}
-          </ul>
+        {(hasDepartSearchSuggestions && hasArriveSearchSuggestions) ||
+        props.isSearching
+          ? <footer>
+              <p className={styles.listFooterText}>
+                Don't see what you're looking for?
+              </p>
 
-          {(hasDepartSearchSuggestions && hasArriveSearchSuggestions) ||
-          props.isSearching
-            ? <footer>
-                <p className={styles.listFooterText}>
-                  Don't see what you're looking for?
-                </p>
-
-                {!query.departSearch
+              {!query.departSearch
+                ? <Button
+                    className={styles.listFooterButton}
+                    onClick={() => {
+                      document.getElementById(
+                        ids.RIDE_DEPART_SEARCH_INPUT
+                      )!.focus()
+                    }}
+                  >
+                    Add Departure Location
+                  </Button>
+                : !query.arriveSearch
                   ? <Button
                       className={styles.listFooterButton}
                       onClick={() => {
                         document.getElementById(
-                          ids.RIDE_DEPART_SEARCH_INPUT
+                          ids.RIDE_ARRIVE_SEARCH_INPUT
                         )!.focus()
                       }}
                     >
-                      Add Departure Location
+                      Add Destination
                     </Button>
-                  : !query.arriveSearch
-                    ? <Button
-                        className={styles.listFooterButton}
-                        onClick={() => {
-                          document.getElementById(
-                            ids.RIDE_ARRIVE_SEARCH_INPUT
-                          )!.focus()
-                        }}
-                      >
-                        Add Destination
+                  : !props.isSearching &&
+                    <Link
+                      to={routes.ride.new(query)}
+                      onClick={() => {
+                        dispatch(ridesActions.resetDraft({ date: new Date() }))
+                      }}
+                    >
+                      <Button className={styles.listFooterButton}>
+                        Create Ride Listing
                       </Button>
-                    : !props.isSearching &&
-                      <Link
-                        to={routes.ride.new(query)}
-                        onClick={() => {
-                          dispatch(
-                            ridesActions.resetDraft({ date: new Date() })
-                          )
-                        }}
-                      >
-                        <Button className={styles.listFooterButton}>
-                          Create Ride Listing
-                        </Button>
-                      </Link>}
-              </footer>
-            : <footer>
-                <p className={styles.listFooterText}>
-                  We couldn't find any matches on Google Maps for your
-                  {!hasDepartSearchSuggestions && " departure location "}
-                  {!(
-                    hasDepartSearchSuggestions || hasArriveSearchSuggestions
-                  ) && " or "}
-                  {!hasArriveSearchSuggestions && " destination "}
-                  search.
-                </p>
-                <p className={styles.listFooterText}>
-                  Make sure you spelled the address or search correctly.
-                </p>
+                    </Link>}
+            </footer>
+          : <footer>
+              <p className={styles.listFooterText}>
+                We couldn't find any matches on Google Maps for your
+                {!hasDepartSearchSuggestions && " departure location "}
+                {!(hasDepartSearchSuggestions || hasArriveSearchSuggestions) &&
+                  " or "}
+                {!hasArriveSearchSuggestions && " destination "}
+                search.
+              </p>
+              <p className={styles.listFooterText}>
+                Make sure you spelled the address or search correctly.
+              </p>
 
-                {!hasDepartSearchSuggestions
-                  ? <Button
-                      className={styles.listFooterButton}
-                      onClick={() => {
-                        const input = document.getElementById(
-                          ids.RIDE_DEPART_SEARCH_INPUT
-                        ) as HTMLInputElement
+              {!hasDepartSearchSuggestions
+                ? <Button
+                    className={styles.listFooterButton}
+                    onClick={() => {
+                      const input = document.getElementById(
+                        ids.RIDE_DEPART_SEARCH_INPUT
+                      ) as HTMLInputElement
 
-                        input.select()
-                      }}
-                    >
-                      Edit Departure Location
-                    </Button>
-                  : <Button
-                      className={styles.listFooterButton}
-                      onClick={() => {
-                        const input = document.getElementById(
-                          ids.RIDE_ARRIVE_SEARCH_INPUT
-                        ) as HTMLInputElement
+                      input.select()
+                    }}
+                  >
+                    Edit Departure Location
+                  </Button>
+                : <Button
+                    className={styles.listFooterButton}
+                    onClick={() => {
+                      const input = document.getElementById(
+                        ids.RIDE_ARRIVE_SEARCH_INPUT
+                      ) as HTMLInputElement
 
-                        input.select()
-                      }}
-                    >
-                      Edit Destination
-                    </Button>}
-              </footer>}
-        </section>
+                      input.select()
+                    }}
+                  >
+                    Edit Destination
+                  </Button>}
+            </footer>}
       </main>
 
       <footer className={styles.navFooter}>
         <Nav ridesPath={props.location.pathname} />
       </footer>
     </div>
+    //     }
+    // </Downshift>
   )
 }
 

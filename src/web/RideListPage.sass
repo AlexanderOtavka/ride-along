@@ -31,48 +31,123 @@
   overflow: hidden
   z-index: 0
 
+.header
+  position: relative
+  z-index: 1
+
+.headerBottom, .headerTop
+  display: flex
+  padding: 16px
+
+.headerTop
+  position: relative
+  flex-direction: row
+  align-items: center
+  z-index: 1
+  transition: background $touch-effect-timing
+  overflow: hidden
+
+  .isSearchMode &
+    overflow: visible
+
+  .request &
+    background-color: $primary-yellow
+
+  .offer &
+    background-color: $primary-green
+
+.fieldWrapper
+  display: flex
+  flex-grow: 1
+  position: relative
+
+.autocompleteList
+  position: absolute
+  top: 100%
+  left: 0
+  right: 0
+  list-style-type: none
+  margin: 0
+  background: $off-white
+  z-index: 1
+  padding: 0
+  border-top: 1px solid $light-grey1
+  text-align: left
+  box-shadow: $shadow1
+
+.autocompleteItem
+  +touch-highlight
+
+  line-height: 48px
+  padding: 0 16px
+  white-space: nowrap
+  text-overflow: ellipsis
+  overflow: hidden
+  font-size: 18px
+
+  &.highlighted
+    background-color: $light-grey2
+
+.downChevron
+  position: absolute
+  top: 0
+  right: 0
+  left: 0
+  width: 100%
+
+  .request &
+    fill: $primary-yellow
+
+  .offer &
+    fill: $primary-green
+
+.headerBottom
+  position: absolute
+  right: 0
+  bottom: 0
+  left: 0
+  flex-direction: column
+  padding-top: 32px
+  z-index: 0
+  transition: transform $header-slide-timing
+
+  .isSearchMode &
+    transform: translateY($header-slide-distance)
+
+  .request &
+    background-color: darken($primary-yellow, 10%)
+
+  .offer &
+    background-color: darken($primary-green, 10%)
+
+.modeSwitch
+  display: flex
+  flex-direction: row
+  margin-left: 16px
+
+.closeButton
+  margin-right: 10px
+  margin-left: 26px
+
+.closeIcon
+  fill: $off-white !important
+  width: 28px !important
+
+.closeRipple
+  background-color: $off-white
+
 .main
   position: relative
   z-index: 0
   transition: transform $header-slide-timing
   flex: 1
   text-align: center
-
-  &.isSearchMode
-    transform: translateY($header-slide-distance)
-
-.autocompleteList
-  +fullbleed
-
-  list-style-type: none
-  margin: 0
-  overflow-y: auto
-  background: $off-white
-  z-index: 1
-  padding: 16px 0
-  text-align: left
-
-  .isSearchMode &
-    bottom: $header-slide-distance
-
-.autocompleteItem
-  +touch-highlight
-
-  line-height: 48px
-  padding: 0 32px
-  white-space: nowrap
-  text-overflow: ellipsis
-  overflow: hidden
-  font-size: 18px
-
-.rideListWrapper
-  +fullbleed
-
   overflow-y: auto
   padding-bottom: 32px
 
-  .isSearchMode &
-    bottom: $header-slide-distance
+  &.isSearchMode
+    transform: translateY($header-slide-distance)
+    padding-bottom: 32px + $header-slide-distance
 
 .rideList
   padding: 0

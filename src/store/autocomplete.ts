@@ -33,7 +33,6 @@ import "rxjs/add/operator/mergeMap"
 import "rxjs/add/operator/catch"
 import "rxjs/add/operator/let"
 
-import { RideSearchFields } from "./rides"
 import { StateModel } from "./index"
 
 import createTypeChecker from "../util/createTypeChecker"
@@ -53,7 +52,6 @@ export interface AutocompleteDependencies {
 export type AutocompletePredictionModel = google.maps.places.QueryAutocompletePrediction
 
 export interface AutocompleteModel {
-  readonly field: keyof RideSearchFields | ""
   readonly list: ReadonlyArray<AutocompletePredictionModel>
 }
 
@@ -63,7 +61,6 @@ export namespace autocompleteActions {
   const actionCreator = actionCreatorFactory("Autocomplete")
 
   export type GetListParams = {
-    field: keyof RideSearchFields
     search: string
   }
   export type GetListResult = {
@@ -80,15 +77,12 @@ export namespace autocompleteActions {
 // Reducers
 
 export const autocompleteReducer = reducerWithInitialState<AutocompleteModel>({
-  field: "",
   list: [],
 })
   .case(autocompleteActions.getList.done, (state, payload) => ({
-    field: payload.params.field,
     list: payload.result.list,
   }))
   .case(autocompleteActions.cancel, () => ({
-    field: "",
     list: [],
   }))
   .build()

@@ -46,7 +46,7 @@
     "switch-default": true,
     "trailing-comma": [false],
     "triple-equals": [true],
-    "typedef": [true, "parameter", "property-declaration"],
+    "typedef": [false],
     "typedef-whitespace": [false],
     "variable-name": [
       true,
@@ -67,12 +67,6 @@
     "indent": [false],
     "jsdoc-format": true,
     "label-position": true,
-    "member-ordering": [
-      true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
-    ],
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [true, "log", "debug", "time", "timeEnd", "trace"],
