@@ -105,6 +105,10 @@ function RideListPage({
   ...props,
 }: AllProps) {
   const isSearchMode = !!props.match.params[0]
+  const departShouldAutoFocus =
+    isSearchMode &&
+    query.departSearch === undefined &&
+    query.arriveSearch === undefined
 
   const onSearchModeChange = (newIsSearchMode: boolean, newValues: Query) => {
     if (newIsSearchMode) {
@@ -172,6 +176,11 @@ function RideListPage({
                       <BoxField
                         field="departSearch"
                         {...getInputProps({
+                          ref: el => {
+                            if (el && departShouldAutoFocus) {
+                              el.focus()
+                            }
+                          },
                           id: ids.RIDE_DEPART_SEARCH_INPUT,
                           type: isSearchMode ? "text" : "submit",
                           placeholder: isSearchMode
@@ -179,10 +188,7 @@ function RideListPage({
                             : query.mode === "offer"
                               ? "Offer a ride"
                               : "Request a ride",
-                          autoFocus:
-                            isSearchMode &&
-                            query.departSearch === undefined &&
-                            query.arriveSearch === undefined,
+                          autoFocus: departShouldAutoFocus,
                           onClick: () => {
                             // Downshift somehow intercepts html submit events,
                             // so we have to manually change the search mode.
