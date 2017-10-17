@@ -66,44 +66,56 @@ function BoxField({
     }
   }
 
+  // Autofocus is broken in preact for some reason, so we have to do this hack
+  const autofocusRefHandler = (el: HTMLInputElement) => {
+    if (el && props.autoFocus) {
+      el.focus()
+    }
+  }
+
   return (
     <div
       {...rootProps}
       className={classnames(styles.boxField, rootProps && rootProps.className)}
     >
-      {type === "submit"
-        ? <input
-            {...props}
-            className={classnames(styles.input, props.className)}
-            type="submit"
-            value={placeholder}
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
-          />
-        : <FormField field={field}>
-            {({ getValue, setValue, setTouched }: any) =>
-              <input
-                {...props}
-                type={type}
-                className={classnames(styles.input, props.className)}
-                placeholder={placeholder}
-                value={getValue("")}
-                onChange={ev => {
-                  setValue(ev.currentTarget.value)
-                  if (props.onChange) {
-                    props.onChange(ev)
-                  }
-                }}
-                onBlur={ev => {
-                  setTouched()
-                  if (props.onBlur) {
-                    props.onBlur(ev)
-                  }
-                }}
-                onMouseDown={handleMouseDown}
-                onTouchStart={handleTouchStart}
-              />}
-          </FormField>}
+      {type === "submit" ? (
+        <input
+          {...props}
+          ref={autofocusRefHandler}
+          className={classnames(styles.input, props.className)}
+          type="submit"
+          value={placeholder}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+        />
+      ) : (
+        <FormField field={field}>
+          {({ getValue, setValue, setTouched }: any) => (
+            <input
+              {...props}
+              ref={autofocusRefHandler}
+              type={type}
+              className={classnames(styles.input, props.className)}
+              placeholder={placeholder}
+              value={getValue("")}
+              onChange={ev => {
+                setValue(ev.currentTarget.value)
+                if (props.onChange) {
+                  props.onChange(ev)
+                }
+              }}
+              onBlur={ev => {
+                setTouched()
+                if (props.onBlur) {
+                  props.onBlur(ev)
+                }
+              }}
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleTouchStart}
+            />
+          )}
+        </FormField>
+      )}
       <div className={styles.backdrop} />
       {children}
     </div>
