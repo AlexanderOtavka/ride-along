@@ -58,6 +58,11 @@ export interface RidesDependencies {
 
 // Models
 
+export interface LocationModel {
+  place_id: string
+  name: string
+}
+
 export interface RideSearchFields {
   readonly departSearch?: string
   readonly arriveSearch?: string
@@ -79,12 +84,12 @@ export interface RideModel extends DraftModel {
   readonly id: string
 }
 
-export interface LocationMap {
-  readonly [id: string]: PlaceResult
+export interface LocationMapModel {
+  readonly [id: string]: LocationModel
 }
 
 export interface RidesModel {
-  readonly locations: LocationMap
+  readonly locations: LocationMapModel
   readonly list: ReadonlyArray<RideModel>
   readonly draft: DraftModel
   readonly isCreating: boolean
@@ -102,7 +107,7 @@ export namespace ridesActions {
   export type Added = RideModel
   export const added = actionCreator<Added>("ADDED")
 
-  export type LocationAdded = PlaceResult
+  export type LocationAdded = LocationModel
   export const locationReceived = actionCreator<LocationAdded>("LOCATION_ADDED")
 
   export type FirebaseError = { message: string }
@@ -159,6 +164,16 @@ export function getDefaultLocation(
     : currentLocation
 }
 
+export function insertRide(list: ReadonlyArray<RideModel>, ride: RideModel) {
+  for (let i = 0; i < list.length; i++) {
+    if (ride.departDateTime < list[i].departDateTime) {
+      return [...list.slice(0, i), ride, ...list.slice(i)]
+    }
+  }
+
+  return [...list, ride]
+}
+
 export const ridesReducer = reducerWithInitialState<RidesModel>({
   locations: {},
   list: [],
@@ -184,7 +199,7 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   }))
   .case(ridesActions.added, (state, payload) => ({
     ...state,
-    list: [...state.list, payload],
+    list: insertRide(state.list, payload),
   }))
   .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
   .case(ridesActions.search.started, state => ({
@@ -242,12 +257,12 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
 
 // Epics
 
-export function getPlaceDetails(
+export function getLocationDetails(
   locationsRef: database.Reference,
   service: PlacesService,
   Status: PlacesServiceStatusType,
   placeId: string,
-  locations: LocationMap
+  locations: LocationMapModel
 ) {
   if (locations[placeId]) {
     return Observable.of(locations[placeId])
@@ -262,11 +277,26 @@ export function getPlaceDetails(
       })
       .catch(
         () =>
-          new Observable<PlaceResult>(observer => {
+          new Observable<LocationModel>(observer => {
             service.getDetails({ placeId }, (result, status) => {
               if (status === Status.OK) {
-                observer.next(result)
+                const location: LocationModel = {
+                  place_id: result.place_id,
+                  name: result.name,
+                }
+
+                observer.next(location)
                 observer.complete()
+
+                locationsRef
+                  .child(location.place_id)
+                  .set(location)
+                  .catch(err => {
+                    console.error(
+                      "There was a problem saving the location to Firebase",
+                      err
+                    )
+                  })
               } else {
                 observer.error(new Error(`Failed with status: ${status}`))
               }
@@ -307,14 +337,14 @@ export function listEpic(
         )
           .flatMap(([locationsRef, service, Status]) =>
             Observable.merge(
-              getPlaceDetails(
+              getLocationDetails(
                 locationsRef,
                 service,
                 Status,
                 ride.departLocation,
                 store.getState().rides.locations
               ).catch(() => Observable.empty<never>()),
-              getPlaceDetails(
+              getLocationDetails(
                 locationsRef,
                 service,
                 Status,
