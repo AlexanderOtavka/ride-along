@@ -27,8 +27,10 @@ import { combineEpics, ActionsObservable } from "redux-observable"
 import { database } from "firebase"
 
 import { Observable } from "rxjs/Observable"
+import { JQueryStyleEventEmitter } from "rxjs/observable/FromEventObservable"
 import "rxjs/add/observable/of"
 import "rxjs/add/observable/from"
+import "rxjs/add/observable/fromEvent"
 import "rxjs/add/observable/zip"
 import "rxjs/add/operator/filter"
 import "rxjs/add/operator/map"
@@ -38,8 +40,7 @@ import "rxjs/add/operator/debounceTime"
 
 import { StateModel } from "./index"
 
-import { toFirebase } from "../util/firebaseConvert"
-import exampleRides from "../constants/exampleRides"
+import { toFirebase, fromFirebase } from "../util/firebaseConvert"
 
 /// <reference types="googlemaps" />
 type PlaceResult = google.maps.places.PlaceResult
@@ -89,6 +90,12 @@ export interface RidesModel {
 
 export namespace ridesActions {
   const actionCreator = actionCreatorFactory("Rides")
+
+  export type Added = RideModel
+  export const added = actionCreator<Added>("ADDED")
+
+  export type FirebaseError = {}
+  export const firebaseError = actionCreator<FirebaseError>("FIREBASE_ERROR")
 
   export type LoadMore = {}
   export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
@@ -142,7 +149,7 @@ export function getDefaultLocation(
 }
 
 export const ridesReducer = reducerWithInitialState<RidesModel>({
-  list: exampleRides, // TODO: start with empty list
+  list: [],
   draft: {
     departLocation: "",
     departDateTime: new Date(),
@@ -156,6 +163,10 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   departSuggestions: [],
   arriveSuggestions: [],
 })
+  .case(ridesActions.added, (state, payload) => ({
+    ...state,
+    list: [...state.list, payload],
+  }))
   .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
   .case(ridesActions.search.started, state => ({
     ...state,
@@ -211,6 +222,63 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   .build()
 
 // Epics
+
+export function getPlaceDetails(
+  service: PlacesService,
+  Status: PlacesServiceStatusType,
+  placeId: string
+) {
+  return new Observable<PlaceResult>(observer => {
+    service.getDetails({ placeId }, (result, status) => {
+      if (status === Status.OK) {
+        observer.next(result)
+        observer.complete()
+      } else {
+        observer.error(new Error(`Failed with status: ${status}`))
+      }
+    })
+  })
+}
+
+export function listEpic(
+  actionsObservable: ActionsObservable<Action<any>>,
+  store: MiddlewareAPI<StateModel>,
+  {
+    ridesListRefPromise,
+    placesServicePromise,
+    placesServiceStatusPromise,
+  }: RidesDependencies
+) {
+  return Observable.from(ridesListRefPromise)
+    .flatMap(ridesListRef =>
+      Observable.fromEvent<database.DataSnapshot>(
+        ridesListRef as JQueryStyleEventEmitter,
+        "child_added"
+      )
+    )
+    .map(snapshot => ({
+      ...(fromFirebase(snapshot.val()) as RideModel),
+      id: snapshot.key || "",
+    }))
+    .flatMap(ride =>
+      Observable.zip(placesServicePromise, placesServiceStatusPromise)
+        .flatMap(([service, Status]) =>
+          Observable.zip(
+            // TODO: put these in firebase so we don't have to waste API calls
+            getPlaceDetails(service, Status, ride.departLocation),
+            getPlaceDetails(service, Status, ride.arriveLocation)
+          )
+        )
+        .map(([departPlace, arrivePlace]) =>
+          ridesActions.added({
+            ...ride,
+            departLocation: departPlace.name,
+            arriveLocation: arrivePlace.name,
+          })
+        )
+        .catch(err => Observable.of(ridesActions.firebaseError({ err })))
+    )
+}
 
 export function getSearchResults(
   service: PlacesService,
@@ -293,8 +361,10 @@ export function createRideEpic(
     .filter(ridesActions.create.started.match)
     .flatMap(({ payload }) =>
       Observable.from(ridesListRefPromise).flatMap(ridesListRef =>
-        Observable.from(ridesListRef.push(toFirebase(payload)))
-          .map((ref: database.Reference) =>
+        Observable.from<database.Reference>(
+          ridesListRef.push(toFirebase(payload))
+        )
+          .map(ref =>
             ridesActions.create.done({
               params: payload,
               result: { id: ref.key || undefined },
@@ -310,6 +380,7 @@ export function createRideEpic(
 }
 
 export const ridesEpic = combineEpics(
+  listEpic,
   searchEpic,
   createStartedToUpdateDraftEpic,
   createDoneToResetDraftEpic,
