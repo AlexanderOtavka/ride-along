@@ -319,7 +319,9 @@ export function listEpic(
   return Observable.from(ridesListRefPromise)
     .flatMap(ridesListRef =>
       Observable.fromEvent<database.DataSnapshot>(
-        ridesListRef as JQueryStyleEventEmitter,
+        ridesListRef
+          .orderByChild("departDateTime/value")
+          .startAt(Date.now()) as JQueryStyleEventEmitter,
         "child_added"
       )
     )
