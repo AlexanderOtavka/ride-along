@@ -59,7 +59,6 @@ type Query = RideSearchModel
 interface StateProps {
   rideList: ReadonlyArray<RideModel>
   autocompleteList: ReadonlyArray<AutocompletePredictionModel>
-  autocompleteField: string
   isSearching: boolean
   hasDepartSearchSuggestions: boolean
   hasArriveSearchSuggestions: boolean
@@ -84,7 +83,6 @@ const withController = compose(
   >(({ rides, autocomplete }: StateModel, props) => ({
     rideList: rides.list,
     autocompleteList: autocomplete.list,
-    autocompleteField: autocomplete.field,
     isSearching: rides.isSearching,
     hasDepartSearchSuggestions:
       !props ||
@@ -148,38 +146,6 @@ function RideListPage({
     setQuery(values)
   }
 
-  const onDepartBoxChange = (search: string) => {
-    dispatch(
-      autocompleteActions.getList.started({
-        field: "departSearch",
-        search,
-      })
-    )
-  }
-
-  // const onDepartBoxBlur = () => {
-  //   setTimeout(() => {
-  //     closeMenu()
-  //     dispatch(autocompleteActions.cancel({}))
-  //   }, 100)
-  // }
-
-  const onArriveBoxChange = (search: string) => {
-    dispatch(
-      autocompleteActions.getList.started({
-        field: "arriveSearch",
-        search,
-      })
-    )
-  }
-
-  // const onArriveBoxBlur = () => {
-  //   requestAnimationFrame(() => {
-  //     closeMenu()
-  //     dispatch(autocompleteActions.cancel({}))
-  //   })
-  // }
-
   return (
     <div className={classnames(styles.page, styles[query.mode])}>
       <header
@@ -209,8 +175,13 @@ function RideListPage({
                   onChange={(item: AutocompletePredictionModel) => {
                     setQuery({
                       ...query,
-                      [props.autocompleteField]: item.description,
+                      departSearch: item.description,
                     })
+                  }}
+                  onStateChange={changes => {
+                    if (changes.hasOwnProperty("isOpen") && !changes.isOpen) {
+                      dispatch(autocompleteActions.cancel({}))
+                    }
                   }}
                   defaultHighlightedIndex={0}
                 >
@@ -245,7 +216,11 @@ function RideListPage({
                             }
                           },
                           onChange: ev => {
-                            onDepartBoxChange(ev.currentTarget.value)
+                            dispatch(
+                              autocompleteActions.getList.started({
+                                search: ev.currentTarget.value,
+                              })
+                            )
                           },
                           onKeyPress: ev => {
                             if (!isSearchMode && /\w|\d/.test(ev.key)) {
@@ -316,8 +291,13 @@ function RideListPage({
                   onChange={(item: AutocompletePredictionModel) => {
                     setQuery({
                       ...query,
-                      [props.autocompleteField]: item.description,
+                      arriveSearch: item.description,
                     })
+                  }}
+                  onStateChange={changes => {
+                    if (changes.hasOwnProperty("isOpen") && !changes.isOpen) {
+                      dispatch(autocompleteActions.cancel({}))
+                    }
                   }}
                   defaultHighlightedIndex={0}
                 >
@@ -335,8 +315,13 @@ function RideListPage({
                         {...getInputProps({
                           id: ids.RIDE_ARRIVE_SEARCH_INPUT,
                           placeholder: "Destination",
-                          onChange: ev =>
-                            onArriveBoxChange(ev.currentTarget.value),
+                          onChange: ev => {
+                            dispatch(
+                              autocompleteActions.getList.started({
+                                search: ev.currentTarget.value,
+                              })
+                            )
+                          },
                         })}
                       />
 
