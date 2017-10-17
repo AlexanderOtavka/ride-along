@@ -5,6 +5,7 @@ exports[`Nav with a path match for feedback 1`] = `
   className="nav"
 >
   <a
+    aria-current={false}
     className="navLink"
     href="/rides"
     onClick={[Function]}
@@ -28,6 +29,7 @@ exports[`Nav with a path match for feedback 1`] = `
     </button>
   </a>
   <a
+    aria-current={false}
     className="navLink"
     href="/profile"
     onClick={[Function]}
@@ -134,6 +136,7 @@ exports[`Nav with a path match for profile 1`] = `
   className="nav"
 >
   <a
+    aria-current={false}
     className="navLink"
     href="/rides"
     onClick={[Function]}
@@ -157,7 +160,8 @@ exports[`Nav with a path match for profile 1`] = `
     </button>
   </a>
   <a
-    className="active navLink"
+    aria-current="true"
+    className="navLink active"
     href="/profile"
     onClick={[Function]}
     style={Object {}}
@@ -263,7 +267,8 @@ exports[`Nav with a path match for rides 1`] = `
   className="nav"
 >
   <a
-    className="active navLink"
+    aria-current="true"
+    className="navLink active"
     href="/rides"
     onClick={[Function]}
     style={Object {}}
@@ -286,6 +291,7 @@ exports[`Nav with a path match for rides 1`] = `
     </button>
   </a>
   <a
+    aria-current={false}
     className="navLink"
     href="/profile"
     onClick={[Function]}
@@ -392,6 +398,7 @@ exports[`Nav with only a sub-path match for feedback 1`] = `
   className="nav"
 >
   <a
+    aria-current={false}
     className="navLink"
     href="/rides"
     onClick={[Function]}
@@ -415,6 +422,7 @@ exports[`Nav with only a sub-path match for feedback 1`] = `
     </button>
   </a>
   <a
+    aria-current={false}
     className="navLink"
     href="/profile"
     onClick={[Function]}
@@ -521,6 +529,7 @@ exports[`Nav with only a sub-path match for profile 1`] = `
   className="nav"
 >
   <a
+    aria-current={false}
     className="navLink"
     href="/rides"
     onClick={[Function]}
@@ -544,7 +553,8 @@ exports[`Nav with only a sub-path match for profile 1`] = `
     </button>
   </a>
   <a
-    className="active navLink"
+    aria-current="true"
+    className="navLink active"
     href="/profile"
     onClick={[Function]}
     style={Object {}}
@@ -650,6 +660,7 @@ exports[`Nav with only a sub-path match for rides 1`] = `
   className="nav"
 >
   <a
+    aria-current={false}
     className="navLink"
     href="/rides"
     onClick={[Function]}
@@ -673,6 +684,7 @@ exports[`Nav with only a sub-path match for rides 1`] = `
     </button>
   </a>
   <a
+    aria-current={false}
     className="navLink"
     href="/profile"
     onClick={[Function]}
@@ -779,6 +791,7 @@ exports[`Nav without a path match 1`] = `
   className="nav"
 >
   <a
+    aria-current={false}
     className="navLink"
     href="/rides"
     onClick={[Function]}
@@ -802,6 +815,7 @@ exports[`Nav without a path match 1`] = `
     </button>
   </a>
   <a
+    aria-current={false}
     className="navLink"
     href="/profile"
     onClick={[Function]}

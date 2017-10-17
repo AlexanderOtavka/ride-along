@@ -38,7 +38,6 @@ import "rxjs/add/operator/debounceTime"
 
 import { StateModel } from "./index"
 
-import createTypeChecker from "../util/createTypeChecker"
 import { toFirebase } from "../util/firebaseConvert"
 import exampleRides from "../constants/exampleRides"
 
@@ -129,15 +128,15 @@ export function getDefaultLocation(
   currentLocation: string = ""
 ) {
   return suggestions &&
-  suggestions.length > 0 &&
-  // true if suggestions list does not contain currentLocation.
-  // We don't have to look through the list for an empty currentLocation.
-  (currentLocation === "" ||
-    !suggestions.reduce(
-      (hasLocation, suggestion) =>
-        hasLocation || suggestion.place_id === currentLocation,
-      false
-    ))
+    suggestions.length > 0 &&
+    // true if suggestions list does not contain currentLocation.
+    // We don't have to look through the list for an empty currentLocation.
+    (currentLocation === "" ||
+      !suggestions.reduce(
+        (hasLocation, suggestion) =>
+          hasLocation || suggestion.place_id === currentLocation,
+        false
+      ))
     ? suggestions[0].place_id
     : currentLocation
 }
@@ -241,7 +240,7 @@ export function searchEpic(
   { placesServicePromise, placesServiceStatusPromise }: RidesDependencies
 ) {
   return actionsObservable
-    .filter(createTypeChecker(ridesActions.search.started))
+    .filter(ridesActions.search.started.match)
     .debounceTime(500)
     .flatMap(({ payload }) =>
       Observable.zip(
@@ -273,7 +272,7 @@ export function createStartedToUpdateDraftEpic(
   actionsObservable: ActionsObservable<Action<any>>
 ) {
   return actionsObservable
-    .filter(createTypeChecker(ridesActions.create.started))
+    .filter(ridesActions.create.started.match)
     .map(({ payload }) => ridesActions.updateDraft(payload))
 }
 
@@ -281,7 +280,7 @@ export function createDoneToResetDraftEpic(
   actionsObservable: ActionsObservable<Action<any>>
 ) {
   return actionsObservable
-    .filter(createTypeChecker(ridesActions.create.done))
+    .filter(ridesActions.create.done.match)
     .map(({ payload }) => ridesActions.resetDraft({ date: new Date() }))
 }
 
@@ -291,7 +290,7 @@ export function createRideEpic(
   { ridesListRefPromise }: RidesDependencies
 ) {
   return actionsObservable
-    .filter(createTypeChecker(ridesActions.create.started))
+    .filter(ridesActions.create.started.match)
     .flatMap(({ payload }) =>
       Observable.from(ridesListRefPromise).flatMap(ridesListRef =>
         Observable.from(ridesListRef.push(toFirebase(payload)))

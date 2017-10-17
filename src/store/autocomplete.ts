@@ -35,7 +35,6 @@ import "rxjs/add/operator/let"
 
 import { StateModel } from "./index"
 
-import createTypeChecker from "../util/createTypeChecker"
 import bufferedThrottleTime from "../util/bufferedThrottleTime"
 
 /// <reference types="googlemaps" />
@@ -115,7 +114,7 @@ export function autocompleteEpic(
   }: AutocompleteDependencies
 ) {
   return actionsObservable
-    .filter(createTypeChecker(autocompleteActions.getList.started))
+    .filter(autocompleteActions.getList.started.match)
     .let(bufferedThrottleTime(1000))
     .flatMap(({ payload }) =>
       Observable.zip(
