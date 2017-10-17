@@ -95,31 +95,6 @@ const withController = compose(
   }))
 )
 
-// const TEST_AUTOCOMPLETE_LIST: ReadonlyArray<
-//   Partial<AutocompletePredictionModel>
-// > = [
-//   {
-//     place_id: "foo",
-//     description: "Foo",
-//   },
-//   {
-//     place_id: "bar",
-//     description: "Bar",
-//   },
-//   {
-//     place_id: "bar2",
-//     description: "Bar 2",
-//   },
-//   {
-//     place_id: "bar3",
-//     description: "Bar 3",
-//   },
-//   {
-//     place_id: "bar4",
-//     description: "Bar 4",
-//   },
-// ]
-
 function RideListPage({
   dispatch,
   history,
