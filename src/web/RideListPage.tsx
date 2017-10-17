@@ -201,24 +201,9 @@ function RideListPage({
               method="get"
               onSubmit={ev => {
                 ev.preventDefault()
-
-                if (!isSearchMode) {
-                  onSearchModeChange(true, query)
-                }
-
                 submitForm()
               }}
             >
-              {/* <input
-                type="submit"
-                value="SUBMIT"
-                style={{
-                  position: "fixed",
-                  zIndex: 999,
-                  top: "100px",
-                  background: "white",
-                }}
-              /> */}
               <div className={styles.headerTop}>
                 <Downshift
                   onChange={(item: AutocompletePredictionModel) => {
@@ -252,6 +237,13 @@ function RideListPage({
                             isSearchMode &&
                             query.departSearch === undefined &&
                             query.arriveSearch === undefined,
+                          onClick: () => {
+                            // Downshift somehow intercepts html submit events,
+                            // so we have to manually change the search mode.
+                            if (!isSearchMode) {
+                              onSearchModeChange(true, query)
+                            }
+                          },
                           onChange: ev => {
                             onDepartBoxChange(ev.currentTarget.value)
                           },
