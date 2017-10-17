@@ -108,10 +108,9 @@ export namespace ridesActions {
   export const added = actionCreator<Added>("ADDED")
 
   export type LocationAdded = LocationModel
-  export const locationReceived = actionCreator<LocationAdded>("LOCATION_ADDED")
-
-  export type FirebaseError = { message: string }
-  export const firebaseError = actionCreator<FirebaseError>("FIREBASE_ERROR")
+  export const locationReceived = actionCreator<LocationAdded>(
+    "LOCATION_RECEIVED"
+  )
 
   export type LoadMore = {}
   export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
@@ -262,15 +261,16 @@ export function getLocationDetails(
   service: PlacesService,
   Status: PlacesServiceStatusType,
   placeId: string,
-  locations: LocationMapModel
+  getLocations: () => LocationMapModel
 ) {
+  const locations = getLocations()
   if (locations[placeId]) {
-    return Observable.of(locations[placeId])
+    return Observable.empty<never>()
   } else {
     return Observable.from(locationsRef.child(placeId).once("value"))
       .map((snapshot: database.DataSnapshot) => {
         if (snapshot.exists && snapshot.val() !== null) {
-          return snapshot.val() as PlaceResult
+          return snapshot.val() as LocationModel
         } else {
           throw Error()
         }
@@ -342,21 +342,19 @@ export function listEpic(
                 service,
                 Status,
                 ride.departLocation,
-                store.getState().rides.locations
-              ).catch(() => Observable.empty<never>()),
+                () => store.getState().rides.locations
+              ).catch(err => (console.error(err), Observable.empty<never>())),
               getLocationDetails(
                 locationsRef,
                 service,
                 Status,
                 ride.arriveLocation,
-                store.getState().rides.locations
-              ).catch(() => Observable.empty<never>())
+                () => store.getState().rides.locations
+              ).catch(err => (console.error(err), Observable.empty<never>()))
             )
           )
           .map(location => ridesActions.locationReceived(location))
-      ).catch(error =>
-        Observable.of(ridesActions.firebaseError({ message: error.message }))
-      )
+      ).catch(err => (console.error(err), Observable.empty<never>()))
     )
 }
 
