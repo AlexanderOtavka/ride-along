@@ -103,7 +103,7 @@ const withController = compose(
   watchProp<AllProps, Query>(
     props => props.query,
     (query, oldQuery, { dispatch }) => {
-      if (!oldQuery) {
+      if (!isEqual(query, oldQuery)) {
         dispatch(ridesActions.search.started(query))
       }
     }
@@ -120,10 +120,6 @@ function RideListPage({
   ...props,
 }: AllProps) {
   const isSearchMode = !!props.match.params[0]
-  const departShouldAutoFocus =
-    isSearchMode &&
-    query.departSearch === undefined &&
-    query.arriveSearch === undefined
 
   const onSearchModeChange = (newIsSearchMode: boolean, newValues: Query) => {
     if (newIsSearchMode) {
@@ -132,13 +128,6 @@ function RideListPage({
       dispatch(ridesActions.cancelSearch({}))
       dispatch(autocompleteActions.cancel({}))
       history.push(routes.ridesList.root(newValues.mode))
-    }
-  }
-
-  const onValuesChange = (values: Query) => {
-    if (!isEqual(query, values)) {
-      dispatch(ridesActions.search.started(values))
-      setQuery(values)
     }
   }
 
@@ -153,7 +142,7 @@ function RideListPage({
         <Form
           values={{ ...query }}
           onChange={(state: any, ...args: any[]) => {
-            onValuesChange(state.values)
+            setQuery(state.values)
           }}
           component={false}
         >
@@ -200,7 +189,10 @@ function RideListPage({
                             : query.mode === "offer"
                               ? "Offer a ride"
                               : "Request a ride",
-                          autoFocus: departShouldAutoFocus,
+                          autoFocus:
+                            isSearchMode &&
+                            query.departSearch === undefined &&
+                            query.arriveSearch === undefined,
                           onClick: () => {
                             // Downshift somehow intercepts html submit events,
                             // so we have to manually change the search mode.
@@ -232,7 +224,7 @@ function RideListPage({
                               }
 
                               if (isSearchMode) {
-                                onValuesChange(newValues)
+                                setQuery(newValues)
                               } else {
                                 onSearchModeChange(true, newValues)
                               }
