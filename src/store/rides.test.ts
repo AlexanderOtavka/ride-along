@@ -91,9 +91,7 @@ describe("ridesReducer", () => {
   describe("with receive action", () => {
     it("replaces its list with the new one", () => {
       // TODO: think about using snapshots
-      expect(
-        ridesReducer(STATE, ridesActions.receive({ list: [RIDE] }))
-      ).toEqual({
+      expect(ridesReducer(STATE, ridesActions.receive(RIDE))).toEqual({
         ...STATE,
         list: [RIDE],
       })

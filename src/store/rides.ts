@@ -144,18 +144,12 @@ export const createGetRideSearchList = () =>
 export namespace ridesActions {
   const actionCreator = actionCreatorFactory("Rides")
 
-  export type Added = RideModel
-  export const added = actionCreator<Added>("ADDED")
-
-  export type LocationAdded = LocationModel
-  export const locationReceived = actionCreator<LocationAdded>(
-    "LOCATION_RECEIVED"
+  export type ReceiveLocation = LocationModel
+  export const receiveLocation = actionCreator<ReceiveLocation>(
+    "RECEIVE_LOCATION"
   )
 
-  export type LoadMore = {}
-  export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
-
-  export type Receive = { list: ReadonlyArray<RideModel> }
+  export type Receive = RideModel
   export const receive = actionCreator<Receive>("RECEIVE")
 
   export type SearchParams = RideSearchModel
@@ -229,18 +223,17 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   departSuggestions: [],
   arriveSuggestions: [],
 })
-  .case(ridesActions.locationReceived, (state, payload) => ({
+  .case(ridesActions.receiveLocation, (state, payload) => ({
     ...state,
     locations: {
       ...state.locations,
       [payload.place_id]: payload,
     },
   }))
-  .case(ridesActions.added, (state, payload) => ({
+  .case(ridesActions.receive, (state, payload) => ({
     ...state,
     list: insertRide(state.list, payload),
   }))
-  .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
   .case(ridesActions.search.started, state => ({
     ...state,
     isSearching: true,
@@ -374,7 +367,7 @@ export function listEpic(
     }))
     .flatMap(ride =>
       Observable.merge(
-        Observable.of(ridesActions.added(ride)),
+        Observable.of(ridesActions.receive(ride)),
         Observable.zip(
           locationsRefPromise,
           placesServicePromise,
@@ -398,7 +391,7 @@ export function listEpic(
               ).catch(err => (console.error(err), Observable.empty<never>()))
             )
           )
-          .map(location => ridesActions.locationReceived(location))
+          .map(location => ridesActions.receiveLocation(location))
       ).catch(err => (console.error(err), Observable.empty<never>()))
     )
 }
