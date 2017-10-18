@@ -27,6 +27,7 @@ import classnames from "classnames"
 import { compose } from "redux"
 import Downshift from "downshift"
 import { Form, RadioGroup } from "react-form"
+import isEqual from "lodash/isEqual"
 
 import Nav from "./Nav"
 import RideListItem from "./RideListItem"
@@ -34,6 +35,7 @@ import BoxField from "./BoxField"
 import ModeButton from "./ModeButton"
 
 import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
+import watchProp from "../controllers/watchProp"
 
 import { pickSearch } from "../util/pick"
 
@@ -97,7 +99,15 @@ const withController = compose(
         !props.query.arriveSearch ||
         (rides.arriveSuggestions && rides.arriveSuggestions.length > 0),
     })
-  })
+  }),
+  watchProp<AllProps, Query>(
+    props => props.query,
+    (query, oldQuery, { dispatch }) => {
+      if (!oldQuery) {
+        dispatch(ridesActions.search.started(query))
+      }
+    }
+  )
 )
 
 function RideListPage({
@@ -126,8 +136,10 @@ function RideListPage({
   }
 
   const onValuesChange = (values: Query) => {
-    dispatch(ridesActions.search.started(values))
-    setQuery(values)
+    if (!isEqual(query, values)) {
+      dispatch(ridesActions.search.started(values))
+      setQuery(values)
+    }
   }
 
   return (
@@ -139,7 +151,7 @@ function RideListPage({
         )}
       >
         <Form
-          values={query}
+          values={{ ...query }}
           onChange={(state: any, ...args: any[]) => {
             onValuesChange(state.values)
           }}
@@ -444,8 +456,6 @@ function RideListPage({
         <Nav ridesPath={props.location.pathname} />
       </footer>
     </div>
-    //     }
-    // </Downshift>
   )
 }
 

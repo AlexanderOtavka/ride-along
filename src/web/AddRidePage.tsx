@@ -112,7 +112,7 @@ function AddRidePage({
   return (
     <Form
       component={false}
-      values={props.draft}
+      values={{ ...props.draft }}
       onChange={({ values }: any) => {
         dispatch(ridesActions.updateDraft(values))
       }}
