@@ -66,13 +66,6 @@ function BoxField({
     }
   }
 
-  // Autofocus is broken in preact for some reason, so we have to do this hack
-  const autofocusRefHandler = (el: HTMLInputElement) => {
-    if (el && props.autoFocus) {
-      el.focus()
-    }
-  }
-
   return (
     <div
       {...rootProps}
@@ -81,7 +74,6 @@ function BoxField({
       {type === "submit" ? (
         <input
           {...props}
-          ref={autofocusRefHandler}
           className={classnames(styles.input, props.className)}
           type="submit"
           value={placeholder}
@@ -93,7 +85,6 @@ function BoxField({
           {({ getValue, setValue, setTouched }: any) => (
             <input
               {...props}
-              ref={autofocusRefHandler}
               type={type}
               className={classnames(styles.input, props.className)}
               placeholder={placeholder}
