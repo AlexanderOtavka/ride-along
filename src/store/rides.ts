@@ -247,8 +247,6 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   }))
   .case(ridesActions.search.done, ({ draft, ...state }, { result }) => ({
     ...state,
-    ...result,
-    isSearching: false,
     draft: {
       ...draft,
       departLocation: getDefaultLocation(
@@ -260,6 +258,9 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
         draft.arriveLocation
       ),
     },
+    isSearching: false,
+    departSuggestions: result.departSuggestions || state.departSuggestions,
+    arriveSuggestions: result.arriveSuggestions || state.arriveSuggestions,
   }))
   .case(ridesActions.updateDraft, ({ draft, ...state }, payload) => ({
     ...state,
