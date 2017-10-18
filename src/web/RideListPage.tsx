@@ -121,7 +121,7 @@ function RideListPage({
 }: AllProps) {
   const isSearchMode = !!props.match.params[0]
 
-  const onSearchModeChange = (newIsSearchMode: boolean, newValues: Query) => {
+  const setSearchMode = (newIsSearchMode: boolean, newValues = query) => {
     if (newIsSearchMode) {
       history.push(routes.ridesList.search(newValues))
     } else {
@@ -197,7 +197,7 @@ function RideListPage({
                             // Downshift somehow intercepts html submit events,
                             // so we have to manually change the search mode.
                             if (!isSearchMode) {
-                              onSearchModeChange(true, query)
+                              setSearchMode(true)
                             }
                           },
                           onChange: ev => {
@@ -209,7 +209,7 @@ function RideListPage({
                           },
                           onKeyPress: ev => {
                             if (!isSearchMode && /\w|\d/.test(ev.key)) {
-                              onSearchModeChange(true, query)
+                              setSearchMode(true)
                             }
                           },
                         })}
@@ -226,7 +226,7 @@ function RideListPage({
                               if (isSearchMode) {
                                 setQuery(newValues)
                               } else {
-                                onSearchModeChange(true, newValues)
+                                setSearchMode(true, newValues)
                               }
                             }}
                           />
@@ -258,7 +258,7 @@ function RideListPage({
                 {isSearchMode ? (
                   <Link
                     to={routes.ridesList.root(query.mode)}
-                    onClick={() => onSearchModeChange(false, query)}
+                    onClick={() => setSearchMode(false)}
                     title="Close"
                   >
                     <IconButton
