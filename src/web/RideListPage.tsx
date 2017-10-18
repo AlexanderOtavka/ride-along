@@ -370,6 +370,10 @@ function RideListPage({
               <Button
                 className={styles.listFooterButton}
                 onClick={() => {
+                  if (!isSearchMode) {
+                    setSearchMode(true)
+                  }
+
                   document.getElementById(ids.RIDE_DEPART_SEARCH_INPUT)!.focus()
                 }}
               >
