@@ -25,6 +25,7 @@ import maxDate from "date-fns/max"
 import { MiddlewareAPI } from "redux"
 import { combineEpics, ActionsObservable } from "redux-observable"
 import { database } from "firebase"
+import { createSelector } from "reselect"
 
 import { Observable } from "rxjs/Observable"
 import { JQueryStyleEventEmitter } from "rxjs/observable/FromEventObservable"
@@ -43,9 +44,9 @@ import "rxjs/add/operator/debounceTime"
 import { StateModel } from "./index"
 
 import { toFirebase, fromFirebase } from "../util/firebaseConvert"
+import { QueryComponentProps } from "../controllers/connectQuery"
 
 /// <reference types="googlemaps" />
-type PlaceResult = google.maps.places.PlaceResult
 type PlacesService = google.maps.places.PlacesService
 type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
 
@@ -95,9 +96,48 @@ export interface RidesModel {
   readonly isCreating: boolean
   readonly lastCreated: string | undefined
   readonly isSearching: boolean
-  readonly departSuggestions: ReadonlyArray<PlaceResult>
-  readonly arriveSuggestions: ReadonlyArray<PlaceResult>
+  readonly departSuggestions: ReadonlyArray<LocationModel>
+  readonly arriveSuggestions: ReadonlyArray<LocationModel>
 }
+
+// Selectors
+
+const getRideList = (rides: RidesModel) => rides.list
+const getDepartSuggestions = (rides: RidesModel) => rides.departSuggestions
+const getArriveSuggestions = (rides: RidesModel) => rides.arriveSuggestions
+
+type QueryProps = QueryComponentProps<{}, RideSearchModel>
+const getHasDepartSearch = (state: never, props: QueryProps | undefined) =>
+  props && !!props.query.departSearch
+const getHasArriveSearch = (state: never, props: QueryProps | undefined) =>
+  props && !!props.query.arriveSearch
+
+export const createGetRideSearchList = () =>
+  createSelector(
+    getRideList,
+    getDepartSuggestions,
+    getArriveSuggestions,
+    getHasDepartSearch,
+    getHasArriveSearch,
+    (
+      list,
+      departSuggestions,
+      arriveSuggestions,
+      hasDepartSearch,
+      hasArriveSearch
+    ) =>
+      list.filter(
+        ride =>
+          (!hasDepartSearch ||
+            departSuggestions.some(
+              suggestion => suggestion.place_id === ride.departLocation
+            )) &&
+          (!hasArriveSearch ||
+            arriveSuggestions.some(
+              suggestion => suggestion.place_id === ride.arriveLocation
+            ))
+      )
+  )
 
 // Actions
 
@@ -120,8 +160,8 @@ export namespace ridesActions {
 
   export type SearchParams = RideSearchModel
   export type SearchResult = {
-    departSuggestions?: ReadonlyArray<Readonly<PlaceResult>>
-    arriveSuggestions?: ReadonlyArray<Readonly<PlaceResult>>
+    departSuggestions?: ReadonlyArray<Readonly<LocationModel>>
+    arriveSuggestions?: ReadonlyArray<Readonly<LocationModel>>
   }
   export const search = actionCreator.async<SearchParams, SearchResult>(
     "SEARCH"
@@ -146,7 +186,7 @@ export namespace ridesActions {
 // Reducers
 
 export function getDefaultLocation(
-  suggestions: ReadonlyArray<PlaceResult> | undefined,
+  suggestions: ReadonlyArray<LocationModel> | undefined,
   currentLocation: string = ""
 ) {
   return suggestions &&
@@ -261,9 +301,9 @@ export function getLocationDetails(
   service: PlacesService,
   Status: PlacesServiceStatusType,
   placeId: string,
-  getLocations: () => LocationMapModel
+  getLocationsState: () => LocationMapModel
 ) {
-  const locations = getLocations()
+  const locations = getLocationsState()
   if (locations[placeId]) {
     return Observable.empty<never>()
   } else {
@@ -317,14 +357,16 @@ export function listEpic(
   }: RidesDependencies
 ) {
   return Observable.from(ridesListRefPromise)
-    .flatMap(ridesListRef =>
-      Observable.fromEvent<database.DataSnapshot>(
-        ridesListRef
-          .orderByChild("departDateTime/value")
-          .startAt(Date.now()) as JQueryStyleEventEmitter,
-        "child_added"
-      )
-    )
+    .flatMap(ridesListRef => {
+      const query = ridesListRef
+        .orderByChild("departDateTime/value")
+        .startAt(Date.now()) as JQueryStyleEventEmitter
+
+      // TODO: handle child_changed and child_removed
+      // We don't have to worry about child_moved since we don't want to
+      // move/reorder things and we won't add a path for that for the user.
+      return Observable.fromEvent<database.DataSnapshot>(query, "child_added")
+    })
     .map(snapshot => ({
       ...(fromFirebase(snapshot.val()) as RideModel),
       id: snapshot.key || "",
@@ -365,11 +407,16 @@ export function getSearchResults(
   Status: PlacesServiceStatusType,
   query: string | undefined
 ) {
-  return new Observable<PlaceResult[] | undefined>(observer => {
+  return new Observable<LocationModel[] | undefined>(observer => {
     if (query) {
       service.textSearch({ query }, (result, status) => {
         if (status === Status.OK || status === Status.ZERO_RESULTS) {
-          observer.next(result || [])
+          observer.next(
+            (result || []).map(place => ({
+              place_id: place.place_id,
+              name: place.name,
+            }))
+          )
           observer.complete()
         } else {
           observer.error(new Error(`Failed with status: ${status}`))

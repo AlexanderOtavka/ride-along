@@ -38,7 +38,12 @@ import connectQuery, { QueryComponentProps } from "../controllers/connectQuery"
 import { pickSearch } from "../util/pick"
 
 import { StateModel } from "../store"
-import { RideModel, RideSearchModel, ridesActions } from "../store/rides"
+import {
+  RideModel,
+  RideSearchModel,
+  ridesActions,
+  createGetRideSearchList,
+} from "../store/rides"
 import {
   AutocompletePredictionModel,
   autocompleteActions,
@@ -76,23 +81,23 @@ const withController = compose(
   connectQuery<Query, RouteParams, Props>((query, { match }) =>
     pickSearch(query, !!match.params[0])
   ),
-  connectRedux<
-    StateProps,
-    DispatchProps,
-    SubProps
-  >(({ rides, autocomplete }: StateModel, props) => ({
-    rideList: rides.list,
-    autocompleteList: autocomplete.list,
-    isSearching: rides.isSearching,
-    hasDepartSearchSuggestions:
-      !props ||
-      !props.query.departSearch ||
-      (rides.departSuggestions && rides.departSuggestions.length > 0),
-    hasArriveSearchSuggestions:
-      !props ||
-      !props.query.arriveSearch ||
-      (rides.arriveSuggestions && rides.arriveSuggestions.length > 0),
-  }))
+  connectRedux<StateProps, DispatchProps, SubProps>(() => {
+    const getRideSearchList = createGetRideSearchList()
+
+    return ({ rides, autocomplete }: StateModel, props) => ({
+      rideList: getRideSearchList(rides, props),
+      autocompleteList: autocomplete.list,
+      isSearching: rides.isSearching,
+      hasDepartSearchSuggestions:
+        !props ||
+        !props.query.departSearch ||
+        (rides.departSuggestions && rides.departSuggestions.length > 0),
+      hasArriveSearchSuggestions:
+        !props ||
+        !props.query.arriveSearch ||
+        (rides.arriveSuggestions && rides.arriveSuggestions.length > 0),
+    })
+  })
 )
 
 function RideListPage({
