@@ -28,7 +28,7 @@ import { database } from "firebase"
 import { createSelector } from "reselect"
 
 import { Observable } from "rxjs/Observable"
-import { JQueryStyleEventEmitter } from "rxjs/observable/FromEventObservable"
+import { EventTargetLike } from "rxjs/observable/FromEventObservable"
 import "rxjs/add/observable/of"
 import "rxjs/add/observable/from"
 import "rxjs/add/observable/fromEvent"
@@ -354,7 +354,7 @@ export function listEpic(
     .flatMap(ridesListRef => {
       const query = ridesListRef
         .orderByChild("departDateTime/value")
-        .startAt(Date.now()) as JQueryStyleEventEmitter
+        .startAt(Date.now()) as EventTargetLike
 
       // TODO: handle child_changed and child_removed
       // We don't have to worry about child_moved since we don't want to
