@@ -25,11 +25,16 @@ import maxDate from "date-fns/max"
 import { MiddlewareAPI } from "redux"
 import { combineEpics, ActionsObservable } from "redux-observable"
 import { database } from "firebase"
+import { createSelector } from "reselect"
 
 import { Observable } from "rxjs/Observable"
+import { JQueryStyleEventEmitter } from "rxjs/observable/FromEventObservable"
 import "rxjs/add/observable/of"
 import "rxjs/add/observable/from"
+import "rxjs/add/observable/fromEvent"
 import "rxjs/add/observable/zip"
+import "rxjs/add/observable/merge"
+import "rxjs/add/observable/empty"
 import "rxjs/add/operator/filter"
 import "rxjs/add/operator/map"
 import "rxjs/add/operator/mergeMap"
@@ -38,11 +43,10 @@ import "rxjs/add/operator/debounceTime"
 
 import { StateModel } from "./index"
 
-import { toFirebase } from "../util/firebaseConvert"
-import exampleRides from "../constants/exampleRides"
+import { toFirebase, fromFirebase } from "../util/firebaseConvert"
+import { QueryComponentProps } from "../controllers/connectQuery"
 
 /// <reference types="googlemaps" />
-type PlaceResult = google.maps.places.PlaceResult
 type PlacesService = google.maps.places.PlacesService
 type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
 
@@ -50,9 +54,15 @@ export interface RidesDependencies {
   placesServicePromise: Promise<PlacesService>
   placesServiceStatusPromise: Promise<PlacesServiceStatusType>
   ridesListRefPromise: Promise<database.Reference>
+  locationsRefPromise: Promise<database.Reference>
 }
 
 // Models
+
+export interface LocationModel {
+  place_id: string
+  name: string
+}
 
 export interface RideSearchFields {
   readonly departSearch?: string
@@ -75,31 +85,77 @@ export interface RideModel extends DraftModel {
   readonly id: string
 }
 
+export interface LocationMapModel {
+  readonly [id: string]: LocationModel
+}
+
 export interface RidesModel {
+  readonly locations: LocationMapModel
   readonly list: ReadonlyArray<RideModel>
   readonly draft: DraftModel
   readonly isCreating: boolean
   readonly lastCreated: string | undefined
   readonly isSearching: boolean
-  readonly departSuggestions: ReadonlyArray<PlaceResult>
-  readonly arriveSuggestions: ReadonlyArray<PlaceResult>
+  readonly departSuggestions: ReadonlyArray<LocationModel>
+  readonly arriveSuggestions: ReadonlyArray<LocationModel>
 }
+
+// Selectors
+
+const getRideList = (rides: RidesModel) => rides.list
+const getDepartSuggestions = (rides: RidesModel) => rides.departSuggestions
+const getArriveSuggestions = (rides: RidesModel) => rides.arriveSuggestions
+
+type QueryProps = QueryComponentProps<{}, RideSearchModel>
+const getHasDepartSearch = (state: never, props: QueryProps | undefined) =>
+  props && !!props.query.departSearch
+const getHasArriveSearch = (state: never, props: QueryProps | undefined) =>
+  props && !!props.query.arriveSearch
+
+export const createGetRideSearchList = () =>
+  createSelector(
+    getRideList,
+    getDepartSuggestions,
+    getArriveSuggestions,
+    getHasDepartSearch,
+    getHasArriveSearch,
+    (
+      list,
+      departSuggestions,
+      arriveSuggestions,
+      hasDepartSearch,
+      hasArriveSearch
+    ) =>
+      list.filter(
+        ride =>
+          (!hasDepartSearch ||
+            departSuggestions.some(
+              suggestion => suggestion.place_id === ride.departLocation
+            )) &&
+          (!hasArriveSearch ||
+            arriveSuggestions.some(
+              suggestion => suggestion.place_id === ride.arriveLocation
+            ))
+      )
+  )
 
 // Actions
 
 export namespace ridesActions {
   const actionCreator = actionCreatorFactory("Rides")
 
-  export type LoadMore = {}
-  export const loadMore = actionCreator<LoadMore>("LOAD_MORE")
+  export type ReceiveLocation = LocationModel
+  export const receiveLocation = actionCreator<ReceiveLocation>(
+    "RECEIVE_LOCATION"
+  )
 
-  export type Receive = { list: ReadonlyArray<RideModel> }
+  export type Receive = RideModel
   export const receive = actionCreator<Receive>("RECEIVE")
 
   export type SearchParams = RideSearchModel
   export type SearchResult = {
-    departSuggestions?: ReadonlyArray<Readonly<PlaceResult>>
-    arriveSuggestions?: ReadonlyArray<Readonly<PlaceResult>>
+    departSuggestions?: ReadonlyArray<Readonly<LocationModel>>
+    arriveSuggestions?: ReadonlyArray<Readonly<LocationModel>>
   }
   export const search = actionCreator.async<SearchParams, SearchResult>(
     "SEARCH"
@@ -124,7 +180,7 @@ export namespace ridesActions {
 // Reducers
 
 export function getDefaultLocation(
-  suggestions: ReadonlyArray<PlaceResult> | undefined,
+  suggestions: ReadonlyArray<LocationModel> | undefined,
   currentLocation: string = ""
 ) {
   return suggestions &&
@@ -141,8 +197,19 @@ export function getDefaultLocation(
     : currentLocation
 }
 
+export function insertRide(list: ReadonlyArray<RideModel>, ride: RideModel) {
+  for (let i = 0; i < list.length; i++) {
+    if (ride.departDateTime < list[i].departDateTime) {
+      return [...list.slice(0, i), ride, ...list.slice(i)]
+    }
+  }
+
+  return [...list, ride]
+}
+
 export const ridesReducer = reducerWithInitialState<RidesModel>({
-  list: exampleRides, // TODO: start with empty list
+  locations: {},
+  list: [],
   draft: {
     departLocation: "",
     departDateTime: new Date(),
@@ -156,15 +223,23 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   departSuggestions: [],
   arriveSuggestions: [],
 })
-  .case(ridesActions.receive, (state, payload) => ({ ...state, ...payload }))
+  .case(ridesActions.receiveLocation, (state, payload) => ({
+    ...state,
+    locations: {
+      ...state.locations,
+      [payload.place_id]: payload,
+    },
+  }))
+  .case(ridesActions.receive, (state, payload) => ({
+    ...state,
+    list: insertRide(state.list, payload),
+  }))
   .case(ridesActions.search.started, state => ({
     ...state,
     isSearching: true,
   }))
   .case(ridesActions.search.done, ({ draft, ...state }, { result }) => ({
     ...state,
-    ...result,
-    isSearching: false,
     draft: {
       ...draft,
       departLocation: getDefaultLocation(
@@ -176,6 +251,9 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
         draft.arriveLocation
       ),
     },
+    isSearching: false,
+    departSuggestions: result.departSuggestions || state.departSuggestions,
+    arriveSuggestions: result.arriveSuggestions || state.arriveSuggestions,
   }))
   .case(ridesActions.updateDraft, ({ draft, ...state }, payload) => ({
     ...state,
@@ -212,16 +290,127 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
 
 // Epics
 
+export function getLocationDetails(
+  locationsRef: database.Reference,
+  service: PlacesService,
+  Status: PlacesServiceStatusType,
+  placeId: string,
+  getLocationsState: () => LocationMapModel
+) {
+  const locations = getLocationsState()
+  if (locations[placeId]) {
+    return Observable.empty<never>()
+  } else {
+    return Observable.from(locationsRef.child(placeId).once("value"))
+      .map((snapshot: database.DataSnapshot) => {
+        if (snapshot.exists && snapshot.val() !== null) {
+          return snapshot.val() as LocationModel
+        } else {
+          throw Error()
+        }
+      })
+      .catch(
+        () =>
+          new Observable<LocationModel>(observer => {
+            service.getDetails({ placeId }, (result, status) => {
+              if (status === Status.OK) {
+                const location: LocationModel = {
+                  place_id: result.place_id,
+                  name: result.name,
+                }
+
+                observer.next(location)
+                observer.complete()
+
+                locationsRef
+                  .child(location.place_id)
+                  .set(location)
+                  .catch(err => {
+                    console.error(
+                      "There was a problem saving the location to Firebase",
+                      err
+                    )
+                  })
+              } else {
+                observer.error(new Error(`Failed with status: ${status}`))
+              }
+            })
+          })
+      )
+  }
+}
+
+export function listEpic(
+  actionsObservable: ActionsObservable<Action<any>>,
+  store: MiddlewareAPI<StateModel>,
+  {
+    ridesListRefPromise,
+    locationsRefPromise,
+    placesServicePromise,
+    placesServiceStatusPromise,
+  }: RidesDependencies
+) {
+  return Observable.from(ridesListRefPromise)
+    .flatMap(ridesListRef => {
+      const query = ridesListRef
+        .orderByChild("departDateTime/value")
+        .startAt(Date.now()) as JQueryStyleEventEmitter
+
+      // TODO: handle child_changed and child_removed
+      // We don't have to worry about child_moved since we don't want to
+      // move/reorder things and we won't add a path for that for the user.
+      return Observable.fromEvent<database.DataSnapshot>(query, "child_added")
+    })
+    .map(snapshot => ({
+      ...(fromFirebase(snapshot.val()) as RideModel),
+      id: snapshot.key || "",
+    }))
+    .flatMap(ride =>
+      Observable.merge(
+        Observable.of(ridesActions.receive(ride)),
+        Observable.zip(
+          locationsRefPromise,
+          placesServicePromise,
+          placesServiceStatusPromise
+        )
+          .flatMap(([locationsRef, service, Status]) =>
+            Observable.merge(
+              getLocationDetails(
+                locationsRef,
+                service,
+                Status,
+                ride.departLocation,
+                () => store.getState().rides.locations
+              ).catch(err => (console.error(err), Observable.empty<never>())),
+              getLocationDetails(
+                locationsRef,
+                service,
+                Status,
+                ride.arriveLocation,
+                () => store.getState().rides.locations
+              ).catch(err => (console.error(err), Observable.empty<never>()))
+            )
+          )
+          .map(location => ridesActions.receiveLocation(location))
+      ).catch(err => (console.error(err), Observable.empty<never>()))
+    )
+}
+
 export function getSearchResults(
   service: PlacesService,
   Status: PlacesServiceStatusType,
   query: string | undefined
 ) {
-  return new Observable<PlaceResult[] | undefined>(observer => {
+  return new Observable<LocationModel[] | undefined>(observer => {
     if (query) {
       service.textSearch({ query }, (result, status) => {
         if (status === Status.OK || status === Status.ZERO_RESULTS) {
-          observer.next(result || [])
+          observer.next(
+            (result || []).map(place => ({
+              place_id: place.place_id,
+              name: place.name,
+            }))
+          )
           observer.complete()
         } else {
           observer.error(new Error(`Failed with status: ${status}`))
@@ -243,28 +432,26 @@ export function searchEpic(
     .filter(ridesActions.search.started.match)
     .debounceTime(500)
     .flatMap(({ payload }) =>
-      Observable.zip(
-        placesServicePromise,
-        placesServiceStatusPromise
-      ).flatMap(([service, Status]) =>
-        Observable.zip(
-          getSearchResults(service, Status, payload.departSearch),
-          getSearchResults(service, Status, payload.arriveSearch),
-          (departSuggestions, arriveSuggestions) => ({
-            departSuggestions,
-            arriveSuggestions,
-          })
-        )
-          .map(result => ridesActions.search.done({ params: payload, result }))
-          .catch(error =>
-            Observable.of(
-              ridesActions.search.failed({
-                params: payload,
-                error,
-              })
-            )
+      Observable.zip(placesServicePromise, placesServiceStatusPromise)
+        .flatMap(([service, Status]) =>
+          Observable.zip(
+            getSearchResults(service, Status, payload.departSearch),
+            getSearchResults(service, Status, payload.arriveSearch),
+            (departSuggestions, arriveSuggestions) => ({
+              departSuggestions,
+              arriveSuggestions,
+            })
           )
-      )
+        )
+        .map(result => ridesActions.search.done({ params: payload, result }))
+        .catch(error =>
+          Observable.of(
+            ridesActions.search.failed({
+              params: payload,
+              error,
+            })
+          )
+        )
     )
 }
 
@@ -293,8 +480,10 @@ export function createRideEpic(
     .filter(ridesActions.create.started.match)
     .flatMap(({ payload }) =>
       Observable.from(ridesListRefPromise).flatMap(ridesListRef =>
-        Observable.from(ridesListRef.push(toFirebase(payload)))
-          .map((ref: database.Reference) =>
+        Observable.from<database.Reference>(
+          ridesListRef.push(toFirebase(payload))
+        )
+          .map(ref =>
             ridesActions.create.done({
               params: payload,
               result: { id: ref.key || undefined },
@@ -310,6 +499,7 @@ export function createRideEpic(
 }
 
 export const ridesEpic = combineEpics(
+  listEpic,
   searchEpic,
   createStartedToUpdateDraftEpic,
   createDoneToResetDraftEpic,

@@ -35,6 +35,7 @@ it("renders without crashing", () => {
     autocompleteServicePromise: Promise.resolve<any>({}),
     placesServiceStatusPromise: Promise.resolve<any>({}),
     ridesListRefPromise: Promise.resolve<any>({}),
+    locationsRefPromise: Promise.resolve<any>({}),
   })
 
   render(

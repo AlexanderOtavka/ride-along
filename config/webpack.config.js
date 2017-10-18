@@ -37,6 +37,7 @@ import paths from "./paths"
 import getClientEnvironment from "./env"
 
 const isProduction = process.env.NODE_ENV === "production"
+const forcePreact = process.env.REACT_ENV === "preact"
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -207,7 +208,7 @@ export default {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       "react-native": "react-native-web",
-      ...(isProduction
+      ...(isProduction || forcePreact
         ? {
             react: "preact-compat",
             "react-dom": "preact-compat",

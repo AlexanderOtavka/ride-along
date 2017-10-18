@@ -39,7 +39,12 @@ import watchProp from "../controllers/watchProp"
 import { pickSearch } from "../util/pick"
 
 import { StateModel } from "../store"
-import { ridesActions, RideSearchModel, RideModel } from "../store/rides"
+import {
+  ridesActions,
+  RideSearchModel,
+  RideModel,
+  LocationModel,
+} from "../store/rides"
 
 import * as routes from "../constants/routes"
 
@@ -50,8 +55,8 @@ import BackSVG from "../drawables/arrow-left.svg"
 type Query = RideSearchModel
 
 interface StateProps {
-  departSuggestions: ReadonlyArray<google.maps.places.PlaceResult>
-  arriveSuggestions: ReadonlyArray<google.maps.places.PlaceResult>
+  departSuggestions: ReadonlyArray<LocationModel>
+  arriveSuggestions: ReadonlyArray<LocationModel>
   draft: Partial<RideModel>
 }
 
@@ -107,7 +112,7 @@ function AddRidePage({
   return (
     <Form
       component={false}
-      values={props.draft}
+      values={{ ...props.draft }}
       onChange={({ values }: any) => {
         dispatch(ridesActions.updateDraft(values))
       }}
@@ -116,7 +121,7 @@ function AddRidePage({
         props.history.push(routes.ride.detail("lastCreated"))
       }}
     >
-      {({ submitForm }: any) =>
+      {({ submitForm }: any) => (
         <form
           className={classnames(styles.page, styles[query.mode])}
           action={routes.ride.root}
@@ -135,107 +140,111 @@ function AddRidePage({
 
             {/* TODO: validate, and don't let them create if it's wrong */}
             {hasDepartSuggestions &&
-              hasArriveSuggestions &&
-              <Button className={styles.createButton} type="submit">
-                Create
-              </Button>}
+              hasArriveSuggestions && (
+                <Button className={styles.createButton} type="submit">
+                  Create
+                </Button>
+              )}
           </header>
 
-          {hasDepartSuggestions && hasArriveSuggestions
-            ? <main className={styles.main}>
-                <RideVertical
-                  departLocation={
-                    // TODO: customize suggestion display with template
-                    <DropdownField
-                      field="departLocation"
-                      source={departSuggestions.map(suggestionToDropdownItem)}
-                    />
-                  }
-                  departDateTime={
-                    <DateTimeField
-                      field="departDateTime"
-                      datePickerProps={{
-                        minDate: subDays(new Date(), 1),
-                        theme: dateTimeTheme,
-                      }}
-                      timePickerProps={{ theme: dateTimeTheme }}
-                    />
-                  }
-                  arriveLocation={
-                    <DropdownField
-                      field="arriveLocation"
-                      source={arriveSuggestions.map(suggestionToDropdownItem)}
-                    />
-                  }
-                  arriveDateTime={
-                    <DateTimeField
-                      field="arriveDateTime"
-                      datePickerProps={{
-                        minDate: subDays(
-                          props.draft.departDateTime || new Date(),
-                          1
-                        ),
-                        theme: dateTimeTheme,
-                      }}
-                      timePickerProps={{ theme: dateTimeTheme }}
-                    />
-                  }
-                />
-                <div className={styles.extraFields}>
-                  <FormField field="seatTotal">
-                    {({ getValue, setValue, setTouched }: any) =>
-                      <label className={styles.seatCount}>
-                        <input
-                          className={styles.seatCountInput}
-                          type="number"
-                          placeholder="#"
-                          value={getValue() || ""}
-                          onChange={ev =>
-                            setValue(+ev.currentTarget.value || 0)}
-                          onFocus={ev => ev.currentTarget.select()}
-                          onBlur={() => setTouched()}
-                        />
-                        <p className={styles.seatCountLabel}>
-                          {query.mode === "request" ? "Rider" : "Seat"}
-                          {getValue() !== 1 && "s"}
-                        </p>
-                      </label>}
-                  </FormField>
-                  {/* TODO: add price selector */}
-                  {/* TODO: add notification preferences */}
-                  {/* TODO: add easy round trip creation */}
-                </div>
-              </main>
-            : <main className={styles.main}>
-                <RideVertical
-                  departLocation={query.departSearch || ""}
-                  departDateTime=""
-                  arriveLocation={query.arriveSearch || ""}
-                  arriveDateTime=""
-                />
+          {hasDepartSuggestions && hasArriveSuggestions ? (
+            <main className={styles.main}>
+              <RideVertical
+                departLocation={
+                  // TODO: customize suggestion display with template
+                  <DropdownField
+                    field="departLocation"
+                    source={departSuggestions.map(suggestionToDropdownItem)}
+                  />
+                }
+                departDateTime={
+                  <DateTimeField
+                    field="departDateTime"
+                    datePickerProps={{
+                      minDate: subDays(new Date(), 1),
+                      theme: dateTimeTheme,
+                    }}
+                    timePickerProps={{ theme: dateTimeTheme }}
+                  />
+                }
+                arriveLocation={
+                  <DropdownField
+                    field="arriveLocation"
+                    source={arriveSuggestions.map(suggestionToDropdownItem)}
+                  />
+                }
+                arriveDateTime={
+                  <DateTimeField
+                    field="arriveDateTime"
+                    datePickerProps={{
+                      minDate: subDays(
+                        props.draft.departDateTime || new Date(),
+                        1
+                      ),
+                      theme: dateTimeTheme,
+                    }}
+                    timePickerProps={{ theme: dateTimeTheme }}
+                  />
+                }
+              />
+              <div className={styles.extraFields}>
+                <FormField field="seatTotal">
+                  {({ getValue, setValue, setTouched }: any) => (
+                    <label className={styles.seatCount}>
+                      <input
+                        className={styles.seatCountInput}
+                        type="number"
+                        placeholder="#"
+                        value={getValue() || ""}
+                        onChange={ev => setValue(+ev.currentTarget.value || 0)}
+                        onFocus={ev => ev.currentTarget.select()}
+                        onBlur={() => setTouched()}
+                      />
+                      <p className={styles.seatCountLabel}>
+                        {query.mode === "request" ? "Rider" : "Seat"}
+                        {getValue() !== 1 && "s"}
+                      </p>
+                    </label>
+                  )}
+                </FormField>
+                {/* TODO: add price selector */}
+                {/* TODO: add notification preferences */}
+                {/* TODO: add easy round trip creation */}
+              </div>
+            </main>
+          ) : (
+            <main className={styles.main}>
+              <RideVertical
+                departLocation={query.departSearch || ""}
+                departDateTime=""
+                arriveLocation={query.arriveSearch || ""}
+                arriveDateTime=""
+              />
 
-                <section className={styles.errorPanel}>
-                  <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
-                  <p className={styles.errorPanelText}>
-                    We couldn't find any matches on Google Maps for your
-                    {!hasDepartSuggestions && " departure location "}
-                    {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
-                    {!hasArriveSuggestions && " destination "}
-                    search.
-                  </p>
-                  <p className={styles.errorPanelText}>
-                    Make sure you spelled the address or search correctly.
-                  </p>
-                  <Link to={backURI}>
-                    <Button>Back to Search</Button>
-                  </Link>
-                </section>
-              </main>}
+              <section className={styles.errorPanel}>
+                <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
+                <p className={styles.errorPanelText}>
+                  We couldn't find any matches on Google Maps for your
+                  {!hasDepartSuggestions && " departure location "}
+                  {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
+                  {!hasArriveSuggestions && " destination "}
+                  search.
+                </p>
+                <p className={styles.errorPanelText}>
+                  Make sure you spelled the address or search correctly.
+                </p>
+                <Link to={backURI}>
+                  <Button>Back to Search</Button>
+                </Link>
+              </section>
+            </main>
+          )}
 
           <footer className={styles.footer}>
             <Nav />
           </footer>
-        </form>}
+        </form>
+      )}
     </Form>
   )
 }

@@ -39,8 +39,8 @@ describe("toFirebase", () => {
   })
 
   it("maps over objects", () => {
-    const obj = { foo: 2, bar: "barval", baz: undefined }
-    expect(toFirebase(obj)).toEqual({ foo: 2, bar: "barval", baz: undefined })
+    const obj = { foo: 2, bar: "bar val", baz: undefined }
+    expect(toFirebase(obj)).toEqual({ foo: 2, bar: "bar val", baz: undefined })
     expect(toFirebase(obj)).not.toBe(obj)
   })
 
@@ -78,8 +78,12 @@ describe("fromFirebase", () => {
   })
 
   it("maps over objects", () => {
-    const obj = { foo: 2, bar: "barval", baz: undefined }
-    expect(fromFirebase(obj)).toEqual({ foo: 2, bar: "barval", baz: undefined })
+    const obj = { foo: 2, bar: "bar val", baz: undefined }
+    expect(fromFirebase(obj)).toEqual({
+      foo: 2,
+      bar: "bar val",
+      baz: undefined,
+    })
     expect(fromFirebase(obj)).not.toBe(obj)
   })
 
