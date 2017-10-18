@@ -24,13 +24,13 @@ import lodashIsEqual from "lodash/isEqual"
 
 export default function watchProp<TProps, TProp>(
   getProp: (props: TProps) => TProp,
-  onChange: (newProp: TProp, oldProp: TProp | undefined, props: TProps) => void,
+  onChange: (newProp: TProp, oldProp: TProp | null, props: TProps) => void,
   isEqual: (a: TProp, b: TProp) => boolean = lodashIsEqual
 ) {
   return (Component: React.ComponentType<TProps>) =>
     class WatchProp extends React.Component<TProps> {
       componentDidMount() {
-        onChange(getProp(this.props), undefined, this.props)
+        onChange(getProp(this.props), null, this.props)
       }
 
       componentWillReceiveProps(nextProps: TProps) {

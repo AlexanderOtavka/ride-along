@@ -62,6 +62,8 @@ export interface RidesDependencies {
 export interface LocationModel {
   place_id: string
   name: string
+  latitude: number
+  longitude: number
 }
 
 export interface RideSearchFields {
@@ -94,7 +96,7 @@ export interface RidesModel {
   readonly list: ReadonlyArray<RideModel>
   readonly draft: DraftModel
   readonly isCreating: boolean
-  readonly lastCreated: string | undefined
+  readonly lastCreated: string | null
   readonly isSearching: boolean
   readonly departSuggestions: ReadonlyArray<LocationModel>
   readonly arriveSuggestions: ReadonlyArray<LocationModel>
@@ -154,8 +156,8 @@ export namespace ridesActions {
 
   export type SearchParams = RideSearchModel
   export type SearchResult = {
-    departSuggestions?: ReadonlyArray<Readonly<LocationModel>>
-    arriveSuggestions?: ReadonlyArray<Readonly<LocationModel>>
+    departSuggestions: ReadonlyArray<Readonly<LocationModel>> | null
+    arriveSuggestions: ReadonlyArray<Readonly<LocationModel>> | null
   }
   export const search = actionCreator.async<SearchParams, SearchResult>(
     "SEARCH"
@@ -171,7 +173,7 @@ export namespace ridesActions {
   export const updateDraft = actionCreator<UpdateDraft>("UPDATE_DRAFT")
 
   export type CreateParams = DraftModel
-  export type CreateResult = { id: string | undefined }
+  export type CreateResult = { id: string | null }
   export const create = actionCreator.async<CreateParams, CreateResult>(
     "CREATE"
   )
@@ -180,7 +182,7 @@ export namespace ridesActions {
 // Reducers
 
 export function getDefaultLocation(
-  suggestions: ReadonlyArray<LocationModel> | undefined,
+  suggestions: ReadonlyArray<LocationModel> | null,
   currentLocation: string = ""
 ) {
   return suggestions &&
@@ -218,7 +220,7 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     seatTotal: 0,
   },
   isCreating: false,
-  lastCreated: undefined,
+  lastCreated: null,
   isSearching: false,
   departSuggestions: [],
   arriveSuggestions: [],
@@ -290,6 +292,19 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
 
 // Epics
 
+export function toLocationModel({
+  place_id,
+  name,
+  geometry,
+}: google.maps.places.PlaceResult): LocationModel {
+  return {
+    place_id,
+    name,
+    latitude: geometry.location.lat(),
+    longitude: geometry.location.lng(),
+  }
+}
+
 export function getLocationDetails(
   locationsRef: database.Reference,
   service: PlacesService,
@@ -314,10 +329,7 @@ export function getLocationDetails(
           new Observable<LocationModel>(observer => {
             service.getDetails({ placeId }, (result, status) => {
               if (status === Status.OK) {
-                const location: LocationModel = {
-                  place_id: result.place_id,
-                  name: result.name,
-                }
+                const location = toLocationModel(result)
 
                 observer.next(location)
                 observer.complete()
@@ -401,23 +413,18 @@ export function getSearchResults(
   Status: PlacesServiceStatusType,
   query: string | undefined
 ) {
-  return new Observable<LocationModel[] | undefined>(observer => {
+  return new Observable<LocationModel[] | null>(observer => {
     if (query) {
       service.textSearch({ query }, (result, status) => {
         if (status === Status.OK || status === Status.ZERO_RESULTS) {
-          observer.next(
-            (result || []).map(place => ({
-              place_id: place.place_id,
-              name: place.name,
-            }))
-          )
+          observer.next(result ? result.map(toLocationModel) : [])
           observer.complete()
         } else {
           observer.error(new Error(`Failed with status: ${status}`))
         }
       })
     } else {
-      observer.next(query === "" ? [] : undefined)
+      observer.next(query === "" ? [] : null)
       observer.complete()
     }
   })
@@ -486,7 +493,7 @@ export function createRideEpic(
           .map(ref =>
             ridesActions.create.done({
               params: payload,
-              result: { id: ref.key || undefined },
+              result: { id: ref.key || null },
             })
           )
           .catch(error =>

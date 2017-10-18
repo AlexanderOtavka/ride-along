@@ -39,12 +39,12 @@ describe("getDefaultLocation", () => {
 
   it("returns empty string without suggestions or currentLocation", () => {
     expect(getDefaultLocation([])).toBe("")
-    expect(getDefaultLocation(undefined)).toBe("")
+    expect(getDefaultLocation(null)).toBe("")
   })
 
   it("returns the current location without suggestions", () => {
     expect(getDefaultLocation([], "foo")).toBe("foo")
-    expect(getDefaultLocation(undefined, "foo")).toBe("foo")
+    expect(getDefaultLocation(null, "foo")).toBe("foo")
   })
 
   it("picks the first suggestion without a current location", () => {
@@ -69,7 +69,7 @@ describe("ridesReducer", () => {
     departSuggestions: [],
     arriveSuggestions: [],
     isCreating: false,
-    lastCreated: undefined,
+    lastCreated: null,
     draft: {
       departLocation: "",
       departDateTime: new Date(2017, 1, 1),

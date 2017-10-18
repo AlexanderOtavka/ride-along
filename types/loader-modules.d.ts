@@ -26,14 +26,14 @@ declare module "*.svg" {
 
 declare module "*.sass" {
   const _default: {
-    [localClassName: string]: string | undefined
+    [localClassName: string]: string
   }
   export = _default
 }
 
 declare module "*.css" {
   const _default: {
-    [localClassName: string]: string | undefined
+    [localClassName: string]: string
   }
   export = _default
 }

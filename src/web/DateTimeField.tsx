@@ -67,7 +67,7 @@ function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
 
   return (
     <FormField field={props.field}>
-      {({ getValue, setValue, setTouched }: any) =>
+      {({ getValue, setValue, setTouched }: any) => (
         <div className={styles.fieldset}>
           <DatePicker
             {...datePickerProps}
@@ -86,7 +86,8 @@ function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
             theme={timeTheme}
             onBlur={() => setTouched()}
           />
-        </div>}
+        </div>
+      )}
     </FormField>
   )
 }

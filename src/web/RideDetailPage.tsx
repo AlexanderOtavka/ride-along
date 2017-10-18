@@ -31,7 +31,7 @@ import { compose } from "redux"
 
 interface StateProps {
   isCreating: boolean
-  lastCreated: string | undefined
+  lastCreated: string | null
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
@@ -51,15 +51,17 @@ function RideDetailPage(props: AllProps) {
   const { id } = props.match.params
 
   // TODO: make this page look nice
-  return id === "lastCreated"
-    ? props.isCreating
-      ? <div>Loading...</div>
-      : props.lastCreated
-        ? <Redirect to={routes.ride.detail(props.lastCreated)} />
-        : <div>Not found</div>
-    : <div>
-        Ride with id: {id}
-      </div>
+  return id === "lastCreated" ? (
+    props.isCreating ? (
+      <div>Loading...</div>
+    ) : props.lastCreated ? (
+      <Redirect to={routes.ride.detail(props.lastCreated)} />
+    ) : (
+      <div>Not found</div>
+    )
+  ) : (
+    <div>Ride with id: {id}</div>
+  )
 }
 
 export default withController(RideDetailPage)

@@ -83,7 +83,7 @@ const withController = compose(
   )
 )
 
-function suggestionToDropdownItem(suggestion: google.maps.places.PlaceResult) {
+function suggestionToDropdownItem(suggestion: LocationModel) {
   return {
     value: suggestion.place_id,
     label: suggestion.name,
