@@ -21,71 +21,24 @@
 
 import React from "react"
 import { FormField } from "react-form"
-import { DatePicker, DatePickerProps } from "react-toolbox/lib/date_picker"
-import { TimePicker, TimePickerProps } from "react-toolbox/lib/time_picker"
-import mergeWith from "lodash/mergeWith"
+import DateTime from "react-datetime"
 import classnames from "classnames"
 
-import { formatDateLong } from "../util/format"
-
+// TODO: import datetime without css module scoping
+import "react-datetime/css/react-datetime.css"
 import styles from "./DateTimeField.sass"
 
 export interface Props {
   field: string
-  datePickerProps?: Partial<DatePickerProps>
-  timePickerProps?: Partial<TimePickerProps>
+  queryMode: "request" | "offer"
 }
 
-function mergeClassNames(objValue: any, sourceValue: any) {
-  return typeof objValue === "string" && typeof sourceValue === "string"
-    ? classnames(objValue, sourceValue)
-    : undefined
-}
-
-function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
-  const sharedTheme = {
-    input: styles.input,
-    inputElement: styles.inputElement,
-  }
-
-  const dateTheme = mergeWith(
-    {},
-    sharedTheme,
-    datePickerProps && datePickerProps.theme,
-    mergeClassNames
-  )
-
-  const timeTheme = mergeWith(
-    {
-      hand: styles.hand,
-      knob: styles.knob,
-    },
-    sharedTheme,
-    timePickerProps && timePickerProps.theme,
-    mergeClassNames
-  )
-
+function DateTimeField(props: Props) {
   return (
     <FormField field={props.field}>
       {({ getValue, setValue, setTouched }: any) => (
-        <div className={styles.fieldset}>
-          <DatePicker
-            {...datePickerProps}
-            value={getValue()}
-            onChange={setValue}
-            sundayFirstDayOfWeek={true}
-            inputFormat={formatDateLong}
-            theme={dateTheme}
-            {...{ onBlur: () => setTouched() }} // TODO: fix when onBlur gets added to typedefs
-          />
-          <TimePicker
-            {...timePickerProps}
-            value={getValue()}
-            onChange={setValue}
-            format="ampm"
-            theme={timeTheme}
-            onBlur={() => setTouched()}
-          />
+        <div className={classnames(styles.fieldset, styles[props.queryMode])}>
+          <DateTime value={getValue()} onChange={setValue} />
         </div>
       )}
     </FormField>

@@ -26,7 +26,6 @@ import classnames from "classnames"
 import { Form, FormField } from "react-form"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { compose } from "redux"
-import subDays from "date-fns/sub_days"
 
 import Nav from "./Nav"
 import RideVertical from "./RideVertical"
@@ -55,6 +54,7 @@ import BackSVG from "../drawables/arrow-left.svg"
 type Query = RideSearchModel
 
 interface StateProps {
+  isSearching: boolean
   departSuggestions: ReadonlyArray<LocationModel>
   arriveSuggestions: ReadonlyArray<LocationModel>
   draft: Partial<RideModel>
@@ -71,6 +71,7 @@ type AllProps = Readonly<StateProps & DispatchProps & SubProps>
 const withController = compose(
   connectQuery<Query, {}, RouteComponentProps<{}>>(query => pickSearch(query)),
   connectRedux<StateProps, DispatchProps, Props>(({ rides }: StateModel) => ({
+    isSearching: rides.isSearching,
     departSuggestions: rides.departSuggestions,
     arriveSuggestions: rides.arriveSuggestions,
     draft: rides.draft,
@@ -99,10 +100,6 @@ function AddRidePage({
 }: AllProps) {
   const hasDepartSuggestions = departSuggestions && departSuggestions.length > 0
   const hasArriveSuggestions = arriveSuggestions && arriveSuggestions.length > 0
-
-  const dateTimeTheme = {
-    dialog: classnames(styles.dateTimeDialog, styles[query.mode]),
-  }
 
   const backURI =
     query.arriveSearch !== undefined || query.departSearch !== undefined
@@ -160,11 +157,7 @@ function AddRidePage({
                 departDateTime={
                   <DateTimeField
                     field="departDateTime"
-                    datePickerProps={{
-                      minDate: subDays(new Date(), 1),
-                      theme: dateTimeTheme,
-                    }}
-                    timePickerProps={{ theme: dateTimeTheme }}
+                    queryMode={query.mode}
                   />
                 }
                 arriveLocation={
@@ -176,14 +169,7 @@ function AddRidePage({
                 arriveDateTime={
                   <DateTimeField
                     field="arriveDateTime"
-                    datePickerProps={{
-                      minDate: subDays(
-                        props.draft.departDateTime || new Date(),
-                        1
-                      ),
-                      theme: dateTimeTheme,
-                    }}
-                    timePickerProps={{ theme: dateTimeTheme }}
+                    queryMode={query.mode}
                   />
                 }
               />
@@ -221,22 +207,24 @@ function AddRidePage({
                 arriveDateTime=""
               />
 
-              <section className={styles.errorPanel}>
-                <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
-                <p className={styles.errorPanelText}>
-                  We couldn't find any matches on Google Maps for your
-                  {!hasDepartSuggestions && " departure location "}
-                  {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
-                  {!hasArriveSuggestions && " destination "}
-                  search.
-                </p>
-                <p className={styles.errorPanelText}>
-                  Make sure you spelled the address or search correctly.
-                </p>
-                <Link to={backURI}>
-                  <Button>Back to Search</Button>
-                </Link>
-              </section>
+              {!props.isSearching && (
+                <section className={styles.errorPanel}>
+                  <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
+                  <p className={styles.errorPanelText}>
+                    We couldn't find any matches on Google Maps for your
+                    {!hasDepartSuggestions && " departure location "}
+                    {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
+                    {!hasArriveSuggestions && " destination "}
+                    search.
+                  </p>
+                  <p className={styles.errorPanelText}>
+                    Make sure you spelled the address or search correctly.
+                  </p>
+                  <Link to={backURI}>
+                    <Button>Back to Search</Button>
+                  </Link>
+                </section>
+              )}
             </main>
           )}
 
