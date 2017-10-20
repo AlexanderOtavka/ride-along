@@ -176,9 +176,12 @@ function AddRidePage({
             )}
           </header>
 
+          {/* TODO: handle ride creation errors gracefully */}
+
           {hasDepartSuggestions && hasArriveSuggestions ? (
             <main className={styles.main}>
               <RideVertical
+                // TODO: customize icons based on location classification
                 departLocation={
                   // TODO: customize suggestion display with template
                   <DropdownField
