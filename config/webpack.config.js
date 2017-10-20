@@ -454,7 +454,7 @@ export default {
   // cumbersome.
   performance: {
     hints: isProduction ? "warning" : false,
-    maxAssetSize: 300 * 1000,
+    maxAssetSize: 320 * 1000,
     maxEntrypointSize: 450 * 1000,
   },
 }
