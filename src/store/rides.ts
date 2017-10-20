@@ -59,6 +59,8 @@ export interface RidesDependencies {
 
 // Models
 
+export type RideMode = "request" | "offer"
+
 export interface LocationModel {
   place_id: string
   name: string
@@ -72,10 +74,11 @@ export interface RideSearchFields {
 }
 
 export interface RideSearchModel extends RideSearchFields {
-  readonly mode: "request" | "offer"
+  readonly mode: RideMode
 }
 
 export interface DraftModel {
+  readonly mode: RideMode
   readonly departLocation: string
   readonly departDateTime: Date
   readonly arriveLocation: string
@@ -183,7 +186,7 @@ export namespace ridesActions {
 
 export function getDefaultLocation(
   suggestions: ReadonlyArray<LocationModel> | null,
-  currentLocation: string = ""
+  currentLocation = ""
 ) {
   return suggestions &&
     suggestions.length > 0 &&
@@ -213,6 +216,7 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   locations: {},
   list: [],
   draft: {
+    mode: "request",
     departLocation: "",
     departDateTime: new Date(),
     arriveLocation: "",
@@ -268,6 +272,7 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   .case(ridesActions.resetDraft, (state, { date }) => ({
     ...state,
     draft: {
+      mode: "request",
       departLocation: getDefaultLocation(state.departSuggestions),
       departDateTime: date,
       arriveLocation: getDefaultLocation(state.arriveSuggestions),

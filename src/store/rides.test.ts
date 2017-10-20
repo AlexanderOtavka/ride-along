@@ -71,6 +71,7 @@ describe("ridesReducer", () => {
     isCreating: false,
     lastCreated: null,
     draft: {
+      mode: "request",
       departLocation: "",
       departDateTime: new Date(2017, 1, 1),
       arriveLocation: "",
@@ -81,6 +82,7 @@ describe("ridesReducer", () => {
 
   const RIDE: RideModel = {
     id: "foo",
+    mode: "request",
     departLocation: "bar",
     departDateTime: new Date(2017, 1, 1),
     arriveLocation: "baz",

@@ -24,8 +24,6 @@ import { FormField } from "react-form"
 import DateTime from "react-datetime"
 import classnames from "classnames"
 
-// TODO: import datetime without css module scoping
-import "react-datetime/css/react-datetime.css"
 import styles from "./DateTimeField.sass"
 
 export interface Props {
@@ -38,7 +36,10 @@ function DateTimeField(props: Props) {
     <FormField field={props.field}>
       {({ getValue, setValue, setTouched }: any) => (
         <div className={classnames(styles.fieldset, styles[props.queryMode])}>
-          <DateTime value={getValue()} onChange={setValue} />
+          <DateTime
+            value={getValue()}
+            onChange={moment => setValue(new Date(+moment.valueOf()))}
+          />
         </div>
       )}
     </FormField>

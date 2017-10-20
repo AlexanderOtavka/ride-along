@@ -36,6 +36,20 @@
   color: $off-white
   font-size: 18px
 
+  &[data-draft-error]:focus::after,
+  &[data-draft-error]:hover::after
+    content: attr(data-draft-error)
+    position: absolute
+    top: 8px
+    right: 8px
+    background: $grey1
+    border-radius: 2px
+    color: $off-white
+    padding: 12px
+    font-size: 14px
+    font-weight: normal
+    max-width: calc(100% - 96px)
+
   button
     color: inherit !important
 
@@ -54,6 +68,9 @@
 
 .createButton
   height: 100%
+  width: auto
+  min-width: 0
+  padding: 0 16px
 
 .main
   --dropdown-color-primary: var(--primary-color)

@@ -41,8 +41,8 @@ import { StateModel } from "../store"
 import {
   ridesActions,
   RideSearchModel,
-  RideModel,
   LocationModel,
+  DraftModel,
 } from "../store/rides"
 
 import * as routes from "../constants/routes"
@@ -50,6 +50,7 @@ import * as routes from "../constants/routes"
 import styles from "./AddRidePage.sass"
 
 import BackSVG from "../drawables/arrow-left.svg"
+import StopIconSVG from "../drawables/alert-octagon.svg"
 
 type Query = RideSearchModel
 
@@ -57,7 +58,7 @@ interface StateProps {
   isSearching: boolean
   departSuggestions: ReadonlyArray<LocationModel>
   arriveSuggestions: ReadonlyArray<LocationModel>
-  draft: Partial<RideModel>
+  draft: DraftModel
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
@@ -91,6 +92,20 @@ function suggestionToDropdownItem(suggestion: LocationModel) {
   }
 }
 
+function getDraftError(draft: DraftModel) {
+  if (draft.departDateTime < new Date()) {
+    return "Departure time cannot be in the past"
+  }
+
+  if (draft.seatTotal === 0) {
+    const passengerQuantifier =
+      draft.mode === "request" ? "riders" : "open seats"
+    return `Must have one or more ${passengerQuantifier}`
+  }
+
+  return null
+}
+
 function AddRidePage({
   query,
   departSuggestions,
@@ -105,6 +120,8 @@ function AddRidePage({
     query.arriveSearch !== undefined || query.departSearch !== undefined
       ? routes.ridesList.search(query)
       : routes.ridesList.root(query.mode)
+
+  const draftError = getDraftError(props.draft)
 
   return (
     <Form
@@ -128,20 +145,21 @@ function AddRidePage({
             submitForm()
           }}
         >
-          <header className={styles.header}>
+          <header className={styles.header} data-draft-error={draftError}>
             <Link to={backURI}>
               <IconButton icon={<BackSVG className={styles.backIcon} />} />
             </Link>
 
             <span className={styles.headerTitle}>New Ride</span>
 
-            {/* TODO: validate, and don't let them create if it's wrong */}
-            {hasDepartSuggestions &&
-              hasArriveSuggestions && (
-                <Button className={styles.createButton} type="submit">
-                  Create
-                </Button>
-              )}
+            <Button
+              className={styles.createButton}
+              type="submit"
+              disabled={!!draftError}
+            >
+              {!!draftError && <StopIconSVG />}
+              Create
+            </Button>
           </header>
 
           {hasDepartSuggestions && hasArriveSuggestions ? (
