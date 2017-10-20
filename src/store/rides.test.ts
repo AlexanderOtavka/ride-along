@@ -69,7 +69,6 @@ describe("ridesReducer", () => {
     departSuggestions: [],
     arriveSuggestions: [],
     isCreating: false,
-    lastCreated: null,
     draft: {
       mode: "request",
       departLocation: "",

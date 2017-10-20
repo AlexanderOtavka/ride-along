@@ -27,6 +27,7 @@ import { Form, FormField } from "react-form"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { compose } from "redux"
 import moment, { Moment } from "moment"
+import LoadingSpinner from "halogen/BounceLoader"
 
 import Nav from "./Nav"
 import RideVertical from "./RideVertical"
@@ -57,6 +58,7 @@ type Query = RideSearchModel
 
 interface StateProps {
   isSearching: boolean
+  isCreating: boolean
   departSuggestions: ReadonlyArray<LocationModel>
   arriveSuggestions: ReadonlyArray<LocationModel>
   draft: DraftModel
@@ -74,6 +76,7 @@ const withController = compose(
   connectQuery<Query, {}, RouteComponentProps<{}>>(query => pickSearch(query)),
   connectRedux<StateProps, DispatchProps, Props>(({ rides }: StateModel) => ({
     isSearching: rides.isSearching,
+    isCreating: rides.isCreating,
     departSuggestions: rides.departSuggestions,
     arriveSuggestions: rides.arriveSuggestions,
     draft: rides.draft,
@@ -156,14 +159,21 @@ function AddRidePage({
 
             <span className={styles.headerTitle}>New Ride</span>
 
-            <Button
-              className={styles.createButton}
-              type="submit"
-              disabled={!!draftError}
-            >
-              {!!draftError && <StopIconSVG />}
-              Create
-            </Button>
+            {props.isCreating ? (
+              <LoadingSpinner
+                className={styles.createLoadingSpinner}
+                color="#fff"
+              />
+            ) : (
+              <Button
+                className={styles.createButton}
+                type="submit"
+                disabled={!!draftError}
+              >
+                {!!draftError && <StopIconSVG />}
+                Create
+              </Button>
+            )}
           </header>
 
           {hasDepartSuggestions && hasArriveSuggestions ? (
@@ -232,8 +242,22 @@ function AddRidePage({
               <RideVertical
                 departLocation={query.departSearch || ""}
                 departDateTime=""
+                departIcon={
+                  props.isSearching ? (
+                    <LoadingSpinner className={styles.locationLoadingSpinner} />
+                  ) : (
+                    undefined
+                  )
+                }
                 arriveLocation={query.arriveSearch || ""}
                 arriveDateTime=""
+                arriveIcon={
+                  props.isSearching ? (
+                    <LoadingSpinner className={styles.locationLoadingSpinner} />
+                  ) : (
+                    undefined
+                  )
+                }
               />
 
               {!props.isSearching && (

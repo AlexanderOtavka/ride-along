@@ -72,6 +72,14 @@
   min-width: 0
   padding: 0 16px
 
+.createLoadingSpinner
+  padding: 0 16px
+
+  > div,
+  > div > div
+    width: 32px !important
+    height: 32px !important
+
 .main
   --dropdown-color-primary: var(--primary-color)
   --color-text: $grey1
@@ -83,6 +91,12 @@
 
   .offer &
     --primary-color: $primary-green
+
+.locationLoadingSpinner
+  > div,
+  > div > div
+    width: 32px !important
+    height: 32px !important
 
 .extraFields
   border-top: 1px solid $light-grey1

@@ -31,16 +31,22 @@ import DownChevronSVG from "../drawables/down-chevron.svg"
 export interface Props {
   departLocation: React.ReactChild
   departDateTime: React.ReactChild
+  departIcon?: React.ReactChild
   arriveLocation: React.ReactChild
   arriveDateTime: React.ReactChild
+  arriveIcon?: React.ReactChild
 }
 
-function RideVertical(props: Props) {
+function RideVertical({
+  departIcon = <MapMarkerSVG />,
+  arriveIcon = <MapMarkerSVG />,
+  ...props,
+}: Props) {
   return (
     <article className={styles.ride}>
       <RideSection
         className={styles.depart}
-        icon={<MapMarkerSVG />}
+        icon={departIcon}
         location={props.departLocation}
         dateTime={props.departDateTime}
       />
@@ -48,7 +54,7 @@ function RideVertical(props: Props) {
       <DownChevronSVG className={styles.downChevron} />
 
       <RideSection
-        icon={<MapMarkerSVG />}
+        icon={arriveIcon}
         location={props.arriveLocation}
         dateTime={props.arriveDateTime}
       />
