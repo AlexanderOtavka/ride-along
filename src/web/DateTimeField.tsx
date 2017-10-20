@@ -48,6 +48,7 @@ function DateTimeField({ field, queryMode, ...pickerProps }: Props) {
                 setValue(value.toDate())
               }
             }}
+            onBlur={() => setTouched()}
           />
         </div>
       )}
