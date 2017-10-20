@@ -26,7 +26,8 @@ import classnames from "classnames"
 import { Form, FormField } from "react-form"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { compose } from "redux"
-import subDays from "date-fns/sub_days"
+import moment, { Moment } from "moment"
+import LoadingSpinner from "halogen/BounceLoader"
 
 import Nav from "./Nav"
 import RideVertical from "./RideVertical"
@@ -42,8 +43,8 @@ import { StateModel } from "../store"
 import {
   ridesActions,
   RideSearchModel,
-  RideModel,
   LocationModel,
+  DraftModel,
 } from "../store/rides"
 
 import * as routes from "../constants/routes"
@@ -51,13 +52,16 @@ import * as routes from "../constants/routes"
 import styles from "./AddRidePage.sass"
 
 import BackSVG from "../drawables/arrow-left.svg"
+import StopIconSVG from "../drawables/alert-octagon.svg"
 
 type Query = RideSearchModel
 
 interface StateProps {
+  isSearching: boolean
+  isCreating: boolean
   departSuggestions: ReadonlyArray<LocationModel>
   arriveSuggestions: ReadonlyArray<LocationModel>
-  draft: Partial<RideModel>
+  draft: DraftModel
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
@@ -71,6 +75,8 @@ type AllProps = Readonly<StateProps & DispatchProps & SubProps>
 const withController = compose(
   connectQuery<Query, {}, RouteComponentProps<{}>>(query => pickSearch(query)),
   connectRedux<StateProps, DispatchProps, Props>(({ rides }: StateModel) => ({
+    isSearching: rides.isSearching,
+    isCreating: rides.isCreating,
     departSuggestions: rides.departSuggestions,
     arriveSuggestions: rides.arriveSuggestions,
     draft: rides.draft,
@@ -83,11 +89,29 @@ const withController = compose(
   )
 )
 
-function suggestionToDropdownItem(suggestion: google.maps.places.PlaceResult) {
+function suggestionToDropdownItem(suggestion: LocationModel) {
   return {
     value: suggestion.place_id,
     label: suggestion.name,
   }
+}
+
+function getDraftError(draft: DraftModel) {
+  if (draft.departDateTime < new Date()) {
+    return "Departure time cannot be in the past"
+  }
+
+  if (draft.arriveDateTime < draft.departDateTime) {
+    return "Arrival time must come after departure"
+  }
+
+  if (draft.seatTotal === 0) {
+    const passengerQuantifier =
+      draft.mode === "request" ? "riders" : "open seats"
+    return `Must have one or more ${passengerQuantifier}`
+  }
+
+  return null
 }
 
 function AddRidePage({
@@ -100,14 +124,12 @@ function AddRidePage({
   const hasDepartSuggestions = departSuggestions && departSuggestions.length > 0
   const hasArriveSuggestions = arriveSuggestions && arriveSuggestions.length > 0
 
-  const dateTimeTheme = {
-    dialog: classnames(styles.dateTimeDialog, styles[query.mode]),
-  }
-
   const backURI =
     query.arriveSearch !== undefined || query.departSearch !== undefined
       ? routes.ridesList.search(query)
       : routes.ridesList.root(query.mode)
+
+  const draftError = getDraftError(props.draft)
 
   return (
     <Form
@@ -118,7 +140,6 @@ function AddRidePage({
       }}
       onSubmit={(values: any) => {
         dispatch(ridesActions.create.started(values))
-        props.history.push(routes.ride.detail("lastCreated"))
       }}
     >
       {({ submitForm }: any) => (
@@ -131,25 +152,36 @@ function AddRidePage({
             submitForm()
           }}
         >
-          <header className={styles.header}>
+          <header className={styles.header} data-draft-error={draftError}>
             <Link to={backURI}>
               <IconButton icon={<BackSVG className={styles.backIcon} />} />
             </Link>
 
             <span className={styles.headerTitle}>New Ride</span>
 
-            {/* TODO: validate, and don't let them create if it's wrong */}
-            {hasDepartSuggestions &&
-              hasArriveSuggestions && (
-                <Button className={styles.createButton} type="submit">
-                  Create
-                </Button>
-              )}
+            {props.isCreating ? (
+              <LoadingSpinner
+                className={styles.createLoadingSpinner}
+                color="#fff"
+              />
+            ) : (
+              <Button
+                className={styles.createButton}
+                type="submit"
+                disabled={!!draftError}
+              >
+                {!!draftError && <StopIconSVG />}
+                Create
+              </Button>
+            )}
           </header>
+
+          {/* TODO: handle ride creation errors gracefully */}
 
           {hasDepartSuggestions && hasArriveSuggestions ? (
             <main className={styles.main}>
               <RideVertical
+                // TODO: customize icons based on location classification
                 departLocation={
                   // TODO: customize suggestion display with template
                   <DropdownField
@@ -160,11 +192,9 @@ function AddRidePage({
                 departDateTime={
                   <DateTimeField
                     field="departDateTime"
-                    datePickerProps={{
-                      minDate: subDays(new Date(), 1),
-                      theme: dateTimeTheme,
-                    }}
-                    timePickerProps={{ theme: dateTimeTheme }}
+                    queryMode={query.mode}
+                    isValidDate={(currentMoment: Moment) =>
+                      currentMoment.isAfter(moment().subtract(1, "day"))}
                   />
                 }
                 arriveLocation={
@@ -176,14 +206,12 @@ function AddRidePage({
                 arriveDateTime={
                   <DateTimeField
                     field="arriveDateTime"
-                    datePickerProps={{
-                      minDate: subDays(
-                        props.draft.departDateTime || new Date(),
-                        1
-                      ),
-                      theme: dateTimeTheme,
-                    }}
-                    timePickerProps={{ theme: dateTimeTheme }}
+                    queryMode={query.mode}
+                    viewMode="time"
+                    isValidDate={(currentMoment: Moment) =>
+                      currentMoment.isAfter(
+                        moment(props.draft.departDateTime).subtract(1, "day")
+                      )}
                   />
                 }
               />
@@ -217,26 +245,42 @@ function AddRidePage({
               <RideVertical
                 departLocation={query.departSearch || ""}
                 departDateTime=""
+                departIcon={
+                  props.isSearching ? (
+                    <LoadingSpinner className={styles.locationLoadingSpinner} />
+                  ) : (
+                    undefined
+                  )
+                }
                 arriveLocation={query.arriveSearch || ""}
                 arriveDateTime=""
+                arriveIcon={
+                  props.isSearching ? (
+                    <LoadingSpinner className={styles.locationLoadingSpinner} />
+                  ) : (
+                    undefined
+                  )
+                }
               />
 
-              <section className={styles.errorPanel}>
-                <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
-                <p className={styles.errorPanelText}>
-                  We couldn't find any matches on Google Maps for your
-                  {!hasDepartSuggestions && " departure location "}
-                  {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
-                  {!hasArriveSuggestions && " destination "}
-                  search.
-                </p>
-                <p className={styles.errorPanelText}>
-                  Make sure you spelled the address or search correctly.
-                </p>
-                <Link to={backURI}>
-                  <Button>Back to Search</Button>
-                </Link>
-              </section>
+              {!props.isSearching && (
+                <section className={styles.errorPanel}>
+                  <h1 className={styles.errorPanelHeading}>Can't add ride!</h1>
+                  <p className={styles.errorPanelText}>
+                    We couldn't find any matches on Google Maps for your
+                    {!hasDepartSuggestions && " departure location "}
+                    {!(hasDepartSuggestions || hasArriveSuggestions) && " or "}
+                    {!hasArriveSuggestions && " destination "}
+                    search.
+                  </p>
+                  <p className={styles.errorPanelText}>
+                    Make sure you spelled the address or search correctly.
+                  </p>
+                  <Link to={backURI}>
+                    <Button>Back to Search</Button>
+                  </Link>
+                </section>
+              )}
             </main>
           )}
 

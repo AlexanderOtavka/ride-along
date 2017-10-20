@@ -21,18 +21,54 @@
 @import "style/colors"
 
 .fieldset
-  display: flex
-  flex-direction: row
   margin: 0 -8px
-  padding: 0
-  border: none
 
-  & > *
-    margin: 8px
+  &.request input:focus
+    border-bottom: 1px solid $primary-yellow
 
-.input
-  padding: 0
+  &.offer input:focus
+    border-bottom: 1px solid $primary-green
 
-.inputElement
-  border-bottom: 1px solid $light-grey2
-  line-height: 20px
+  input
+    color: $grey1
+    background: none
+    border: none
+    border-bottom: 1px solid $light-grey2
+    font-size: 14px
+    line-height: 20px
+    width: 100%
+    padding: 8px 0
+
+    &:focus
+      outline: none
+
+  &.request :global
+    .rdtActive
+      background-color: $primary-yellow !important
+
+    .rdtToday:not(.rdtActive)::before
+      border-bottom-color: $primary-yellow !important
+
+  &.offer :global
+    .rdtActive
+      background-color: $primary-green !important
+
+    .rdtToday:not(.rdtActive)::before
+      border-bottom-color: $primary-green !important
+
+  & :global
+    @import "~react-datetime/css/react-datetime"
+
+    .rdt
+      display: flex
+      flex-direction: row
+      margin: 8px
+      padding: 0
+      border: none
+
+    .rdtPicker
+      top: 38px
+
+    .rdtActive
+      font-weight: bold
+      text-shadow: none !important

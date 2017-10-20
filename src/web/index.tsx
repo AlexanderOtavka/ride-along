@@ -21,8 +21,9 @@
 
 import React from "react"
 import { render } from "react-dom"
-import { BrowserRouter } from "react-router-dom"
+import { Router } from "react-router-dom"
 import { Provider } from "react-redux"
+import { createBrowserHistory } from "history"
 import * as firebase from "firebase/app"
 
 import App from "./App"
@@ -66,7 +67,10 @@ const firebaseDatabasePromise = import(/* webpackChunkName: "firebase-database" 
   () => firebase.database()
 )
 
+const history = createBrowserHistory()
+
 const store = configureStore({
+  history,
   placesServicePromise: placesAPIPromise.then(
     places => new places.PlacesService(poweredByGoogleNode)
   ),
@@ -88,9 +92,9 @@ registerServiceWorker()
 
 render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <App poweredByGoogleNode={poweredByGoogleNode} />
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById("root")
 )

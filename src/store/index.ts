@@ -56,12 +56,12 @@ const epic = combineEpics<Action<any>, StateModel, Dependencies>(
 
 export default function configureStore(
   dependencies: Dependencies,
-  initialState?: StateModel
+  initialState: StateModel | null = null
 ) {
   const epicMiddleware = createEpicMiddleware(epic, { dependencies })
   const enhancer = composeWithDevTools(applyMiddleware(epicMiddleware))
 
-  return initialState !== undefined
+  return initialState !== null
     ? createStore<StateModel>(reducer, initialState, enhancer)
     : createStore<StateModel>(reducer, enhancer)
 }

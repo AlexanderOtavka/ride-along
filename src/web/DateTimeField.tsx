@@ -21,72 +21,37 @@
 
 import React from "react"
 import { FormField } from "react-form"
-import { DatePicker, DatePickerProps } from "react-toolbox/lib/date_picker"
-import { TimePicker, TimePickerProps } from "react-toolbox/lib/time_picker"
-import mergeWith from "lodash/mergeWith"
+import DateTime, { DatetimepickerProps } from "react-datetime"
 import classnames from "classnames"
-
-import { formatDateLong } from "../util/format"
+import { isMoment } from "moment"
 
 import styles from "./DateTimeField.sass"
 
-export interface Props {
+export interface Props extends DatetimepickerProps {
   field: string
-  datePickerProps?: Partial<DatePickerProps>
-  timePickerProps?: Partial<TimePickerProps>
+  queryMode: "request" | "offer"
 }
 
-function mergeClassNames(objValue: any, sourceValue: any) {
-  return typeof objValue === "string" && typeof sourceValue === "string"
-    ? classnames(objValue, sourceValue)
-    : undefined
-}
-
-function DateTimeField({ datePickerProps, timePickerProps, ...props }: Props) {
-  const sharedTheme = {
-    input: styles.input,
-    inputElement: styles.inputElement,
-  }
-
-  const dateTheme = mergeWith(
-    {},
-    sharedTheme,
-    datePickerProps && datePickerProps.theme,
-    mergeClassNames
-  )
-
-  const timeTheme = mergeWith(
-    {
-      hand: styles.hand,
-      knob: styles.knob,
-    },
-    sharedTheme,
-    timePickerProps && timePickerProps.theme,
-    mergeClassNames
-  )
-
+function DateTimeField({ field, queryMode, ...pickerProps }: Props) {
   return (
-    <FormField field={props.field}>
-      {({ getValue, setValue, setTouched }: any) =>
-        <div className={styles.fieldset}>
-          <DatePicker
-            {...datePickerProps}
+    <FormField field={field}>
+      {({ getValue, setValue, setTouched }: any) => (
+        <div className={classnames(styles.fieldset, styles[queryMode])}>
+          <DateTime
+            timeConstraints={{
+              minutes: { min: 0, max: 59, step: 10 },
+            }}
+            {...pickerProps}
             value={getValue()}
-            onChange={setValue}
-            sundayFirstDayOfWeek={true}
-            inputFormat={formatDateLong}
-            theme={dateTheme}
-            {...{ onBlur: () => setTouched() }} // TODO: fix when onBlur gets added to typedefs
-          />
-          <TimePicker
-            {...timePickerProps}
-            value={getValue()}
-            onChange={setValue}
-            format="ampm"
-            theme={timeTheme}
+            onChange={value => {
+              if (isMoment(value)) {
+                setValue(value.toDate())
+              }
+            }}
             onBlur={() => setTouched()}
           />
-        </div>}
+        </div>
+      )}
     </FormField>
   )
 }

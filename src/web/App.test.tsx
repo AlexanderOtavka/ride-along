@@ -21,8 +21,9 @@
 
 import React from "react"
 import { render } from "react-dom"
-import { MemoryRouter } from "react-router-dom"
+import { Router } from "react-router-dom"
 import { Provider } from "react-redux"
+import { createMemoryHistory } from "history"
 
 import App from "./App"
 
@@ -30,7 +31,9 @@ import configureStore from "../store"
 
 it("renders without crashing", () => {
   const div = document.createElement("div")
+  const history = createMemoryHistory()
   const store = configureStore({
+    history,
     placesServicePromise: Promise.resolve<any>({}),
     autocompleteServicePromise: Promise.resolve<any>({}),
     placesServiceStatusPromise: Promise.resolve<any>({}),
@@ -40,9 +43,9 @@ it("renders without crashing", () => {
 
   render(
     <Provider store={store}>
-      <MemoryRouter>
+      <Router history={history}>
         <App />
-      </MemoryRouter>
+      </Router>
     </Provider>,
     div
   )

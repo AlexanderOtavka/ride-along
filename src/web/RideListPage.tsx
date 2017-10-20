@@ -44,7 +44,7 @@ import {
   RideModel,
   RideSearchModel,
   ridesActions,
-  createGetRideSearchList,
+  createRideSearchListSelector,
 } from "../store/rides"
 import {
   AutocompletePredictionModel,
@@ -84,7 +84,7 @@ const withController = compose(
     pickSearch(query, !!match.params[0])
   ),
   connectRedux<StateProps, DispatchProps, SubProps>(() => {
-    const getRideSearchList = createGetRideSearchList()
+    const getRideSearchList = createRideSearchListSelector()
 
     return ({ rides, autocomplete }: StateModel, props) => ({
       rideList: getRideSearchList(rides, props),
