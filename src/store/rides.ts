@@ -21,7 +21,9 @@
 
 import actionCreatorFactory, { Action } from "typescript-fsa"
 import { reducerWithInitialState } from "typescript-fsa-reducers"
-import maxDate from "date-fns/max"
+import getMinutes from "date-fns/get_minutes"
+import setMinutes from "date-fns/set_minutes"
+import startOfMinute from "date-fns/start_of_minute"
 import { MiddlewareAPI } from "redux"
 import { combineEpics, ActionsObservable } from "redux-observable"
 import { database } from "firebase"
@@ -117,7 +119,7 @@ const getHasDepartSearch = (state: never, props: QueryProps | undefined) =>
 const getHasArriveSearch = (state: never, props: QueryProps | undefined) =>
   props && !!props.query.arriveSearch
 
-export const createGetRideSearchList = () =>
+export const createRideSearchListSelector = () =>
   createSelector(
     getRideList,
     getDepartSuggestions,
@@ -202,6 +204,10 @@ export function getDefaultLocation(
     : currentLocation
 }
 
+export function cleanDate(date: Date, round = Math.ceil) {
+  return startOfMinute(setMinutes(date, round(getMinutes(date) / 10) * 10))
+}
+
 export function insertRide(list: ReadonlyArray<RideModel>, ride: RideModel) {
   for (let i = 0; i < list.length; i++) {
     if (ride.departDateTime < list[i].departDateTime) {
@@ -218,9 +224,9 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
   draft: {
     mode: "request",
     departLocation: "",
-    departDateTime: new Date(),
+    departDateTime: cleanDate(new Date()),
     arriveLocation: "",
-    arriveDateTime: new Date(),
+    arriveDateTime: cleanDate(new Date()),
     seatTotal: 0,
   },
   isCreating: false,
@@ -265,7 +271,8 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     ...state,
     draft: {
       ...payload,
-      arriveDateTime: maxDate(payload.departDateTime, payload.arriveDateTime),
+      departDateTime: startOfMinute(payload.departDateTime),
+      arriveDateTime: startOfMinute(payload.arriveDateTime),
       seatTotal: Math.min(Math.max(payload.seatTotal, 0), 99),
     },
   }))
@@ -274,9 +281,9 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     draft: {
       mode: "request",
       departLocation: getDefaultLocation(state.departSuggestions),
-      departDateTime: date,
+      departDateTime: cleanDate(date),
       arriveLocation: getDefaultLocation(state.arriveSuggestions),
-      arriveDateTime: date,
+      arriveDateTime: cleanDate(date),
       seatTotal: 0,
     },
   }))

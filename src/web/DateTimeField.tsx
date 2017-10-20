@@ -21,24 +21,33 @@
 
 import React from "react"
 import { FormField } from "react-form"
-import DateTime from "react-datetime"
+import DateTime, { DatetimepickerProps } from "react-datetime"
 import classnames from "classnames"
+import { isMoment } from "moment"
 
 import styles from "./DateTimeField.sass"
 
-export interface Props {
+export interface Props extends DatetimepickerProps {
   field: string
   queryMode: "request" | "offer"
 }
 
-function DateTimeField(props: Props) {
+function DateTimeField({ field, queryMode, ...pickerProps }: Props) {
   return (
-    <FormField field={props.field}>
+    <FormField field={field}>
       {({ getValue, setValue, setTouched }: any) => (
-        <div className={classnames(styles.fieldset, styles[props.queryMode])}>
+        <div className={classnames(styles.fieldset, styles[queryMode])}>
           <DateTime
+            timeConstraints={{
+              minutes: { min: 0, max: 59, step: 10 },
+            }}
+            {...pickerProps}
             value={getValue()}
-            onChange={moment => setValue(new Date(+moment.valueOf()))}
+            onChange={value => {
+              if (isMoment(value)) {
+                setValue(value.toDate())
+              }
+            }}
           />
         </div>
       )}

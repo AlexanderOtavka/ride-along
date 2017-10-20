@@ -42,6 +42,20 @@
     &:focus
       outline: none
 
+  &.request :global
+    .rdtActive
+      background-color: $primary-yellow !important
+
+    .rdtToday:not(.rdtActive)::before
+      border-bottom-color: $primary-yellow !important
+
+  &.offer :global
+    .rdtActive
+      background-color: $primary-green !important
+
+    .rdtToday:not(.rdtActive)::before
+      border-bottom-color: $primary-green !important
+
   & :global
     @import "~react-datetime/css/react-datetime"
 
@@ -54,3 +68,7 @@
 
     .rdtPicker
       top: 38px
+
+    .rdtActive
+      font-weight: bold
+      text-shadow: none !important

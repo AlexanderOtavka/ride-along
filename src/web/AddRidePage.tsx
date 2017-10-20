@@ -26,6 +26,7 @@ import classnames from "classnames"
 import { Form, FormField } from "react-form"
 import { connect as connectRedux, DispatchProp } from "react-redux"
 import { compose } from "redux"
+import moment, { Moment } from "moment"
 
 import Nav from "./Nav"
 import RideVertical from "./RideVertical"
@@ -95,6 +96,10 @@ function suggestionToDropdownItem(suggestion: LocationModel) {
 function getDraftError(draft: DraftModel) {
   if (draft.departDateTime < new Date()) {
     return "Departure time cannot be in the past"
+  }
+
+  if (draft.arriveDateTime < draft.departDateTime) {
+    return "Arrival time must come after departure"
   }
 
   if (draft.seatTotal === 0) {
@@ -176,6 +181,8 @@ function AddRidePage({
                   <DateTimeField
                     field="departDateTime"
                     queryMode={query.mode}
+                    isValidDate={(currentMoment: Moment) =>
+                      currentMoment.isAfter(moment().subtract(1, "day"))}
                   />
                 }
                 arriveLocation={
@@ -188,6 +195,11 @@ function AddRidePage({
                   <DateTimeField
                     field="arriveDateTime"
                     queryMode={query.mode}
+                    viewMode="time"
+                    isValidDate={(currentMoment: Moment) =>
+                      currentMoment.isAfter(
+                        moment(props.draft.departDateTime).subtract(1, "day")
+                      )}
                   />
                 }
               />
