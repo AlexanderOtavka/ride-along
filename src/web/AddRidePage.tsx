@@ -137,7 +137,6 @@ function AddRidePage({
       }}
       onSubmit={(values: any) => {
         dispatch(ridesActions.create.started(values))
-        props.history.push(routes.ride.detail("lastCreated"))
       }}
     >
       {({ submitForm }: any) => (

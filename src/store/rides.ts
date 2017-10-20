@@ -28,6 +28,7 @@ import { MiddlewareAPI } from "redux"
 import { combineEpics, ActionsObservable } from "redux-observable"
 import { database } from "firebase"
 import { createSelector } from "reselect"
+import { History } from "history"
 
 import { Observable } from "rxjs/Observable"
 import { EventTargetLike } from "rxjs/observable/FromEventObservable"
@@ -45,6 +46,7 @@ import "rxjs/add/operator/debounceTime"
 
 import { StateModel } from "./index"
 
+import * as routes from "../constants/routes"
 import { toFirebase, fromFirebase } from "../util/firebaseConvert"
 import { QueryComponentProps } from "../controllers/connectQuery"
 
@@ -53,6 +55,7 @@ type PlacesService = google.maps.places.PlacesService
 type PlacesServiceStatusType = typeof google.maps.places.PlacesServiceStatus
 
 export interface RidesDependencies {
+  history: History
   placesServicePromise: Promise<PlacesService>
   placesServiceStatusPromise: Promise<PlacesServiceStatusType>
   ridesListRefPromise: Promise<database.Reference>
@@ -101,7 +104,6 @@ export interface RidesModel {
   readonly list: ReadonlyArray<RideModel>
   readonly draft: DraftModel
   readonly isCreating: boolean
-  readonly lastCreated: string | null
   readonly isSearching: boolean
   readonly departSuggestions: ReadonlyArray<LocationModel>
   readonly arriveSuggestions: ReadonlyArray<LocationModel>
@@ -178,7 +180,7 @@ export namespace ridesActions {
   export const updateDraft = actionCreator<UpdateDraft>("UPDATE_DRAFT")
 
   export type CreateParams = DraftModel
-  export type CreateResult = { id: string | null }
+  export type CreateResult = { id: string }
   export const create = actionCreator.async<CreateParams, CreateResult>(
     "CREATE"
   )
@@ -230,7 +232,6 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     seatTotal: 0,
   },
   isCreating: false,
-  lastCreated: null,
   isSearching: false,
   departSuggestions: [],
   arriveSuggestions: [],
@@ -291,10 +292,9 @@ export const ridesReducer = reducerWithInitialState<RidesModel>({
     ...state,
     isCreating: true,
   }))
-  .case(ridesActions.create.done, (state, { result }) => ({
+  .case(ridesActions.create.done, state => ({
     ...state,
     isCreating: false,
-    lastCreated: result.id,
   }))
   .case(ridesActions.create.failed, state => ({
     ...state,
@@ -490,6 +490,19 @@ export function createDoneToResetDraftEpic(
     .map(({ payload }) => ridesActions.resetDraft({ date: new Date() }))
 }
 
+export function createDoneToHistoryAction(
+  actionsObservable: ActionsObservable<Action<any>>,
+  store: MiddlewareAPI<StateModel>,
+  { history }: RidesDependencies
+) {
+  return actionsObservable
+    .filter(ridesActions.create.done.match)
+    .flatMap(({ payload }) => {
+      history.replace(routes.ride.detail(payload.result.id))
+      return Observable.empty<never>()
+    })
+}
+
 export function createRideEpic(
   actionsObservable: ActionsObservable<Action<any>>,
   store: MiddlewareAPI<StateModel>,
@@ -502,12 +515,16 @@ export function createRideEpic(
         Observable.from<database.Reference>(
           ridesListRef.push(toFirebase(payload))
         )
-          .map(ref =>
-            ridesActions.create.done({
-              params: payload,
-              result: { id: ref.key || null },
-            })
-          )
+          .map(ref => {
+            if (ref.key) {
+              return ridesActions.create.done({
+                params: payload,
+                result: { id: ref.key },
+              })
+            } else {
+              throw Error("Couldn't get key")
+            }
+          })
           .catch(error =>
             Observable.of(
               ridesActions.create.failed({ params: payload, error })
@@ -522,5 +539,6 @@ export const ridesEpic = combineEpics(
   searchEpic,
   createStartedToUpdateDraftEpic,
   createDoneToResetDraftEpic,
+  createDoneToHistoryAction,
   createRideEpic
 )

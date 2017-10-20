@@ -21,17 +21,15 @@
 
 import React from "react"
 import { DispatchProp, connect } from "react-redux"
-import { Redirect, RouteComponentProps } from "react-router"
+import { RouteComponentProps } from "react-router"
 
 import { StateModel } from "../store/index"
-import * as routes from "../constants/routes"
 import { compose } from "redux"
 
 // import styles from "./RideDetailPage.sass"
 
 interface StateProps {
   isCreating: boolean
-  lastCreated: string | null
 }
 
 interface DispatchProps extends DispatchProp<StateModel> {}
@@ -43,7 +41,6 @@ type AllProps = StateProps & DispatchProps & Props
 const withController = compose(
   connect<StateProps, DispatchProps, Props>((state: StateModel) => ({
     isCreating: state.rides.isCreating,
-    lastCreated: state.rides.lastCreated,
   }))
 )
 
@@ -51,17 +48,7 @@ function RideDetailPage(props: AllProps) {
   const { id } = props.match.params
 
   // TODO: make this page look nice
-  return id === "lastCreated" ? (
-    props.isCreating ? (
-      <div>Loading...</div>
-    ) : props.lastCreated ? (
-      <Redirect to={routes.ride.detail(props.lastCreated)} />
-    ) : (
-      <div>Not found</div>
-    )
-  ) : (
-    <div>Ride with id: {id}</div>
-  )
+  return <div>Ride with id: {id}</div>
 }
 
 export default withController(RideDetailPage)
