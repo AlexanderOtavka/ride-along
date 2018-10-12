@@ -25,28 +25,22 @@ jobs:
     docker:
       - image: circleci/node:10.11.0-browsers
     steps:
-      # Checkout and Pull in Dependencies
       - checkout
       - restore_cache:
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+            - yarn-packages-
       - run: yarn
       - save_cache:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
-      # Build
       - run: yarn build
-      - store_artifacts:
-          path: report/bundle-analyzer.html
-          prefix: bundle
-
-      # Test
       - run: yarn test --coverage
+
       - store_artifacts:
-          path: report/coverage
-          prefix: coverage
-      # Lighthouse
+          path: report
       # - run:
       #     command: npx serve -s build/web -p 5000
       #     background: true
