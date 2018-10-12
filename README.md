@@ -4,6 +4,14 @@
 
 > An app for ride sharing at Grinnell College.
 
+# Getting Started
+
+1. Install [yarn](https://yarnpkg.com/en/).
+2. Run `yarn` to download all dependencies.
+3. Run `yarn start` to start a development server.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
