@@ -20,14 +20,10 @@
 
 version: 2
 
-executors:
-  node:
-    docker:
-      - image: circleci/node:10.11.0-browsers
-
 jobs:
   checkout:
-    executor: node
+    docker:
+      - image: circleci/node:10.11.0-browsers
     steps:
       - checkout
       - restore_cache:
@@ -37,26 +33,45 @@ jobs:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+      - save_cache:
+          key: repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - "{{ .Environment.CIRCLE_WORKING_DIRECTORY }}"
 
   test:
-    executor: node
-    steps:
+    docker:
+      - image: circleci/node:10.11.0-browsers
+   steps:
+      - restore_cache:
+          key: repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test --coverage
       - store_artifacts:
           path: report/coverage
           prefix: coverage
 
   build:
-    executor: node
+    docker:
+      - image: circleci/node:10.11.0-browsers
     steps:
+      - restore_cache:
+          key: repo-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build
       - store_artifacts:
           path: report/bundle-analyzer.html
           prefix: bundle
+      - save_cache:
+          key: build-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - build
 
   lighthouse:
-    executor: node
+    docker:
+      - image: circleci/node:10.11.0-browsers
     steps:
+      - restore_cache:
+          key: repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           command: npx serve -s build/web -p 5000
           background: true
@@ -68,6 +83,7 @@ jobs:
           prefix: lighthouse
 
 workflows:
+  version: 2
   build_and_test:
     jobs:
       - checkout
