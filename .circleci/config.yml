@@ -1,0 +1,82 @@
+##
+# .circleci/config.yml
+#
+# Created by Zander Otavka on 6/27/17.
+# Copyright (C) 2016  Grinnell AppDev.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+version: 2
+
+executors:
+  node:
+    docker:
+      - image: circleci/node:10.11.0-browsers
+
+jobs:
+  checkout:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+      - run: yarn
+      - save_cache:
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+  test:
+    executor: node
+    steps:
+      - run: yarn test --coverage
+      - store_artifacts:
+          path: report/coverage
+          prefix: coverage
+
+  build:
+    executor: node
+    steps:
+      - run: yarn build
+      - store_artifacts:
+          path: report/bundle-analyzer.html
+          prefix: bundle
+
+  lighthouse:
+    executor: node
+    steps:
+      - run:
+          command: npx serve -s build/web -p 5000
+          background: true
+      - run: |
+          npx lighthouse http://localhost:5000 --output=json --output-path=lighthouse.json
+          yarn check-lighthouse -- lighthouse.json
+      - store_artifacts:
+          path: lighthouse.json
+          prefix: lighthouse
+
+workflows:
+  build_and_test:
+    jobs:
+      - checkout
+      - test:
+          requires:
+            - checkout
+      - build:
+          requires:
+            - checkout
+      - lighthouse:
+          requires:
+            - build
