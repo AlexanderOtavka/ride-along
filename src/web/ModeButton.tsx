@@ -61,9 +61,11 @@ function ModeButton({ mode, ...props }: Props) {
         onMouseDown={props.onMouseDown}
         onTouchStart={props.onTouchStart}
       >
-        {isRequestMode
-          ? <ThumbSVG className={styles.icon} />
-          : <CarSVG className={styles.icon} />}
+        {isRequestMode ? (
+          <ThumbSVG className={styles.icon} />
+        ) : (
+          <CarSVG className={styles.icon} />
+        )}
       </div>
 
       {props.children}

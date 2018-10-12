@@ -34,16 +34,10 @@ export interface Props {
 function RideSection(props: Props) {
   return (
     <section className={classnames(styles.section, props.className)}>
-      <div className={styles.iconCircle}>
-        {props.icon}
-      </div>
+      <div className={styles.iconCircle}>{props.icon}</div>
       <div className={styles.text}>
-        <h2 className={styles.location}>
-          {props.location}
-        </h2>
-        <div className={styles.dateTime}>
-          {props.dateTime}
-        </div>
+        <h2 className={styles.location}>{props.location}</h2>
+        <div className={styles.dateTime}>{props.dateTime}</div>
       </div>
     </section>
   )

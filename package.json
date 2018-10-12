@@ -7,17 +7,13 @@
     "lint-staged": "lint-staged",
     "start": "babel-node scripts/start.js",
     "test": "babel-node scripts/test.js --env=jsdom",
-    "prettier": "prettier --no-semi --trailing-comma es5 --write",
+    "prettier": "prettier --write",
     "tslint": "tslint",
     "check-lighthouse": "babel-node scripts/check-lighthouse.js"
   },
   "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
+    "presets": ["es2015"],
+    "plugins": ["transform-object-rest-spread"]
   },
   "dependencies": {
     "@types/classnames": "^2.2.0",
@@ -119,18 +115,9 @@
   "private": true,
   "jest": {
     "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx"
-    ],
+    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}"],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/src/**/?(*.)test.ts?(x)"
@@ -151,10 +138,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "yon run prettier",
-      "git add",
-      "yon run tslint"
-    ]
+    "*.{js,ts,tsx}": ["yon run prettier", "git add", "yon run tslint"]
   }
 }

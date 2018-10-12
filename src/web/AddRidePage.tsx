@@ -119,7 +119,7 @@ function AddRidePage({
   departSuggestions,
   arriveSuggestions,
   dispatch,
-  ...props,
+  ...props
 }: AllProps) {
   const hasDepartSuggestions = departSuggestions && departSuggestions.length > 0
   const hasArriveSuggestions = arriveSuggestions && arriveSuggestions.length > 0
@@ -194,7 +194,8 @@ function AddRidePage({
                     field="departDateTime"
                     queryMode={query.mode}
                     isValidDate={(currentMoment: Moment) =>
-                      currentMoment.isAfter(moment().subtract(1, "day"))}
+                      currentMoment.isAfter(moment().subtract(1, "day"))
+                    }
                   />
                 }
                 arriveLocation={
@@ -211,7 +212,8 @@ function AddRidePage({
                     isValidDate={(currentMoment: Moment) =>
                       currentMoment.isAfter(
                         moment(props.draft.departDateTime).subtract(1, "day")
-                      )}
+                      )
+                    }
                   />
                 }
               />

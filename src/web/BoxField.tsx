@@ -52,7 +52,7 @@ function BoxField({
   children,
   onMouseDown,
   onTouchStart,
-  ...props,
+  ...props
 }: Props) {
   const handleMouseDown = (ev: React.MouseEvent<HTMLInputElement>) => {
     if (onMouseDown && document.activeElement !== ev.currentTarget) {

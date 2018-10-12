@@ -52,7 +52,11 @@ export function formatDateLong(date: Date) {
   const dateSuffix =
     dateLastDigit === 1
       ? "st"
-      : dateLastDigit === 2 ? "nd" : dateLastDigit === 3 ? "rd" : "th"
+      : dateLastDigit === 2
+        ? "nd"
+        : dateLastDigit === 3
+          ? "rd"
+          : "th"
 
   const dateOfYear = `${month} ${date.getDate()}${dateSuffix}`
 

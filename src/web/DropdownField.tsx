@@ -34,7 +34,7 @@ export interface Props extends DropdownProps {
 function DropdownField({ theme, field, ...props }: Props) {
   return (
     <FormField field={field}>
-      {({ getValue, setValue, setTouched }: any) =>
+      {({ getValue, setValue, setTouched }: any) => (
         <Dropdown
           {...props}
           value={getValue()}
@@ -53,7 +53,8 @@ function DropdownField({ theme, field, ...props }: Props) {
               (classname, key) => classnames(classname, theme && theme[key])
             ),
           }}
-        />}
+        />
+      )}
     </FormField>
   )
 }

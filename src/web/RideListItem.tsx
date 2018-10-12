@@ -54,20 +54,18 @@ export interface Props {
 type AllProps = StateProps & DispatchProps & Props
 
 const withController = compose(
-  connectRedux<
-    StateProps,
-    DispatchProps,
-    Props
-  >(({ rides }: StateModel, props) => ({
-    departLocationName:
-      !!props && props.departLocation in rides.locations
-        ? rides.locations[props.departLocation].name
-        : "Loading...",
-    arriveLocationName:
-      !!props && props.arriveLocation in rides.locations
-        ? rides.locations[props.arriveLocation].name
-        : "Loading...",
-  }))
+  connectRedux<StateProps, DispatchProps, Props>(
+    ({ rides }: StateModel, props) => ({
+      departLocationName:
+        !!props && props.departLocation in rides.locations
+          ? rides.locations[props.departLocation].name
+          : "Loading...",
+      arriveLocationName:
+        !!props && props.arriveLocation in rides.locations
+          ? rides.locations[props.arriveLocation].name
+          : "Loading...",
+    })
+  )
 )
 
 function RideListItem({ uri, isLast = false, ...props }: AllProps) {

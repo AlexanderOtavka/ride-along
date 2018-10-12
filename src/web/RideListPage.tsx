@@ -117,7 +117,7 @@ function RideListPage({
   setQuery,
   hasDepartSearchSuggestions,
   hasArriveSearchSuggestions,
-  ...props,
+  ...props
 }: AllProps) {
   const isSearchMode = !!props.match.params[0]
 

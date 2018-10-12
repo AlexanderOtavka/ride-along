@@ -40,7 +40,7 @@ export interface Props {
 function RideVertical({
   departIcon = <MapMarkerSVG />,
   arriveIcon = <MapMarkerSVG />,
-  ...props,
+  ...props
 }: Props) {
   return (
     <article className={styles.ride}>
