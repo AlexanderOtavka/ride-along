@@ -24,14 +24,17 @@ import path from "path"
 import webpack from "webpack"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import ExtractTextPlugin from "extract-text-webpack-plugin"
+import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import ManifestPlugin from "webpack-manifest-plugin"
 import CaseSensitivePathsPlugin from "case-sensitive-paths-webpack-plugin"
-import InterpolateHtmlPlugin from "react-dev-utils/InterpolateHtmlPlugin"
+import InterpolateHtmlPlugin from "interpolate-html-plugin"
 import WatchMissingNodeModulesPlugin from "react-dev-utils/WatchMissingNodeModulesPlugin"
 import ModuleScopePlugin from "react-dev-utils/ModuleScopePlugin"
 import SWPrecacheWebpackPlugin from "sw-precache-webpack-plugin"
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer"
 import CompressionPlugin from "compression-webpack-plugin"
+import OptimizeCssAssetsPlugin from "optimize-css-assets-webpack-plugin"
+import UglifyJsPlugin from "uglifyjs-webpack-plugin"
 
 import paths from "./paths"
 import getClientEnvironment from "./env"
@@ -128,6 +131,7 @@ const getExtractStyleLoader = loaders =>
     : [require.resolve("style-loader"), ...loaders]
 
 export default {
+  mode: isProduction ? "production" : "development",
   // In production, don't attempt to continue if there are any errors.
   bail: isProduction,
   // We generate sourcemaps in production. This is slow but gives good results.
@@ -256,10 +260,9 @@ export default {
       {
         exclude: [
           /\.html$/,
-          /\.(js|jsx)$/,
-          /\.(ts|tsx)$/,
-          /\.sass$/,
-          /\.css$/,
+          /\.jsx?$/,
+          /\.tsx?$/,
+          /\.(sa|c)ss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -286,17 +289,27 @@ export default {
       },
       // Compile .tsx?
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.tsx?$/,
         include: paths.appSrc,
         loader: require.resolve("ts-loader"),
       },
       {
-        test: /\.sass$/,
-        use: getExtractStyleLoader(sassLoaders),
+        test: /\.css$/,
+        use: [
+          isProduction
+            ? MiniCssExtractPlugin.loader
+            : require.resolve("style-loader"),
+          ...cssLoaders,
+        ],
       },
       {
-        test: /\.css$/,
-        use: getExtractStyleLoader(cssLoaders),
+        test: /\.sass$/,
+        use: [
+          isProduction
+            ? MiniCssExtractPlugin.loader
+            : require.resolve("style-loader"),
+          ...sassLoaders,
+        ],
       },
       {
         test: /\.svg$/,
@@ -315,13 +328,6 @@ export default {
     ],
   },
   plugins: [
-    // Makes some environment variables available in index.html.
-    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-    // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    // In production, it will be an empty string unless you specify "homepage"
-    // in `package.json`, in which case it will be the pathname of that URL.
-    // In development, this will be an empty string.
-    new InterpolateHtmlPlugin(env.raw),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
@@ -341,6 +347,13 @@ export default {
           }
         : false,
     }),
+    // Makes some environment variables available in index.html.
+    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+    // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    // In production, it will be an empty string unless you specify "homepage"
+    // in `package.json`, in which case it will be the pathname of that URL.
+    // In development, this will be an empty string.
+    new InterpolateHtmlPlugin(env.raw),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // For production builds, it is absolutely essential that NODE_ENV was set
@@ -353,36 +366,21 @@ export default {
           new BundleAnalyzerPlugin({
             analyzerMode: "static",
             reportFilename: path.join(paths.report, "bundle-analyzer.html"),
+            defaultSizes: "gzip",
           }),
-          // Move modules shared by enough children of main back into main
-          new webpack.optimize.CommonsChunkPlugin({
-            name: "main",
-            children: true,
-            // Tweak this number for optimal chunking
-            minChunks: 3,
-          }),
-          // Minify the code.
-          new webpack.optimize.UglifyJsPlugin({
-            compress: {
-              warnings: false,
-              // This feature has been reported as buggy a few times, such as:
-              // https://github.com/mishoo/UglifyJS2/issues/1964
-              // We'll wait with enabling it by default until it is more solid.
-              reduce_vars: false,
-            },
-            output: {
-              comments: false,
-            },
-            sourceMap: true,
+          new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: `static/css/${isProduction
+              ? "[name].[chunkhash:8]"
+              : "bundle"}.css`,
+            chunkFilename: `static/css/[name]${isProduction
+              ? ".[chunkhash:8]"
+              : ""}.chunk.css`,
           }),
           // Create gzip files
           new CompressionPlugin({
             test: /\.(js|css|html)$/,
-          }),
-          // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-          new ExtractTextPlugin({
-            filename: cssFilename,
-            allChunks: true,
           }),
           // Generate a manifest file which contains a mapping of all asset filenames
           // to their corresponding output file so that tools can pick it up without
@@ -442,6 +440,27 @@ export default {
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
+  optimization: {
+    // Minify the code.
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          compress: {
+            warnings: false,
+            // This feature has been reported as buggy a few times, such as:
+            // https://github.com/mishoo/UglifyJS2/issues/1964
+            // We'll wait with enabling it by default until it is more solid.
+            reduce_vars: false,
+          },
+          output: {
+            comments: false,
+          },
+        },
+        sourceMap: true,
+      }),
+      new OptimizeCssAssetsPlugin({}),
+    ],
+  },
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {

@@ -33,20 +33,28 @@ export interface Props {
 
 const RideListPage = asyncComponent({
   resolve: () =>
-    import(/* webpackChunkName: "RideListPage" */ "./RideListPage"),
+    import(/* webpackChunkName: "RideListPage" */ "./RideListPage").then(
+      mod => mod.default
+    ),
 })
 
 const RideDetailPage = asyncComponent({
   resolve: () =>
-    import(/* webpackChunkName: "RideDetailPage" */ "./RideDetailPage"),
+    import(/* webpackChunkName: "RideDetailPage" */ "./RideDetailPage").then(
+      mod => mod.default
+    ),
 })
 
 const AddRidePage = asyncComponent({
-  resolve: () => import(/* webpackChunkName: "AddRidePage" */ "./AddRidePage"),
+  resolve: () =>
+    import(/* webpackChunkName: "AddRidePage" */ "./AddRidePage").then(
+      mod => mod.default
+    ),
 })
 
 const Nav = asyncComponent({
-  resolve: () => import(/* webpackChunkName: "Nav" */ "./Nav"),
+  resolve: () =>
+    import(/* webpackChunkName: "Nav" */ "./Nav").then(mod => mod.default),
 })
 
 function App(props: Props) {
